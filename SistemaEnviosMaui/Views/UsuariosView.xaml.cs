@@ -8,7 +8,7 @@ public partial class UsuariosView : ContentView
     public ObservableCollection<Usuario> MisUsuarios { get; set; } = new ObservableCollection<Usuario>();
     public ObservableCollection<Rol> MisRoles { get; set; } = new ObservableCollection<Rol>();
 
-
+    Usuario usuarioSeleccionado;
 
     public UsuariosView()
     {
@@ -111,7 +111,54 @@ public partial class UsuariosView : ContentView
         MisRoles.Add(new Rol { IdRol = 3, NombreRol = "Repartidor" });
 
         pckRol.ItemsSource = MisRoles;
-        pckRol.ItemDisplayBinding = new Binding("NombreRol"); // Esto dice qué texto mostrar
+        pckRol.ItemDisplayBinding = new Binding("NombreRol");
     }
+
+    private async void OnEliminarClicked(object sender, EventArgs e)
+    {
+        // 1. Verificar si hay alguien seleccionado
+        if (usuarioSeleccionado == null)
+        {
+            await Application.Current.MainPage.DisplayAlert("Atención", "Selecciona un usuario de la lista primero", "OK");
+            return;
+        }
+
+        // 2. Preguntar confirmación (Importante para no borrar por error)
+        bool confirmar = await Application.Current.MainPage.DisplayAlert("Confirmar", $"¿Deseas eliminar a {usuarioSeleccionado.NombreCompleto}?", "Sí", "No");
+
+        if (confirmar)
+        {
+            string mensaje;
+            // 3. Llamar a la Capa Datos
+            bool eliminado = new CapaDatos.CD_Usuario().Eliminar(usuarioSeleccionado.IdUsuario, out mensaje);
+
+            if (eliminado)
+            {
+                // 4. Quitarlo de la lista visual (ObservableCollection)
+                MisUsuarios.Remove(usuarioSeleccionado);
+                await Application.Current.MainPage.DisplayAlert("Éxito", "Usuario eliminado", "OK");
+                OnLimpiarClicked(null, null); // Limpiamos los campos
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", mensaje, "OK");
+            }
+        }
+    }
+
+    // Este método sirve para capturar al usuario cuando lo tocas en la lista
+    private void OnUsuarioSeleccionado(object sender, SelectionChangedEventArgs e)
+    {
+        usuarioSeleccionado = e.CurrentSelection.FirstOrDefault() as Usuario;
+
+        if (usuarioSeleccionado != null)
+        {
+            // Opcional: Llenar los campos de la izquierda con los datos del seleccionado
+            txtNombre.Text = usuarioSeleccionado.NombreCompleto;
+            txtCorreo.Text = usuarioSeleccionado.Correo;
+            // los demas
+        }
+    }
+
 
 }

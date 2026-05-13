@@ -192,44 +192,32 @@ namespace CapaDatos
             return respuesta;
         }
 
-        public bool Eliminar(Usuario obj, out string Mensaje)
+        public bool Eliminar(int idUsuario, out string mensaje)
         {
             bool respuesta = false;
-            Mensaje = string.Empty;
-
-          
-            if (obj == null)
-            {
-                Mensaje = "El usuario no existe.";
-                return false;
-            }
-
+            mensaje = string.Empty;
             try
             {
-                using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+                using (SqlConnection con = new SqlConnection(Conexion.Cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("SP_ELIMINARUSUARIO", oconexion);
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Usuarios WHERE IdUsuario = @id", con);
+                    cmd.Parameters.AddWithValue("@id", idUsuario);
+                    con.Open();
 
-                    // Usamos la propiedad IdUsuario del objeto obj
-                    cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
-
-                    cmd.Parameters.Add("Respuesta", SqlDbType.Bit).Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    oconexion.Open();
-                    cmd.ExecuteNonQuery();
-
-                    // Convertimos la respuesta del SP (1 o 0) a booleano
-                    respuesta = Convert.ToBoolean(cmd.Parameters["Respuesta"].Value);
-                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                    if (cmd.ExecuteNonQuery() > 0)
+                    {
+                        respuesta = true;
+                    }
+                    else
+                    {
+                        mensaje = "No se pudo eliminar el usuario.";
+                    }
                 }
             }
             catch (Exception ex)
             {
                 respuesta = false;
-                Mensaje = ex.Message;
+                mensaje = ex.Message;
             }
             return respuesta;
         }

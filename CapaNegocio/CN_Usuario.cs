@@ -72,7 +72,7 @@ namespace CapaNegocio
 
         public bool Eliminar(Usuario obj, out string Mensaje)
         {
-            return objCapaDato.Eliminar(obj, out Mensaje);
+            return objCapaDato.Eliminar(obj.IdUsuario, out Mensaje);
         }
 
 

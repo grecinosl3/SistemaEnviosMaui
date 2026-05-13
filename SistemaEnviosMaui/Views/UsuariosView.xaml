@@ -98,7 +98,7 @@
 
 
                     <!-- Esta es la lista que se llenará sola -->
-                    <CollectionView x:Name="lstUsuarios" ItemsSource="{Binding MisUsuarios}" HeightRequest="400">
+                    <CollectionView x:Name="lstUsuarios" ItemsSource="{Binding MisUsuarios}" HeightRequest="400" SelectionMode="Single" SelectionChanged="OnUsuarioSeleccionado">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*, *, *, 100" Padding="10">
