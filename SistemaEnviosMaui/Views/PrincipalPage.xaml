@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SistemaEnviosMaui"
+             x:Class="SistemaEnviosMaui.Views.PrincipalPage"
+             Title="PrincipalPage"
+             NavigationPage.HasNavigationBar="False">
+             
+    
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        
+        <!-- 1. BARRA AZUL (Título y Usuario) -->
+        <Grid Grid.Row="0" BackgroundColor="#0056b3" ColumnDefinitions="*, Auto" Padding="15,10">
+            <Label Text="Sistema de Gestión de Envíos" 
+               TextColor="White" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+
+            <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="5">
+                <Label Text="Usuario:" TextColor="White" VerticalOptions="Center"/>
+                <Label x:Name="lblUsuarioNombre" Text="Invitado" TextColor="White" 
+                   FontAttributes="Bold" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- 2. BARRA DE ICONOS (Menú Horizontal) -->
+
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="100">
+            <HorizontalStackLayout Padding="10" Spacing="5">
+
+                <!-- BOTON INICIO -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Inicio}" FontFamily="FontAwesomeSolid" 
+                       FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Inicio" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inicio" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON USUARIOS -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Usuarios}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Usuarios" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Usuarios" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON INVENTARIO -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Inventario}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Inventario" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inventario" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON PEDIDOS -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Pedidos}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Pedidos" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Pedidos" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON REPORTES -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Reportes}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Reportes" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Reportes" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON CLIENTES -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Clientes}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Clientes" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Clientes" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON EMPRESA -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Empresa}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Empresa" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Empresa" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON MENSAJERIA -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Mensajeria}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Mensajería" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Mensajeria" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON FACTURAS -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Facturas}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Facturas" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Facturas" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <!-- BOTON REPARTIDORES -->
+                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent" WidthRequest="90">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="{x:Static local:Iconos.Repartidores}" FontFamily="FontAwesomeSolid" 
+                            FontSize="28" HorizontalOptions="Center" TextColor="#2196F3"/>
+                        <Label Text="Repartidores" HorizontalOptions="Center" FontSize="11"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Repartidores" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- 3. CONTENIDO PRINCIPAL (Aquí se verá lo que selecciones) -->
+        <!-- <Grid Grid.Row="2" BackgroundColor="White">
+            <Label Text="Seleccione una opción del menú superior" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray"/>
+        </Grid>-->
+
+        <ContentView x:Name="ContenedorPrincipal" 
+             Grid.Row="2" 
+             BackgroundColor="White">
+            <Label Text="Seleccione una opción del menú superior" 
+           HorizontalOptions="Center" 
+           VerticalOptions="Center" 
+           TextColor="Gray"/>
+        </ContentView>
+
+    </Grid>
+
+
+</ContentPage>

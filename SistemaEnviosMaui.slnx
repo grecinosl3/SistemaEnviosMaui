@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CapaDatos/CapaDatos.csproj" Id="bedd18af-e6d6-4306-ba49-463b5debcec8" />
+  <Project Path="CapaEntidad/CapaEntidad.csproj" Id="1f3d288f-c81e-4377-ad58-61e1c8a7f0f7" />
+  <Project Path="CapaNegocio/CapaNegocio.csproj" Id="f35468b9-7102-4460-8b31-4ac2da14d5b9" />
+  <Project Path="SistemaEnviosMaui/SistemaEnviosMaui.csproj" />
+</Solution>
