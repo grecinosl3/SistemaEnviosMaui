@@ -28,6 +28,9 @@ public partial class PrincipalPage : ContentPage
             case "Pedidos":
                 ContenedorPrincipal.Content = new PedidosView();
                 break;
+            case "Inventario":
+                ContenedorPrincipal.Content = new InventarioPage();
+                break;
         }
 
     }

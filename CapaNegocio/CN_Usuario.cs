@@ -75,8 +75,5 @@ namespace CapaNegocio
             return objCapaDato.Eliminar(obj.IdUsuario, out Mensaje);
         }
 
-
-
-
     }
 }
