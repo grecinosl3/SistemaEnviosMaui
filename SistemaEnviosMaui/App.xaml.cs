@@ -8,7 +8,6 @@ namespace SistemaEnviosMaui
         public App()
         {
             InitializeComponent();
-
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
@@ -21,5 +20,4 @@ namespace SistemaEnviosMaui
             return new Window(pantallaPrincipal);
         }
     }
-
 }

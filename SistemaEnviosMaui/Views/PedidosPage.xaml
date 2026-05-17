@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SistemaEnviosMaui.Views.PedidosPage"
+             BackgroundColor="#121212">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Frame Grid.Row="0" BackgroundColor="#1e1e1e" CornerRadius="0" HasShadow="False" Padding="10">
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Button x:Name="btnTabRegistrar" 
+                        Text="NUEVO PEDIDO" 
+                        Clicked="OnTabClicked"
+                        BackgroundColor="#3498db" 
+                        TextColor="White"
+                        CornerRadius="20"
+                        WidthRequest="160"
+                        FontAttributes="Bold"/>
+
+                <Button x:Name="btnTabDetalle" 
+                        Text="VER DETALLES" 
+                        Clicked="OnTabClicked"
+                        BackgroundColor="Transparent" 
+                        TextColor="#888888"
+                        CornerRadius="20"
+                        WidthRequest="160"
+                        FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Grid Grid.Row="1" Margin="20">
+
+            <ScrollView x:Name="viewRegistrar" IsVisible="True">
+                <VerticalStackLayout Spacing="20">
+
+                    <Label Text="REGISTRAR NUEVO PEDIDO" FontSize="18" FontAttributes="Bold" TextColor="#3498db" Margin="0,0,0,5"/>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="20">
+                        <Frame Grid.Column="0" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="15">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="DATOS DEL PEDIDO" TextColor="#3498db" FontAttributes="Bold" FontSize="12" Margin="0,0,0,5"/>
+                                <Label Text="Fecha de Emisión" TextColor="White" FontSize="13"/>
+                                <DatePicker x:Name="dtpFecha" BackgroundColor="#2b2b2b" TextColor="White" Format="dd/MM/yyyy"/>
+                                <Label Text="Método de Pago" TextColor="White" FontSize="13" Margin="0,5,0,0"/>
+                                <Picker x:Name="cboMetodoPago" BackgroundColor="#2b2b2b" TextColor="White" Title="Seleccione...">
+                                    <Picker.Items>
+                                        <x:String>Efectivo</x:String>
+                                        <x:String>Transferencia</x:String>
+                                        <x:String>Tarjeta de Crédito</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="1" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="15">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="DATOS DEL CLIENTE" TextColor="#3498db" FontAttributes="Bold" FontSize="12" Margin="0,0,0,5"/>
+                                <Label Text="Código de Cliente" TextColor="White" FontSize="13"/>
+                                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                    <Entry x:Name="txtCodigoCliente" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="Ej: CLI-100" PlaceholderColor="#666666" Grid.Column="0"/>
+                                    <Button x:Name="btnBuscarCliente" Text="🔍" BackgroundColor="#3498db" TextColor="White" WidthRequest="45" CornerRadius="5" Grid.Column="1" Clicked="OnBuscarClienteClicked" />
+                                </Grid>
+                                <Label Text="Nombre Completo" TextColor="White" FontSize="13" Margin="0,5,0,0"/>
+                                <Entry x:Name="txtNombreCliente" BackgroundColor="#2b2b2b" TextColor="White" IsReadOnly="True" Placeholder="Cargue un cliente..." PlaceholderColor="#555555"/>
+                                <Label Text="Dirección de Envío" TextColor="White" FontSize="13" Margin="0,5,0,0"/>
+                                <Entry x:Name="txtDireccionCliente" BackgroundColor="#2b2b2b" TextColor="White" IsReadOnly="True" Placeholder="Dirección registrada..." PlaceholderColor="#555555"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                    <Frame BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="15">
+                        <Grid ColumnDefinitions="*, *, *, *, *, Auto" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label Text="Cod. Producto" TextColor="White" FontSize="12"/>
+                                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="5">
+                                    <Entry x:Name="txtCodProducto" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="PROD..."/>
+                                    <Button x:Name="btnBuscarProducto" Text="🔍" BackgroundColor="#3498db" TextColor="White" WidthRequest="35" HeightRequest="35" CornerRadius="5" Grid.Column="1" Padding="0"/>
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Producto" TextColor="White" FontSize="12"/>
+                                <Entry x:Name="txtNombreProducto" BackgroundColor="#2b2b2b" TextColor="White" IsReadOnly="True"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="2" Spacing="5">
+                                <Label Text="Precio Unitario" TextColor="White" FontSize="12"/>
+                                <Entry x:Name="txtPrecioUnitario" BackgroundColor="#2b2b2b" TextColor="White" IsReadOnly="True"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="3" Spacing="5">
+                                <Label Text="Cantidad" TextColor="White" FontSize="12"/>
+                                <Entry x:Name="txtCantidadProducto" Keyboard="Numeric" BackgroundColor="#2b2b2b" TextColor="White" Text="1"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="4" Spacing="5">
+                                <Label Text="Tipo Factura" TextColor="White" FontSize="12"/>
+                                <Picker x:Name="cboTipoFactura" BackgroundColor="#2b2b2b" TextColor="White">
+                                    <Picker.Items>
+                                        <x:String>Electronica</x:String>
+                                        <x:String>Física</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </VerticalStackLayout>
+
+                            <Button x:Name="btnAgregarProducto" 
+                                    Text="Agregar" 
+                                    BackgroundColor="#2ecc71" 
+                                    TextColor="White" 
+                                    FontAttributes="Bold" 
+                                    WidthRequest="90" 
+                                    HeightRequest="40" 
+                                    CornerRadius="8" 
+                                    Grid.Column="5" 
+                                    VerticalOptions="End" 
+                                    Padding="0"/>
+                        </Grid>
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*, 250" ColumnSpacing="20">
+                        <Frame Grid.Column="0" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="0" HeightRequest="200">
+                            <CollectionView x:Name="lstDetallePedido">
+                                <CollectionView.Header>
+                                    <Grid BackgroundColor="#2b2b2b" ColumnDefinitions="*, *, *, *" Padding="10">
+                                        <Label Text="Producto" FontAttributes="Bold" TextColor="#3498db" Grid.Column="0"/>
+                                        <Label Text="Precio Unitario" FontAttributes="Bold" TextColor="#3498db" Grid.Column="1" HorizontalOptions="Center"/>
+                                        <Label Text="Cantidad" FontAttributes="Bold" TextColor="#3498db" Grid.Column="2" HorizontalOptions="Center"/>
+                                        <Label Text="SubTotal" FontAttributes="Bold" TextColor="#3498db" Grid.Column="3" HorizontalOptions="End"/>
+                                    </Grid>
+                                </CollectionView.Header>
+                            </CollectionView>
+                        </Frame>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="15" VerticalOptions="End">
+                            <Label Text="Total a Pagar:" TextColor="White" FontSize="14"/>
+                            <Entry x:Name="txtTotalPagar" Text="Q 0.00" BackgroundColor="#1e1e1e" TextColor="#2ecc71" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" IsReadOnly="True"/>
+
+                            <Button x:Name="btnRegistrarPedido" 
+                                    Text="💾 Registrar" 
+                                    BackgroundColor="#3498db" 
+                                    TextColor="White" 
+                                    FontAttributes="Bold" 
+                                    HeightRequest="50" 
+                                    CornerRadius="8"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <ScrollView x:Name="viewDetalle" IsVisible="False">
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Buscador de Historial" FontSize="20" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Módulo de consulta en desarrollo..." TextColor="#888888"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </Grid>
+</ContentView>

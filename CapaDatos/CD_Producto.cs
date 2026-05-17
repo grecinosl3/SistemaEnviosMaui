@@ -28,7 +28,10 @@ namespace CapaDatos
                         {
                             lista.Add(new Producto
                             {
+
                                 IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                // Asignamos el ID al código para que se "pinte" en la lista
+                                Codigo = dr["IdProducto"].ToString(),
                                 Nombre = dr["Nombre"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
                                 Precio = Convert.ToDecimal(dr["Precio"]),

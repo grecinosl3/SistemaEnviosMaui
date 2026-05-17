@@ -26,7 +26,7 @@ public partial class PrincipalPage : ContentPage
                 ContenedorPrincipal.Content = new UsuariosView();
                 break;
             case "Pedidos":
-                ContenedorPrincipal.Content = new PedidosView();
+                ContenedorPrincipal.Content = new PedidosPage();
                 break;
             case "Inventario":
                 ContenedorPrincipal.Content = new InventarioPage();
