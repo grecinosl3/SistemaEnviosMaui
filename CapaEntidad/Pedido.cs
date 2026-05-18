@@ -1,32 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CapaEntidad
 {
     public class Pedido
     {
-        public int IdPedido { get; set; }
+        public int IdPedido { get; set; } // Este será el Número de Guía
 
-        // Objetos completos (Para mostrar Nombre del cliente o del producto en la pantalla)
+        // La Empresa/Comercio que envía el paquete
+        public int IdCliente { get; set; }
         public Cliente oCliente { get; set; }
-        public Producto oProducto { get; set; } // OJO: Si un pedido tiene muchos productos, usa solo la lista de abajo
 
-        // Datos de control
-        public int IdModerador { get; set; }
-        public int IdRepartidor { get; set; }
+        // Personal operativo (Se quedan como null al inicio hasta que el Admin los asigne)
+        public int? IdModerador { get; set; }  // El administrador que despacha la ruta
+        public int? IdRepartidor { get; set; } // El motorista que lleva el paquete
 
-        // Información del envío
-        public DateTime FechaPedido { get; set; } = DateTime.Now; // Valor por defecto
-        public DateTime? FechaEntrega { get; set; }
-        public string Direccion { get; set; }
-        public string Estado { get; set; } // Ej: "Pendiente", "En Camino", "Entregado"
+        // Fechas del ciclo logístico
+        public DateTime FechaPedido { get; set; } = DateTime.Now; // Cuando la empresa creó la guía
+        public DateTime? FechaEntrega { get; set; }               // Cuando el motorista la entrega en la calle
 
-        // Dinero
-        public string MetodoPago { get; set; }
-        public decimal Total { get; set; }
+        // Datos del Destinatario Final (A quién se le entrega el paquete físico)
+        public string NombreDestinatario { get; set; }
+        public string TelefonoDestinatario { get; set; }
+        public string DireccionEntrega { get; set; } // Dirección exacta de la casa/oficina del comprador
 
-        // El "corazón" del pedido
+        // Control de Estados (Registrado, En Bodega, En Ruta, Entregado, Devuelto, Liquidado)
+        public string Estado { get; set; } = "Registrado";
+
+        // Finanzas del Paquete
+        public string MetodoPago { get; set; } // Ej: "Pago Contra Entrega (COD)" o "Flete Prepagado"
+        public decimal MontoCOD { get; set; }   // ¡VITAL! El efectivo que el motorista debe traer de la calle
+        public decimal CostoFlete { get; set; } // Lo que tú cobras por el envío (Viene de tu inventario)
+        public decimal Total { get; set; }      // Monto total de la operación
+
+        public string Notas { get; set; } // Ej: "Entregar solo de tarde / Caja frágil"
+
+        // El flete o fletes aplicados a este envío (Tu carrito de fletes)
         public List<DetallePedido> Detalles { get; set; } = new List<DetallePedido>();
     }
 }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SistemaEnviosMaui.Views.UsuariosView">
+             x:Class="SistemaEnviosMaui.Views.ClientesView">
 
-    <Grid ColumnDefinitions="380, *" BackgroundColor="#121212" Padding="20" ColumnSpacing="20">
+    <Grid ColumnDefinitions="400, *" BackgroundColor="#121212" Padding="20" ColumnSpacing="20">
 
-        <!-- PANEL DE EDICIÓN (Izquierda - Gris Oscuro) -->
         <Border Grid.Column="0" StrokeShape="RoundRectangle 15" StrokeThickness="0" BackgroundColor="#1E1E1E">
             <Border.Shadow>
                 <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.5"/>
@@ -13,119 +12,135 @@
 
             <ScrollView>
                 <VerticalStackLayout Padding="25" Spacing="15">
-                    <Label Text="DETALLE DEL PERFIL" FontSize="14" CharacterSpacing="2" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center" Margin="0,0,0,10"/>
+                    <Label Text="DATOS DE LA EMPRESA (B2B)" FontSize="14" CharacterSpacing="2" FontAttributes="Bold" TextColor="#2196F3" HorizontalOptions="Center" Margin="0,0,0,10"/>
 
                     <BoxView HeightRequest="1" Color="#333333" Margin="0,0,0,10"/>
 
-                    <!-- Campos con fondo oscuro -->
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Nombre del Usuario" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                        <Label Text="Nombre Comercial" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
                         <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
-                            <Entry x:Name="txtNombre" Placeholder="Nombre Completo" TextColor="White" PlaceholderColor="#666666"/>
+                            <Entry x:Name="txtNombreComercial" Placeholder="Ej: Calzado Patito" TextColor="White" PlaceholderColor="#666666"/>
                         </Frame>
                     </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Correo Electrónico" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
-                        <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
-                            <Entry x:Name="txtCorreo" Placeholder="email@empresa.com" TextColor="White" PlaceholderColor="#666666" Keyboard="Email"/>
-                        </Frame>
-                    </VerticalStackLayout>
-
 
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
-                        <!-- ROL -->
                         <VerticalStackLayout Grid.Column="0" Spacing="5">
-                            <Label Text="Rol"  FontSize="12" FontAttributes="Bold" TextColor="#AAAAAA" Margin="5,0"/>
-                            <!-- Gris suave, no blanco puro -->
-
-                            <Frame Padding="10,0" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525" HeightRequest="65">
-                                <Picker x:Name="pckRol" Title="Seleccionar" TextColor="White" TitleColor="#666666" FontSize="14" VerticalOptions="Center">
-                                    <Picker.ItemsSource>
-                                        <x:Array Type="{x:Type x:String}">
-                                            <x:String>Administrador</x:String>
-                                            <x:String>Moderador</x:String>
-                                            <x:String>Cliente</x:String>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
+                            <Label Text="Razón Social" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtRazonSocial" Placeholder="S.A. / Individual" TextColor="White" PlaceholderColor="#666666"/>
                             </Frame>
                         </VerticalStackLayout>
 
-                        <!-- ESTADO -->
                         <VerticalStackLayout Grid.Column="1" Spacing="5">
-                            <Label Text="Estado" FontSize="12" FontAttributes="Bold" TextColor="#AAAAAA" Margin="5,0"/>
-
-                            <Frame Padding="10,0" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525" HeightRequest="65">
-                                <Picker x:Name="pckEstado" Title="Seleccionar" TextColor="White" TitleColor="#666666" FontSize="14" VerticalOptions="Center">
-                                    <Picker.ItemsSource>
-                                        <x:Array Type="{x:Type x:String}">
-                                            <x:String>Activo</x:String>
-                                            <x:String>Inactivo</x:String>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
+                            <Label Text="NIT" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtNIT" Placeholder="1234567-8" TextColor="White" PlaceholderColor="#666666"/>
                             </Frame>
                         </VerticalStackLayout>
                     </Grid>
 
-                    <!-- ... (Botones con colores más vivos para que resalten en lo oscuro) -->
-                    <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
-                        <Button x:Name="btnGuardar" Text="GUARDAR CAMBIOS" BackgroundColor="#2196F3" CornerRadius="8" FontAttributes="Bold" HeightRequest="50" Clicked="OnGuardarClicked"/>
-                        <Button x:Name="btnLimpiar" Text="LIMPIAR" BackgroundColor="Transparent" BorderColor="#2196F3" BorderWidth="1" TextColor="#2196F3" CornerRadius="8" HeightRequest="45"/>
-                        <Button x:Name="btnEliminar" Text="ELIMINAR" BackgroundColor="#FF3B30" Opacity="0.8" CornerRadius="8" FontAttributes="Bold" HeightRequest="45" Clicked="OnLimpiarClicked"/>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Nombre del Encargado (Logística)" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                        <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                            <Entry x:Name="txtNombreContacto" Placeholder="Persona de contacto" TextColor="White" PlaceholderColor="#666666"/>
+                        </Frame>
+                    </VerticalStackLayout>
 
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Teléfono Contacto" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtTelefonoContacto" Placeholder="5555-5555" Keyboard="Telephone" TextColor="White" PlaceholderColor="#666666"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Correo Contacto" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtCorreoContacto" Placeholder="logistica@empresa.com" Keyboard="Email" TextColor="White" PlaceholderColor="#666666"/>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Dirección de su Bodega (Recolección)" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                        <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                            <Entry x:Name="txtDireccionBodega" Placeholder="Dirección exacta donde se recogen paquetes" TextColor="White" PlaceholderColor="#666666"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Banco para Reembolsos" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtBanco" Placeholder="Nombre del Banco" TextColor="White" PlaceholderColor="#666666"/>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="No. Cuenta Bancaria" FontSize="12" FontAttributes="Bold" TextColor="#CCCCCC" Margin="5,0"/>
+                            <Frame Padding="10,2" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525">
+                                <Entry x:Name="txtCuentaBancaria" Placeholder="00-000000-0" TextColor="White" PlaceholderColor="#666666"/>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Estado de la Empresa" FontSize="12" FontAttributes="Bold" TextColor="#AAAAAA" Margin="5,0"/>
+                        <Frame Padding="10,0" CornerRadius="8" HasShadow="False" BorderColor="#333333" BackgroundColor="#252525" HeightRequest="50">
+                            <Picker x:Name="pckEstado" Title="Seleccionar" TextColor="White" TitleColor="#666666" FontSize="14" VerticalOptions="Center">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Activo</x:String>
+                                        <x:String>Inactivo</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10" Margin="0,15,0,0">
+                        <Button x:Name="btnGuardar" Text="GUARDAR CLIENTE" BackgroundColor="#2196F3" CornerRadius="8" FontAttributes="Bold" HeightRequest="50" Clicked="OnGuardarClicked"/>
+                        <Button x:Name="btnLimpiar" Text="LIMPIAR CAMPOS" BackgroundColor="Transparent" BorderColor="#2196F3" BorderWidth="1" TextColor="#2196F3" CornerRadius="8" HeightRequest="45" Clicked="OnLimpiarClicked"/>
+                        <Button x:Name="btnEliminar" Text="DAR DE BAJA (DESACTIVAR)" BackgroundColor="#FF3B30" Opacity="0.8" CornerRadius="8" FontAttributes="Bold" HeightRequest="45" Clicked="OnEliminarClicked"/>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>
         </Border>
 
-        <!-- PANEL DE LISTADO (Derecha) -->
         <Grid Grid.RowDefinitions="Auto, *" Grid.Column="1">
             <HorizontalStackLayout Grid.Row="0" Spacing="15" Margin="0,0,0,20">
-                <Label Text="Usuarios del Sistema" FontSize="28" FontAttributes="Bold" TextColor="White" VerticalOptions="Center"/>
+                <Label Text="Empresas y Comercios Afiliados" FontSize="28" FontAttributes="Bold" TextColor="White" VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
             <Border Grid.Row="1" StrokeShape="RoundRectangle 15" StrokeThickness="0" BackgroundColor="#1E1E1E">
                 <VerticalStackLayout>
-                    <!-- Cabecera Tabla Oscura -->
-                    <Grid ColumnDefinitions="*, *, *, 100" Padding="20" BackgroundColor="#252525">
-                        <Label Text="USUARIO" FontAttributes="Bold" TextColor="#2196F3"/>
-                        <Label Text="CONTACTO" FontAttributes="Bold" TextColor="#AAAAAA" Grid.Column="1"/>
-                        <Label Text="ROL" FontAttributes="Bold" TextColor="#AAAAAA" Grid.Column="2"/>
+                    <Grid ColumnDefinitions="2*, *, 1.5*, 80" Padding="20" BackgroundColor="#252525">
+                        <Label Text="EMPRESA" FontAttributes="Bold" TextColor="#2196F3"/>
+                        <Label Text="NIT" FontAttributes="Bold" TextColor="#AAAAAA" Grid.Column="1"/>
+                        <Label Text="BODEGA RECOLECCIÓN" FontAttributes="Bold" TextColor="#AAAAAA" Grid.Column="2"/>
                         <Label Text="STATUS" FontAttributes="Bold" TextColor="#AAAAAA" Grid.Column="3" HorizontalOptions="Center"/>
                     </Grid>
 
-
-                    <!-- Esta es la lista que se llenará sola -->
-                    <CollectionView x:Name="lstUsuarios" ItemsSource="{Binding MisUsuarios}" HeightRequest="400" SelectionMode="Single" SelectionChanged="OnUsuarioSeleccionado">
+                    <CollectionView x:Name="lstClientes" ItemsSource="{Binding MisClientes}" HeightRequest="500" SelectionMode="Single" SelectionChanged="OnClienteSeleccionado">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid ColumnDefinitions="*, *, *, 100" Padding="10">
-                                    <!-- Nombre -->
-                                    <Label Text="{Binding NombreCompleto}" TextColor="White" FontAttributes="Bold" VerticalOptions="Center"/>
+                                <Grid ColumnDefinitions="2*, *, 1.5*, 80" Padding="15">
+                                    <Label Text="{Binding NombreComercial}" TextColor="White" FontAttributes="Bold" VerticalOptions="Center"/>
 
-                                    <!-- Correo -->
-                                    <Label Text="{Binding Correo}" Grid.Column="1" TextColor="#BBBBBB" VerticalOptions="Center"/>
+                                    <Label Text="{Binding NIT}" Grid.Column="1" TextColor="#BBBBBB" VerticalOptions="Center"/>
 
-                                    <!-- Rol (Accedemos al objeto oRol) -->
-                                    <Label Text="{Binding oRol.NombreRol}" Grid.Column="2" TextColor="#BBBBBB" VerticalOptions="Center"/>
+                                    <Label Text="{Binding DireccionBodega}" Grid.Column="2" TextColor="#BBBBBB" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
 
-                                    <!-- Estado -->
-                                    <Border Grid.Column="3" BackgroundColor="#2E7D32" StrokeShape="RoundRectangle 10" Padding="8,2" HorizontalOptions="Center">
-                                        <Label Text="{Binding EstadoTexto}" TextColor="White" FontSize="10" FontAttributes="Bold"/>
+                                    <Border Grid.Column="3" BackgroundColor="#2E7D32" StrokeShape="RoundRectangle 10" Padding="8,2" HorizontalOptions="Center" HeightRequest="25">
+                                        <Label Text="Activo" TextColor="White" FontSize="10" FontAttributes="Bold" VerticalOptions="Center"/>
                                     </Border>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
                 </VerticalStackLayout>
             </Border>
         </Grid>
     </Grid>
-
-
-
-
 </ContentView>

@@ -14,8 +14,5 @@ namespace CapaEntidad
         public decimal Subtotal => Cantidad * PrecioUnitario;
 
         public Producto oProducto { get; set; }
-
-
-
     }
 }

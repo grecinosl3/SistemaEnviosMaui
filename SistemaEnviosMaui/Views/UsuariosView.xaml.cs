@@ -1,164 +1,195 @@
 using CapaEntidad;
+using CapaNegocio;
 using System.Collections.ObjectModel;
 
-namespace SistemaEnviosMaui.Views;
-
-public partial class UsuariosView : ContentView
+namespace SistemaEnviosMaui.Views
 {
-    public ObservableCollection<Usuario> MisUsuarios { get; set; } = new ObservableCollection<Usuario>();
-    public ObservableCollection<Rol> MisRoles { get; set; } = new ObservableCollection<Rol>();
-
-    Usuario usuarioSeleccionado;
-
-    public UsuariosView()
+    public partial class ClientesView : ContentView
     {
-        InitializeComponent();
+        // Colección reactiva para llenar el Grid/CollectionView de la derecha
+        public ObservableCollection<Cliente> MisClientes { get; set; } = new ObservableCollection<Cliente>();
 
-        // 1. Inicializamos la lista
-        MisUsuarios = new ObservableCollection<Usuario>();
-        MisRoles = new ObservableCollection<Rol>();
+        // Instancia de la Capa de Negocio
+        private CN_Cliente _cnCliente = new CN_Cliente();
 
-        this.BindingContext = this;
+        // Variable global para saber a qué empresa tenemos seleccionada en la tabla
+        private Cliente _clienteSeleccionado;
 
-        // 2. Cargamos los datos de la BD
-        CargarRoles();
-        CargarUsuariosBD();
-    }
-
-    private async void OnGuardarClicked(object sender, EventArgs e)
-    {
-        try
+        public ClientesView()
         {
-            // --- PASO 2: Obtener el objeto Rol real del Picker ---
-            var rolSeleccionado = pckRol.SelectedItem as Rol;
+            InitializeComponent();
 
-            if (rolSeleccionado == null)
+            // Vinculamos la vista con este código para que el CollectionView reconozca "MisClientes"
+            this.BindingContext = this;
+
+            // Cargamos la tabla en cuanto se abra la pantalla
+            CargarClientesBD();
+
+            // Forzamos al picker de estado a arrancar por defecto en "Activo"
+            pckEstado.SelectedIndex = 0;
+        }
+
+        // 1. CARGAR LISTADO DESDE BASE DE DATOS
+        private void CargarClientesBD()
+        {
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Atención", "Por favor, selecciona un rol para el usuario", "OK");
+                var listaDesdeBD = _cnCliente.Listar();
+                MisClientes.Clear();
+
+                foreach (var c in listaDesdeBD)
+                {
+                    MisClientes.Add(c);
+                }
+            }
+            catch (Exception ex)
+            {
+                Application.Current.MainPage.DisplayAlert("Error al cargar", ex.Message, "OK");
+            }
+        }
+
+        // 2. BOTÓN GUARDAR (REGISTRAR O EDITAR)
+        private async void OnGuardarClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                // Armamos el objeto Cliente con lo que el usuario escribió en los Entry
+                var clienteFormulario = new Cliente
+                {
+                    IdCliente = _clienteSeleccionado?.IdCliente ?? 0, // Si es nuevo es 0, si estamos editando mantiene su ID
+                    NombreComercial = txtNombreComercial.Text?.Trim(),
+                    RazonSocial = txtRazonSocial.Text?.Trim(),
+                    NIT = txtNIT.Text?.Trim(),
+                    NombreContacto = txtNombreContacto.Text?.Trim(),
+                    TelefonoContacto = txtTelefonoContacto.Text?.Trim(),
+                    CorreoContacto = txtCorreoContacto.Text?.Trim(),
+                    DireccionBodega = txtDireccionBodega.Text?.Trim(),
+                    Banco = txtBanco.Text?.Trim(),
+                    CuentaBancaria = txtCuentaBancaria.Text?.Trim(),
+                    Activo = pckEstado.SelectedItem?.ToString() == "Activo"
+                };
+
+                string mensaje;
+
+                // SI ES UN CLIENTE NUEVO (REGISTRAR)
+                if (clienteFormulario.IdCliente == 0)
+                {
+                    int idGenerado = _cnCliente.Registrar(clienteFormulario, out mensaje);
+
+                    if (idGenerado > 0)
+                    {
+                        clienteFormulario.IdCliente = idGenerado;
+                        clienteFormulario.FechaRegistro = DateTime.Now;
+
+                        MainThread.BeginInvokeOnMainThread(() => {
+                            MisClientes.Add(clienteFormulario); // Lo agrega inmediatamente a la tabla
+                        });
+
+                        await Application.Current.MainPage.DisplayAlert("¡Éxito!", "Empresa afiliada correctamente.", "OK");
+                        OnLimpiarClicked(null, null);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Validación", mensaje, "OK");
+                    }
+                }
+                // SI YA EXISTÍA (EDITAR)
+                else
+                {
+                    bool editadoExitoso = _cnCliente.Editar(clienteFormulario, out mensaje);
+
+                    if (editadoExitoso)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("¡Éxito!", "Datos de la empresa actualizados.", "OK");
+                        CargarClientesBD(); // Recarga la tabla para ver los cambios reflejados
+                        OnLimpiarClicked(null, null);
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Validación", mensaje, "OK");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error Crítico", ex.Message, "OK");
+            }
+        }
+
+        // 3. SELECCIONAR UN CLIENTE DE LA TABLA (Para cargarlo en los campos de texto)
+        private void OnClienteSeleccionado(object sender, SelectionChangedEventArgs e)
+        {
+            _clienteSeleccionado = e.CurrentSelection.FirstOrDefault() as Cliente;
+
+            if (_clienteSeleccionado != null)
+            {
+                // Pasamos los datos de la fila seleccionada a las cajas de texto
+                txtNombreComercial.Text = _clienteSeleccionado.NombreComercial;
+                txtRazonSocial.Text = _clienteSeleccionado.RazonSocial;
+                txtNIT.Text = _clienteSeleccionado.NIT;
+                txtNombreContacto.Text = _clienteSeleccionado.NombreContacto;
+                txtTelefonoContacto.Text = _clienteSeleccionado.TelefonoContacto;
+                txtCorreoContacto.Text = _clienteSeleccionado.CorreoContacto;
+                txtDireccionBodega.Text = _clienteSeleccionado.DireccionBodega;
+                txtBanco.Text = _clienteSeleccionado.Banco;
+                txtCuentaBancaria.Text = _clienteSeleccionado.CuentaBancaria;
+
+                pckEstado.SelectedItem = _clienteSeleccionado.Activo ? "Activo" : "Inactivo";
+
+                // Cambiamos el texto del botón principal para guiar al usuario
+                btnGuardar.Text = "ACTUALIZAR DATOS";
+            }
+        }
+
+        // 4. DAR DE BAJA / DESACTIVAR (Eliminar en modelo logístico)
+        private async void OnEliminarClicked(object sender, EventArgs e)
+        {
+            if (_clienteSeleccionado == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Atención", "Selecciona una empresa de la lista primero.", "OK");
                 return;
             }
 
-            // 1. Creamos el objeto Usuario con el ID REAL del rol
-            var nuevoUsuario = new Usuario
+            bool confirmar = await Application.Current.MainPage.DisplayAlert(
+                "Confirmar",
+                $"¿Seguro que deseas dar de baja a la empresa '{_clienteSeleccionado.NombreComercial}'?\n(Esto no borrará sus guías pasadas, pero impedirá generar nuevos envíos).",
+                "Sí, Desactivar", "No");
+
+            if (confirmar)
             {
-                NombreCompleto = txtNombre.Text,
-                Correo = txtCorreo.Text,
-                Telefono = "",
-                Contrasena = "123",
-                Activo = true,
-                oRol = new Rol
+                string mensaje;
+                bool dadoDeBaja = _cnCliente.Eliminar(_clienteSeleccionado, out mensaje);
+
+                if (dadoDeBaja)
                 {
-                    IdRol = rolSeleccionado.IdRol, 
-                    NombreRol = rolSeleccionado.NombreRol
+                    await Application.Current.MainPage.DisplayAlert("Éxito", "La empresa ha sido inactivada del sistema.", "OK");
+                    CargarClientesBD(); // Actualiza la tabla visual
+                    OnLimpiarClicked(null, null);
                 }
-            };
-
-            // 2. Llamamos a tu CapaDatos.Registrar (Esto ya lo tenías perfecto)
-            string mensaje;
-            int idGenerado = new CapaDatos.CD_Usuario().Registrar(nuevoUsuario, out mensaje);
-
-            if (idGenerado != 0)
-            {
-                // 3. Si se guardó en SQL, lo agregamos a la lista visual
-                nuevoUsuario.IdUsuario = idGenerado;
-                MainThread.BeginInvokeOnMainThread(() => {
-                    MisUsuarios.Add(nuevoUsuario);
-                });
-
-                await Application.Current.MainPage.DisplayAlert("¡Éxito!", "Guardado en Base de Datos", "OK");
-                OnLimpiarClicked(null, null);
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", mensaje, "OK");
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", mensaje, "OK");
+                }
             }
         }
-        catch (Exception ex)
+
+        // 5. LIMPIAR EL FORMULARIO
+        private void OnLimpiarClicked(object sender, EventArgs e)
         {
-            await Application.Current.MainPage.DisplayAlert("Error Crítico", ex.Message, "OK");
+            txtNombreComercial.Text = string.Empty;
+            txtRazonSocial.Text = string.Empty;
+            txtNIT.Text = string.Empty;
+            txtNombreContacto.Text = string.Empty;
+            txtTelefonoContacto.Text = string.Empty;
+            txtCorreoContacto.Text = string.Empty;
+            txtDireccionBodega.Text = string.Empty;
+            txtBanco.Text = string.Empty;
+            txtCuentaBancaria.Text = string.Empty;
+
+            pckEstado.SelectedIndex = 0; // Regresa a Activo por defecto
+            _clienteSeleccionado = null; // Reseteamos la selección
+
+            btnGuardar.Text = "GUARDAR CLIENTE"; // Regresa el botón a su estado original
         }
     }
-
-    private void OnLimpiarClicked(object sender, EventArgs e)
-    {
-        txtNombre.Text = string.Empty;
-        txtCorreo.Text = string.Empty;
-        if (pckRol != null) pckRol.SelectedIndex = -1;
-        if (pckEstado != null) pckEstado.SelectedIndex = -1;
-    }
-
-    private void CargarUsuariosBD()
-    {
-        // Aquí es donde invocas a tu CapaDatos
-        var listaDesdeBD = new CapaDatos.CD_Usuario().ListarUsuarios();
-
-        MisUsuarios.Clear();
-
-        foreach (var u in listaDesdeBD)
-        {
-            MisUsuarios.Add(u);
-        }
-    }
-
-
-    // En el constructor, después de inicializar la lista:
-    private void CargarRoles()
-    {
-
-        MisRoles.Clear();
-        MisRoles.Add(new Rol { IdRol = 1, NombreRol = "Administrador" });
-        MisRoles.Add(new Rol { IdRol = 2, NombreRol = "Moderador" });
-        MisRoles.Add(new Rol { IdRol = 3, NombreRol = "Repartidor" });
-
-        pckRol.ItemsSource = MisRoles;
-        pckRol.ItemDisplayBinding = new Binding("NombreRol");
-    }
-
-    private async void OnEliminarClicked(object sender, EventArgs e)
-    {
-        // 1. Verificar si hay alguien seleccionado
-        if (usuarioSeleccionado == null)
-        {
-            await Application.Current.MainPage.DisplayAlert("Atención", "Selecciona un usuario de la lista primero", "OK");
-            return;
-        }
-
-        // 2. Preguntar confirmación (Importante para no borrar por error)
-        bool confirmar = await Application.Current.MainPage.DisplayAlert("Confirmar", $"¿Deseas eliminar a {usuarioSeleccionado.NombreCompleto}?", "Sí", "No");
-
-        if (confirmar)
-        {
-            string mensaje;
-            // 3. Llamar a la Capa Datos
-            bool eliminado = new CapaDatos.CD_Usuario().Eliminar(usuarioSeleccionado.IdUsuario, out mensaje);
-
-            if (eliminado)
-            {
-                // 4. Quitarlo de la lista visual (ObservableCollection)
-                MisUsuarios.Remove(usuarioSeleccionado);
-                await Application.Current.MainPage.DisplayAlert("Éxito", "Usuario eliminado", "OK");
-                OnLimpiarClicked(null, null); // Limpiamos los campos
-            }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", mensaje, "OK");
-            }
-        }
-    }
-
-    // Este método sirve para capturar al usuario cuando lo tocas en la lista
-    private void OnUsuarioSeleccionado(object sender, SelectionChangedEventArgs e)
-    {
-        usuarioSeleccionado = e.CurrentSelection.FirstOrDefault() as Usuario;
-
-        if (usuarioSeleccionado != null)
-        {
-            // Opcional: Llenar los campos de la izquierda con los datos del seleccionado
-            txtNombre.Text = usuarioSeleccionado.NombreCompleto;
-            txtCorreo.Text = usuarioSeleccionado.Correo;
-            // los demas
-        }
-    }
-
-
 }

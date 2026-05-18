@@ -1,3 +1,4 @@
+using CapaEntidad;
 using SistemaEnviosMaui.Views;
 
 namespace SistemaEnviosMaui.Views;
@@ -23,7 +24,7 @@ public partial class PrincipalPage : ContentPage
         switch (opcion)
         {
             case "Usuarios":
-                ContenedorPrincipal.Content = new UsuariosView();
+                ContenedorPrincipal.Content = new ClientesView();
                 break;
             case "Pedidos":
                 ContenedorPrincipal.Content = new PedidosPage();
