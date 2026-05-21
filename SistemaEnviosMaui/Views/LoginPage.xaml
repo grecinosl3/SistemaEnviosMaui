@@ -2,45 +2,138 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SistemaEnviosMaui.Views.LoginPage"
-             Title="Bienvenido"
-             BackgroundColor="#F5F5F5">
+             Title="Acceso al Sistema"
+             NavigationPage.HasNavigationBar="False">
 
-    <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Center">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0A0E17" Offset="0.0" />
+            <GradientStop Color="#121824" Offset="0.5" />
+            <GradientStop Color="#1A2333" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
-        <Image Source="dotnet_bot.png"
-               HeightRequest="100"
-               HorizontalOptions="Center" />
+    <ScrollView VerticalOptions="CenterAndExpand">
+        <Grid Padding="24" VerticalOptions="Center">
 
-        <Label Text="Inicio de Sesión"
-               FontSize="28"
-               FontAttributes="Bold"
-               TextColor="#333"
-               HorizontalOptions="Center" />
+            <Border StrokeShape="RoundRectangle 24" 
+                    Stroke="#2A364F" 
+                    BackgroundColor="#1E293B" 
+                    Padding="30, 40, 30, 35"
+                    VerticalOptions="Center"
+                    StrokeThickness="1"
+                    Shadow="{Shadow Brush=Black, Offset='0,15', Radius=30, Opacity=0.4}">
 
-        <Frame Padding="10,0" CornerRadius="10" HasShadow="False" BorderColor="#CCCCCC">
-            <Entry x:Name="txtCorreo" 
-                   Placeholder="Correo electrónico" 
-                   Keyboard="Email"
-                   HeightRequest="45"/>
-        </Frame>
+                <VerticalStackLayout Spacing="24">
 
-        <Frame Padding="10,0" CornerRadius="10" HasShadow="False" BorderColor="#CCCCCC">
-            <Entry x:Name="txtPassword" 
-                   Placeholder="Contraseña" 
-                   IsPassword="True"
-                   HeightRequest="45"/>
-        </Frame>
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,0,0,10">
+                        <Border StrokeShape="RoundRectangle 42.5" 
+                                BackgroundColor="#0F172A" 
+                                WidthRequest="85" 
+                                HeightRequest="85"
+                                StrokeThickness="1"
+                                Stroke="#3B82F6"
+                                Shadow="{Shadow Brush='#3B82F6', Offset='0,0', Radius=15, Opacity=0.2}">
+                            <Label Text="🚀" FontSize="44" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
 
-        <Button x:Name="btnIngresar"
-                Text="INGRESAR"
-                BackgroundColor="#2196F3"
-                TextColor="White"
-                FontAttributes="Bold"
-                HeightRequest="50"
-                CornerRadius="10"
-                Clicked="btnIngresar_Clicked"/>
+                        <Label Text="LOGÍSTICA EXPERTA" 
+                               FontSize="12" 
+                               TextColor="#3B82F6" 
+                               FontAttributes="Bold" 
+                               CharacterSpacing="3" 
+                               HorizontalOptions="Center"/>
 
-        <ActivityIndicator x:Name="indicador" IsRunning="False" HorizontalOptions="Center" Color="#2196F3" />
+                        <Label Text="Sistema de Envíos" 
+                               FontSize="24" 
+                               FontAttributes="Bold" 
+                               TextColor="White" 
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
 
-    </VerticalStackLayout>
+                    <Grid RowDefinitions="Auto, Auto" RowSpacing="6">
+                        <Label Grid.Row="0" Text="Identificación" FontSize="13" TextColor="#94A3B8" FontAttributes="Bold" Margin="4,0"/>
+                        <Border Grid.Row="1" StrokeShape="RoundRectangle 12" Stroke="#334155" BackgroundColor="#0F172A" StrokeThickness="1.5">
+                            <Grid ColumnDefinitions="40, *">
+                                <Label Grid.Column="0" Text="✉️" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#64748B"/>
+                                <Entry Grid.Column="1" 
+                                       x:Name="txtCorreo" 
+                                       Placeholder="tu-correo@sistema.com" 
+                                       PlaceholderColor="#475569"
+                                       TextColor="White"
+                                       HeightRequest="50" 
+                                       Keyboard="Email"
+                                       Margin="0,0,10,0"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Grid RowDefinitions="Auto, Auto" RowSpacing="6">
+                        <Label Grid.Row="0" Text="Clave de Acceso" FontSize="13" TextColor="#94A3B8" FontAttributes="Bold" Margin="4,0"/>
+                        <Border Grid.Row="1" StrokeShape="RoundRectangle 12" Stroke="#334155" BackgroundColor="#0F172A" StrokeThickness="1.5">
+                            <Grid ColumnDefinitions="40, *">
+                                <Label Grid.Column="0" Text="🔒" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#64748B"/>
+                                <Entry Grid.Column="1" 
+                                       x:Name="txtPassword" 
+                                       Placeholder="••••••••••••" 
+                                       IsPassword="True" 
+                                       PlaceholderColor="#475569"
+                                       TextColor="White"
+                                       HeightRequest="50" 
+                                       Margin="0,0,10,0"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Button x:Name="btnIngresar"
+                            Text="INICIAR SESIÓN" 
+                            BackgroundColor="#2563EB" 
+                            TextColor="White" 
+                            CornerRadius="12" 
+                            HeightRequest="52" 
+                            FontAttributes="Bold"
+                            CharacterSpacing="1"
+                            FontSize="15"
+                            Clicked="btnIngresar_Clicked"
+                            Shadow="{Shadow Brush=#2563EB, Offset='0,4', Radius=12, Opacity=0.4}"
+                            Margin="0,10,0,0"/>
+
+                    <Grid ColumnDefinitions="*, Auto, *" Margin="0,10,0,0" VerticalOptions="Center">
+                        <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#334155" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text=" O TAMBIÉN " FontSize="10" TextColor="#64748B" FontAttributes="Bold" VerticalOptions="Center" Margin="10,0"/>
+                        <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#334155" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                        <Button Grid.Column="0" 
+                                Text="Crear Cuenta" 
+                                BackgroundColor="Transparent" 
+                                BorderColor="#10B981"
+                                BorderWidth="1.5"
+                                TextColor="#10B981" 
+                                CornerRadius="12" 
+                                HeightRequest="46" 
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                Clicked="OnRegistroClicked"/>
+
+                        <Button Grid.Column="1" 
+                                Text="Salir" 
+                                BackgroundColor="Transparent" 
+                                BorderColor="#EF4444"
+                                BorderWidth="1.5"
+                                TextColor="#EF4444" 
+                                CornerRadius="12" 
+                                HeightRequest="46" 
+                                FontAttributes="Bold"
+                                FontSize="13"
+                                Clicked="OnSalirClicked"/>
+                    </Grid>
+
+                    <ActivityIndicator x:Name="indicador" IsVisible="False" Color="#2563EB" HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
 </ContentPage>

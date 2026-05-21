@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SistemaEnviosMaui.Views.UsuariosPage"
+             BackgroundColor="#121212">
+
+    <Grid ColumnDefinitions="380, *" Padding="20" ColumnSpacing="20">
+
+        <Border Grid.Column="0" StrokeShape="RoundRectangle 15" BackgroundColor="#1E1E1E" Stroke="Transparent" Padding="20">
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Spacing="15">
+
+                    <Label Text="REGISTRO DE PERSONAL" TextColor="#2196F3" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Nombre Completo" TextColor="#B0B0B0" FontSize="12"/>
+                        <Entry x:Name="txtNombre" Placeholder="Ej. Juan Pérez" BackgroundColor="#2D2D2D" TextColor="White" PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5" IsVisible="False">
+                        <Label Text="Documento Identificación / Cédula" TextColor="#B0B0B0" FontSize="12"/>
+                        <Entry x:Name="txtDocumento" Placeholder="Ej. 12345678" BackgroundColor="#2D2D2D" TextColor="White" PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Teléfono" TextColor="#B0B0B0" FontSize="12"/>
+                        <Entry x:Name="txtTelefono" Placeholder="Ej. 5555-5555" Keyboard="Telephone" BackgroundColor="#2D2D2D" TextColor="White" PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Correo Electrónico" TextColor="#B0B0B0" FontSize="12"/>
+                        <Entry x:Name="txtCorreo" Placeholder="juan@sistema.com" Keyboard="Email" BackgroundColor="#2D2D2D" TextColor="White" PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Contraseña de Acceso" TextColor="#B0B0B0" FontSize="12"/>
+                        <Entry x:Name="txtClave" Placeholder="********" IsPassword="True" BackgroundColor="#2D2D2D" TextColor="White" PlaceholderColor="Gray"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Rol del Sistema" TextColor="#B0B0B0" FontSize="12"/>
+                        <Picker x:Name="pckRol" BackgroundColor="#2D2D2D" TextColor="White" Title="Seleccionar Rol" TitleColor="Gray">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Administrador</x:String>
+                                    <x:String>Operador Logístico</x:String>
+                                    <x:String>Repartidor</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Estado" TextColor="#B0B0B0" FontSize="12"/>
+                        <Picker x:Name="pckEstado" BackgroundColor="#2D2D2D" TextColor="White">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Activo</x:String>
+                                    <x:String>Inactivo</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <Button x:Name="btnGuardar" Text="GUARDAR USUARIO" BackgroundColor="#2196F3" TextColor="White" FontAttributes="Bold" CornerRadius="8" Margin="0,15,0,0" Clicked="OnGuardarClicked"/>
+                    <Button Text="DAR DE BAJA" BackgroundColor="#D32F2F" TextColor="White" FontAttributes="Bold" CornerRadius="8" Clicked="OnEliminarClicked"/>
+                    <Button Text="LIMPIAR" BackgroundColor="#616161" TextColor="White" FontAttributes="Bold" CornerRadius="8" Clicked="OnLimpiarClicked"/>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto, *">
+
+            <Grid Grid.Row="0" ColumnDefinitions="2.5*, 2.5*, 2*, *" BackgroundColor="#1E1E1E" Padding="15,10" Margin="0,0,0,5">
+                <Label Grid.Column="0" Text="Nombre Completo" TextColor="#2196F3" FontAttributes="Bold" FontSize="13"/>
+                <Label Grid.Column="1" Text="Correo Electrónico" TextColor="#2196F3" FontAttributes="Bold" FontSize="13"/>
+                <Label Grid.Column="2" Text="Rol Asignado" TextColor="#2196F3" FontAttributes="Bold" FontSize="13"/>
+                <Label Grid.Column="3" Text="Estado" TextColor="#2196F3" FontAttributes="Bold" FontSize="13" HorizontalOptions="Center"/>
+            </Grid>
+
+            <CollectionView x:Name="lstUsuarios" Grid.Row="1" ItemsSource="{Binding MisUsuarios}" SelectionMode="Single" SelectionChanged="OnUsuarioSeleccionado">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="2.5*, 2.5*, 2*, *" Padding="15" Margin="0,2" HeightRequest="60" BackgroundColor="#1A1A1A">
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#1A1A1A" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#2D2D2D" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <Label Grid.Column="0" Text="{Binding NombreCompleto}" TextColor="White" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="{Binding Correo}" TextColor="#E0E0E0" VerticalOptions="Center"/>
+
+                            <Label Grid.Column="2" Text="{Binding oRol.Descripcion, FallbackValue='No Asignado'}" TextColor="White" VerticalOptions="Center"/>
+
+                            <Border Grid.Column="3" StrokeShape="RoundRectangle 5" HorizontalOptions="Center" VerticalOptions="Center" Padding="8,4" BackgroundColor="#2D2D2D">
+                                <Label Text="{Binding EstadoTexto}" TextColor="White" FontSize="11" FontAttributes="Bold"/>
+                            </Border>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentView>

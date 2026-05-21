@@ -272,6 +272,231 @@ namespace CapaDatos
             return lista;
         }
 
+        //  MÉTODO 1: FILTRAR PEDIDOS PENDIENTES DE RUTA
+        public List<Pedido> ListarPedidosPendientes()
+        {
+            List<Pedido> lista = new List<Pedido>();
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // El query correcto que habla el mismo idioma de tu base de datos
+                    string query = @"
+                SELECT IdPedido, NombreDestinatario, DireccionEntrega, Total, FechaPedido
+                FROM Pedidos
+                WHERE (Estado = 'Registrado' OR Estado = 'REGISTRADO') 
+                AND (IdUsuario IS NULL OR IdUsuario = 0)";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Pedido()
+                            {
+                                IdPedido = Convert.ToInt32(dr["IdPedido"]),
+                                NombreDestinatario = dr["NombreDestinatario"].ToString(),
+                                DireccionEntrega = dr["DireccionEntrega"].ToString(),
+                                Total = Convert.ToDecimal(dr["Total"]),
+                                FechaPedido = Convert.ToDateTime(dr["FechaPedido"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("ERROR DESPACHO LEER: " + ex.Message);
+                    lista = new List<Pedido>();
+                }
+            }
+            return lista;
+        }
+
+        //  MÉTODO 2: ACTUALIZAR EL CHOFER Y PASAR A "EN RUTA"
+        // 🛠️ Nombre corregido para que tu CN_Pedido lo encuentre a la perfección
+        public bool AsignarPilotoEnBD(int idPedido, int idUsuario, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // El query que apunta a tu tabla real 'Pedidos' y tu columna 'IdUsuario'
+                    string query = @"
+                UPDATE Pedidos 
+                SET IdUsuario = @idusuario, 
+                    Estado = 'En Ruta',
+                    FechaEntrega = GETDATE()
+                WHERE IdPedido = @idpedido";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@idusuario", idUsuario);
+                    cmd.Parameters.AddWithValue("@idpedido", idPedido);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+
+                    if (filasAfectadas > 0)
+                    {
+                        respuesta = true;
+                    }
+                    else
+                    {
+                        Mensaje = "No se pudo asignar el pedido o el pedido ya no existe.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return respuesta;
+        }
+
+
+        // 1. OBTENER ENVIOS ENTREGADOS POR REPARTIDOR PARA COBRO COD
+        public List<Pedido> ObtenerPedidosParaLiquidar(int idRepartidor)
+        {
+            List<Pedido> lista = new List<Pedido>();
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // 🛠️ CORRECCIÓN DE COLUMNA Y TABLA: Cambiado a p.IdUsuario y 'Pedidos'
+                    string query = @"
+                SELECT p.IdPedido, p.NombreDestinatario, p.DireccionEntrega, p.MontoCOD, p.CostoFlete, p.Total, p.FechaPedido
+                FROM Pedidos p
+                WHERE p.IdUsuario = @idrepartidor 
+                AND p.MetodoPago = 'COD' 
+                AND p.Estado = 'Entregado'";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@idrepartidor", idRepartidor);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Pedido()
+                            {
+                                IdPedido = Convert.ToInt32(dr["IdPedido"]),
+                                NombreDestinatario = dr["NombreDestinatario"].ToString(),
+                                DireccionEntrega = dr["DireccionEntrega"].ToString(),
+                                MontoCOD = Convert.ToDecimal(dr["MontoCOD"]),
+                                CostoFlete = Convert.ToDecimal(dr["CostoFlete"]),
+                                Total = Convert.ToDecimal(dr["Total"]),
+                                FechaPedido = Convert.ToDateTime(dr["FechaPedido"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Imprime el error real en la consola de salida de Visual Studio por si acaso
+                    System.Diagnostics.Debug.WriteLine("CRITICAL SQL ERROR: " + ex.Message);
+                    lista = new List<Pedido>();
+                }
+            }
+            return lista;
+        }
+
+        // 2. PROCESAR LA LIQUIDACIÓN COBRADA (Cerrar el ciclo del dinero)
+        public bool LiquidarPedidosPiloto(int idRepartidor, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // 🛠️ CORRECCIÓN AQUÍ TAMBIÉN: Cambiado a IdUsuario y 'Pedidos'
+                    string query = @"
+                UPDATE Pedidos 
+                SET Estado = 'Liquidado' 
+                WHERE IdUsuario = @idrepartidor 
+                AND MetodoPago = 'COD' 
+                AND Estado = 'Entregado'";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@idrepartidor", idRepartidor);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+
+                    if (filasAfectadas > 0)
+                    {
+                        respuesta = true;
+                    }
+                    else
+                    {
+                        Mensaje = "No se encontraron pedidos pendientes de liquidar para este piloto.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return respuesta;
+        }
+
+
+
+
+        public DashboardMetrics ObtenerMetricasDashboard()
+        {
+            DashboardMetrics metrics = new DashboardMetrics();
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // Consulta consolidada para traer todo de un solo golpe por rendimiento
+                    string query = @"
+                SELECT 
+                    COUNT(CASE WHEN Estado = 'Registrado' THEN 1 END) as Pendientes,
+                    COUNT(CASE WHEN Estado = 'En Ruta' THEN 1 END) as EnRuta,
+                    COUNT(CASE WHEN Estado = 'Liquidado' THEN 1 END) as Liquidados,
+                    ISNULL(SUM(CASE WHEN Estado = 'Liquidado' AND MetodoPago = 'COD' THEN Total END), 0) as TotalMes
+                FROM PEDIDO";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            metrics.PaquetesPendientes = Convert.ToInt32(dr["Pendientes"]);
+                            metrics.PaquetesEnRuta = Convert.ToInt32(dr["EnRuta"]);
+                            metrics.PaquetesLiquidados = Convert.ToInt32(dr["Liquidados"]);
+                            metrics.TotalEfectivoMes = Convert.ToDecimal(dr["TotalMes"]);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    metrics = new DashboardMetrics(); // Si falla, devuelve todo en 0
+                }
+            }
+            return metrics;
+        }
+
 
     }
 }

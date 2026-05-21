@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SistemaEnviosMaui.Views.RepartidoresPage"
+             BackgroundColor="#121212">
+
+    <Grid ColumnDefinitions="380, *" ColumnSpacing="20" Margin="20">
+
+        <Frame Grid.Column="0" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="20">
+            <ScrollView>
+                <VerticalStackLayout Spacing="15">
+                    <Label x:Name="lblTituloFormulario" Text="REGISTRAR NUEVO PILOTO" FontSize="16" FontAttributes="Bold" TextColor="#3498db" Margin="0,0,0,10"/>
+
+                    <Entry x:Name="txtIdRepartidor" IsVisible="False" Text="0"/>
+
+                    <Label Text="Nombre(s)" TextColor="White" FontSize="13"/>
+                    <Entry x:Name="txtNombre" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="Ej: Carlos Alberto"/>
+
+                    <Label Text="Apellido(s)" TextColor="White" FontSize="13"/>
+                    <Entry x:Name="txtApellidos" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="Ej: Mendoza Gómez"/>
+
+                    <Label Text="Teléfono de Contacto" TextColor="White" FontSize="13"/>
+                    <Entry x:Name="txtTelefono" Keyboard="Telephone" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="Ej: 5544-3322"/>
+
+                    <Label Text="Tipo de Vehículo asignado" TextColor="White" FontSize="13"/>
+                    <Picker x:Name="cboTipoVehiculo" BackgroundColor="#2b2b2b" TextColor="White" Title="Seleccione...">
+                        <Picker.Items>
+                            <x:String>Motocicleta</x:String>
+                            <x:String>Panel de Carga</x:String>
+                            <x:String>Camión Ligero</x:String>
+                        </Picker.Items>
+                    </Picker>
+
+                    <Label Text="Placa del Vehículo" TextColor="White" FontSize="13"/>
+                    <Entry x:Name="txtPlaca" BackgroundColor="#2b2b2b" TextColor="White" Placeholder="Ej: M-123ABC / P-456XYZ"/>
+
+                    <HorizontalStackLayout Spacing="10" Margin="0,5,0,10">
+                        <CheckBox x:Name="chkActivo" IsChecked="True" Color="#2ecc71"/>
+                        <Label Text="Piloto Disponible / Activo" TextColor="White" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <Button x:Name="btnGuardar" Text="Guardar Piloto" BackgroundColor="#2ecc71" TextColor="White" FontAttributes="Bold" HeightRequest="45" Clicked="OnGuardarClicked"/>
+                    <Button x:Name="btnCancelar" Text="Cancelar Edición" BackgroundColor="#e74c3c" TextColor="White" FontAttributes="Bold" HeightRequest="40" IsVisible="False" Clicked="OnCancelarClicked"/>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Frame>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto, *">
+
+            <Label Grid.Row="0" Text="PILOTOS LOGÍSTICOS REGISTRADOS" FontSize="18" FontAttributes="Bold" TextColor="White" Margin="0,0,0,15"/>
+
+            <Frame Grid.Row="1" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="0">
+                <Grid RowDefinitions="Auto, *">
+
+                    <Grid Grid.Row="0" BackgroundColor="#2b2b2b" Padding="12" ColumnDefinitions="2.5*, 1.5*, 2*, 1.5*, Auto">
+                        <Label Text="Nombre del Piloto" TextColor="#3498db" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Teléfono" TextColor="#3498db" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Column="2" Text="Vehículo / Placa" TextColor="#3498db" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Estado" TextColor="#3498db" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Column="4" Text="Acciones" TextColor="#3498db" FontAttributes="Bold" WidthRequest="100" HorizontalOptions="Center"/>
+                    </Grid>
+
+                    <CollectionView Grid.Row="1" x:Name="lstRepartidores" EmptyView="No hay repartidores registrados en el sistema central.">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="12" ColumnDefinitions="2.5*, 1.5*, 2*, 1.5*, Auto" BackgroundColor="#1a1a1a">
+
+                                    <HorizontalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding Nombre}" TextColor="White"/>
+                                        <Label Text=" "/>
+                                        <Label Text="{Binding Apellidos}" TextColor="White"/>
+                                    </HorizontalStackLayout>
+
+                                    <Label Grid.Column="1" Text="{Binding Telefono}" TextColor="#aaaaaa" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                                    <HorizontalStackLayout Grid.Column="2" VerticalOptions="Center">
+                                        <Label Text="{Binding TipoVehiculo}" TextColor="White" FontAttributes="Bold"/>
+                                        <Label Text=" [" TextColor="#666666"/>
+                                        <Label Text="{Binding PlacaVehiculo}" TextColor="#e67e22"/>
+                                        <Label Text="]" TextColor="#666666"/>
+                                    </HorizontalStackLayout>
+
+                                    <Label Grid.Column="3" Text="Disponible" TextColor="#2ecc71" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding Activo}"/>
+
+                                    <Label Grid.Column="3" Text="Inactivo" TextColor="#e74c3c" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" IsVisible="False">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Activo}" Value="False">
+                                                <Setter Property="IsVisible" Value="True"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+
+                                    <Button Grid.Column="4" Text="✏️" BackgroundColor="#3498db" TextColor="White" WidthRequest="45" HeightRequest="35" CornerRadius="5" Padding="0" Clicked="OnEditarFilaClicked" CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
+</ContentView>

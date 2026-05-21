@@ -13,11 +13,11 @@ namespace SistemaEnviosMaui
         protected override Window CreateWindow(IActivationState? activationState)
         {
             // DESCOMENTAR PARA USAR LA VENTANA PRINCIPAL
-            //return new Window(new AppShell());
+            return new Window(new AppShell());
 
-            var pantallaPrincipal = new NavigationPage(new Views.PrincipalPage("Usuario Prueba"));
+            //var pantallaPrincipal = new NavigationPage(new Views.PrincipalPage("Usuario Prueba"));
 
-            return new Window(pantallaPrincipal);
+            //return new Window(pantallaPrincipal);
         }
     }
 }

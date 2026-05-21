@@ -115,5 +115,63 @@ namespace CapaNegocio
 
             return objcd_pedido.AsignarRepartidor(idPedido, idRepartidor, out Mensaje);
         }
+
+        //  PUENTE PARA TRAER LOS PENDIENTES
+        public List<Pedido> ListarPendientes()
+        {
+            return objcd_pedido.ListarPedidosPendientes();
+        }
+
+        // VALIDACIÓN LOGÍSTICA PARA LA ASIGNACIÓN
+        public bool DespacharARuta(int idPedido, int idRepartidor, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+
+            if (idPedido <= 0)
+                Mensaje += "Número de guía o pedido inválido.\n";
+
+            if (idRepartidor <= 0)
+                Mensaje += "Debe seleccionar obligatoriamente un piloto para la entrega.\n";
+
+            if (Mensaje != string.Empty)
+                return false;
+
+            // Si todo está bien, mandamos la orden de salida a la Capa de Datos
+            return objcd_pedido.AsignarPilotoEnBD(idPedido, idRepartidor, out Mensaje);
+        }
+
+
+        //  MODULO DE LIQUIDACIÓN DE COBROS DE PILOTO - REPARTIDOR
+
+        //  ENLACE PARA TRAER LA CARGA DE COBROS DEL PILOTO
+        public List<Pedido> ListarPedidosParaLiquidar(int idRepartidor)
+        {
+            if (idRepartidor <= 0)
+                return new List<Pedido>();
+
+            return objcd_pedido.ObtenerPedidosParaLiquidar(idRepartidor);
+        }
+
+        //  VALIDACIÓN PARA EFECTUAR EL CIERRE DE CAJA
+        public bool LiquidarCajaPiloto(int idRepartidor, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+
+            if (idRepartidor <= 0)
+            {
+                Mensaje = "Debe seleccionar un piloto válido para realizar la liquidación.";
+                return false;
+            }
+
+            return objcd_pedido.LiquidarPedidosPiloto(idRepartidor, out Mensaje);
+        }
+
+
+
+
+        public DashboardMetrics GetDashboard()
+        {
+            return objcd_pedido.ObtenerMetricasDashboard();
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using CapaEntidad;
-using Microsoft.Data.SqlClient; 
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +8,7 @@ namespace CapaDatos
 {
     public class CD_Usuario
     {
+        // 1. LISTAR USUARIOS (Corregido para leer la columna real NombreCompleto)
         public List<Usuario> ListarUsuarios()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -16,9 +17,8 @@ namespace CapaDatos
             {
                 using (SqlConnection con = new SqlConnection(Conexion.Cadena))
                 {
-                    
                     string query = @"SELECT u.IdUsuario, 
-                                     (u.Nombre + ' ' + u.Apellido) as NombreCompleto, 
+                                     u.NombreCompleto, 
                                      u.Correo, 
                                      ISNULL(u.Telefono,'') as Telefono, 
                                      u.IdRol, u.Activo, 
@@ -52,7 +52,6 @@ namespace CapaDatos
             }
             catch (Exception ex)
             {
-               
                 string error = ex.Message;
                 lista = new List<Usuario>();
             }
@@ -60,6 +59,7 @@ namespace CapaDatos
             return lista;
         }
 
+        // 2. LOGIN (Corregido para leer la columna real NombreCompleto)
         public Usuario Login(string correo, string contrasena)
         {
             Usuario usuario = null;
@@ -68,8 +68,8 @@ namespace CapaDatos
             {
                 using (SqlConnection con = new SqlConnection(Conexion.Cadena))
                 {
-                    // También concatenamos aquí
-                    string query = @"SELECT u.IdUsuario, (u.Nombre + ' ' + u.Apellido) as NombreCompleto, 
+                    string query = @"SELECT u.IdUsuario, 
+                                     u.NombreCompleto, 
                                      u.Correo, u.Telefono, u.Activo,
                                      u.IdRol, r.NombreRol 
                                      FROM Usuarios u
@@ -113,7 +113,7 @@ namespace CapaDatos
             return usuario;
         }
 
-
+        // 3. REGISTRAR
         public int Registrar(Usuario obj, out string Mensaje)
         {
             int idUsuarioGenerado = 0;
@@ -124,26 +124,23 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
                 {
                     SqlCommand cmd = new SqlCommand("SP_REGISTRARUSUARIO", oconexion);
-
-                    // Enviamos el NombreCompleto (el SP se encarga de dividirlo en Nombre y Apellido)
-                    cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
-                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
-                    cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
-                    cmd.Parameters.AddWithValue("Contrasena", obj.Contrasena);
-                    cmd.Parameters.AddWithValue("IdRol", obj.oRol.IdRol);
-                    cmd.Parameters.AddWithValue("Activo", obj.Activo);
-
-                    // Parámetros de salida
-                    cmd.Parameters.Add("IdUsuarioResultado", SqlDbType.Int).Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
-
                     cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("@Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("@Telefono", obj.Telefono);
+                    cmd.Parameters.AddWithValue("@Contrasena", obj.Contrasena);
+                    cmd.Parameters.AddWithValue("@IdRol", obj.oRol.IdRol);
+                    cmd.Parameters.AddWithValue("@Activo", obj.Activo);
+
+                    cmd.Parameters.Add("@IdUsuarioResultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
 
                     oconexion.Open();
                     cmd.ExecuteNonQuery();
 
-                    idUsuarioGenerado = Convert.ToInt32(cmd.Parameters["IdUsuarioResultado"].Value);
-                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                    idUsuarioGenerado = Convert.ToInt32(cmd.Parameters["@IdUsuarioResultado"].Value);
+                    Mensaje = cmd.Parameters["@Mensaje"].Value.ToString();
                 }
             }
             catch (Exception ex)
@@ -154,6 +151,7 @@ namespace CapaDatos
             return idUsuarioGenerado;
         }
 
+        // 4. EDITAR
         public bool Editar(Usuario obj, out string Mensaje)
         {
             bool respuesta = false;
@@ -164,24 +162,24 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
                 {
                     SqlCommand cmd = new SqlCommand("SP_EDITARUSUARIO", oconexion);
-                    cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
-                    cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
-                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
-                    cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
-                    cmd.Parameters.AddWithValue("Contrasena", obj.Contrasena);
-                    cmd.Parameters.AddWithValue("IdRol", obj.oRol.IdRol);
-                    cmd.Parameters.AddWithValue("Activo", obj.Activo);
-
-                    cmd.Parameters.Add("Respuesta", SqlDbType.Bit).Direction = ParameterDirection.Output;
-                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
-
                     cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@IdUsuario", obj.IdUsuario);
+                    cmd.Parameters.AddWithValue("@NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("@Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("@Telefono", obj.Telefono);
+                    cmd.Parameters.AddWithValue("@Contrasena", obj.Contrasena);
+                    cmd.Parameters.AddWithValue("@IdRol", obj.oRol.IdRol);
+                    cmd.Parameters.AddWithValue("@Activo", obj.Activo);
+
+                    cmd.Parameters.Add("@Respuesta", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
 
                     oconexion.Open();
                     cmd.ExecuteNonQuery();
 
-                    respuesta = Convert.ToBoolean(cmd.Parameters["Respuesta"].Value);
-                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                    respuesta = Convert.ToBoolean(cmd.Parameters["@Respuesta"].Value);
+                    Mensaje = cmd.Parameters["@Mensaje"].Value.ToString();
                 }
             }
             catch (Exception ex)
@@ -192,6 +190,7 @@ namespace CapaDatos
             return respuesta;
         }
 
+        // 5. ELIMINAR 
         public bool Eliminar(int idUsuario, out string mensaje)
         {
             bool respuesta = false;
@@ -220,6 +219,34 @@ namespace CapaDatos
                 mensaje = ex.Message;
             }
             return respuesta;
+        }
+
+        // 6. ACTUALIZAR ROL
+        public bool ActualizarRol(int idUsuario, int nuevoIdRol, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    string query = "UPDATE Usuarios SET IdRol = @idrol WHERE IdUsuario = @idusuario";
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("@idrol", nuevoIdRol);
+                    cmd.Parameters.AddWithValue("@idusuario", idUsuario);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0;
+                }
+                catch (Exception ex)
+                {
+                    resultado = false;
+                    Mensaje = ex.Message;
+                }
+            }
+            return resultado;
         }
     }
 }

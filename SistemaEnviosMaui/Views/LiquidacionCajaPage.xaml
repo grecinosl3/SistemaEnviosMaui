@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SistemaEnviosMaui.Views.LiquidacionCajaPage"
+             BackgroundColor="#121212">
+
+    <Grid ColumnDefinitions="380, *" ColumnSpacing="20" Margin="20">
+
+        <Frame Grid.Column="0" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="20" VerticalOptions="Start">
+            <VerticalStackLayout Spacing="20">
+                <Label Text="LIQUIDACIÓN DE CAJA COD" FontSize="16" FontAttributes="Bold" TextColor="#2ecc71" HorizontalOptions="Center"/>
+                <BoxView HeightRequest="1" BackgroundColor="#333333"/>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Seleccione Piloto que regresa:" TextColor="White" FontSize="14"/>
+                    <Picker x:Name="cboRepartidores" 
+                            BackgroundColor="#2b2b2b" 
+                            TextColor="White" 
+                            Title="Seleccione un piloto..." 
+                            ItemDisplayBinding="{Binding NombreCompleto}" 
+                            SelectedIndexChanged="OnPilotoSeleccionadoChanged"/>
+                </VerticalStackLayout>
+
+                <Frame BackgroundColor="#1a2e1a" BorderColor="#2ecc71" CornerRadius="8" Padding="15" Margin="0,10,0,0">
+                    <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                        <Label Text="EFECTIVO A RECIBIR" TextColor="#2ecc71" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label x:Name="lblTotalEfectivo" Text="Q 0.00" TextColor="#2ecc71" FontSize="26" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" RowSpacing="10" Margin="0,10,0,0">
+                    <Label Grid.Row="0" Grid.Column="0" Text="Paquetes Entregados:" TextColor="#888888" FontSize="13"/>
+                    <Label Grid.Row="0" Grid.Column="1" x:Name="lblCantidadPaquetes" Text="0" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalOptions="End"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Text="Fletes acumulados:" TextColor="#888888" FontSize="13"/>
+                    <Label Grid.Row="1" Grid.Column="1" x:Name="lblTotalFletes" Text="Q 0.00" TextColor="White" FontSize="13" FontAttributes="Bold" HorizontalOptions="End"/>
+                </Grid>
+
+                <Button x:Name="btnLiquidar" Text="🔒 Procesar y Cerrar Caja" BackgroundColor="#2ecc71" TextColor="White" FontAttributes="Bold" HeightRequest="45" Margin="0,10,0,0" IsEnabled="False" Clicked="OnLiquidarCajaClicked"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto, *">
+            <Label Grid.Row="0" Text="DESGLOSE DE ENVÍOS EFECTUADOS (CASH ON DELIVERY)" FontSize="18" FontAttributes="Bold" TextColor="White" Margin="0,0,0,15"/>
+
+            <Frame Grid.Row="1" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="0">
+                <Grid RowDefinitions="Auto, *">
+                    <Grid Grid.Row="0" BackgroundColor="#2b2b2b" Padding="12" ColumnDefinitions="1.2*, 3*, 2*, 1.8*">
+                        <Label Text="No. Guía" TextColor="#3498db" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Destinatario" TextColor="#3498db" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Fecha Envío" TextColor="#3498db" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Column="3" Text="Monto Cobrado" TextColor="#3498db" FontAttributes="Bold" HorizontalOptions="End"/>
+                    </Grid>
+
+                    <CollectionView Grid.Row="1" x:Name="lstGuiasACobrar" EmptyView="Seleccione un piloto para escanear guías entregadas.">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="12" ColumnDefinitions="1.2*, 3*, 2*, 1.8*" BackgroundColor="#1a1a1a">
+                                    <Label Text="{Binding IdPedido}" TextColor="#e67e22" FontAttributes="Bold" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding NombreDestinatario}" TextColor="White" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+                                    <Label Grid.Column="2" Text="{Binding FechaPedido, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#aaaaaa" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Grid.Column="3" Text="{Binding Total, StringFormat='Q {0:F2}'}" TextColor="#2ecc71" FontAttributes="Bold" HorizontalOptions="End" VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Frame>
+        </Grid>
+    </Grid>
+</ContentView>

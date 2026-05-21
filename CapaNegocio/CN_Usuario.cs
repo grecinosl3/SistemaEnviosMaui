@@ -10,6 +10,7 @@ namespace CapaNegocio
     {
 
         private CD_Usuario objCapaDato = new CD_Usuario();
+        private CD_Usuario objcd_usuario = new CD_Usuario();
 
         public List<Usuario> Listar()
         {
@@ -73,6 +74,25 @@ namespace CapaNegocio
         public bool Eliminar(Usuario obj, out string Mensaje)
         {
             return objCapaDato.Eliminar(obj.IdUsuario, out Mensaje);
+        }
+
+
+
+        public bool CambiarRol(int idUsuario, int nuevoIdRol, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+
+            if (idUsuario <= 0)
+                Mensaje += "El ID de usuario seleccionado es inválido.\n";
+
+            if (nuevoIdRol < 1 || nuevoIdRol > 3)
+                Mensaje += "El rango seleccionado no existe.\n";
+
+            if (Mensaje != string.Empty)
+                return false;
+
+            // Llama al método de CapaDatos que también debe recibir el int
+            return objcd_usuario.ActualizarRol(idUsuario, nuevoIdRol, out Mensaje);
         }
 
     }

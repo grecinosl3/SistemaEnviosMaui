@@ -346,6 +346,7 @@ namespace SistemaEnviosMaui.Views
 
             lstHistorialPedidos.SelectedItem = null;
         }
+
     }
 
     public class DetalleTemporal
