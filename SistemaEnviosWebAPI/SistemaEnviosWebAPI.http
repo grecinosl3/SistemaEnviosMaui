@@ -1,0 +1,6 @@
+@SistemaEnviosWebAPI_HostAddress = http://localhost:5228
+
+GET {{SistemaEnviosWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

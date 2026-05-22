@@ -147,6 +147,17 @@
                         </Border.GestureRecognizers>
                     </Border>
 
+                    <Border x:Name="MenuMensajes" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
+                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label Text="{x:Static local:Iconos.Comentarios}" FontFamily="FontAwesomeSolid" 
+               FontSize="22" HorizontalOptions="Center" TextColor="#10B981"/>
+                            <Label Text="Mensajes" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Mensajes" />
+                        </Border.GestureRecognizers>
+                    </Border>
+
                 </HorizontalStackLayout>
             </ScrollView>
         </Grid>

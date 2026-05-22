@@ -7,6 +7,7 @@ namespace SistemaEnviosMaui.Views
 {
     public partial class PrincipalPage : ContentPage
     {
+        private Usuario _usuarioActual; // 👈 Guardamos los datos del login aquí
         // Modificamos el constructor para que reciba el objeto Usuario completo
         public PrincipalPage(Usuario usuarioLogueado)
         {
@@ -15,6 +16,7 @@ namespace SistemaEnviosMaui.Views
             // Si por alguna razón viene nulo, lo manejamos como invitado para evitar caídas
             if (usuarioLogueado != null)
             {
+                _usuarioActual = usuarioLogueado;
                 // 1. Pintamos el nombre real en el encabezado azul
                 lblUsuarioNombre.Text = usuarioLogueado.NombreCompleto;
 
@@ -38,6 +40,7 @@ namespace SistemaEnviosMaui.Views
             MenuRepartidores.IsVisible = false;
             MenuFacturas.IsVisible = false;
             MenuDespacho.IsVisible = false;
+            MenuMensajes.IsVisible = false;
 
             // La pantalla de Inicio siempre se queda activa para todos
             MenuInicio.IsVisible = true;
@@ -53,6 +56,7 @@ namespace SistemaEnviosMaui.Views
                     MenuRepartidores.IsVisible = true;
                     MenuFacturas.IsVisible = true;
                     MenuDespacho.IsVisible = true;
+                    MenuMensajes.IsVisible = true;
                     break;
 
                 case 2: // MODERADOR (Operador Logístico)
@@ -62,11 +66,13 @@ namespace SistemaEnviosMaui.Views
                     MenuRepartidores.IsVisible = true;
                     MenuFacturas.IsVisible = true;
                     MenuDespacho.IsVisible = true;
+                    MenuMensajes.IsVisible = true;
                     break;
 
                 case 3: //  REPARTIDOR (Piloto)
                     MenuPedidos.IsVisible = true;
                     MenuDespacho.IsVisible = true;
+                    MenuMensajes.IsVisible = true;
                     break;
 
                 case 4: //  CLIENTE (Distribuidora)
@@ -77,7 +83,7 @@ namespace SistemaEnviosMaui.Views
         private void IluminarPestanaActiva(string opcionSeleccionada)
         {
             // 1. Primero volvemos a poner TODOS los botones en su estado "Apagado" (Oscuro)
-            Border[] todosLosMenus = { MenuInicio, MenuUsuarios, MenuClientes, MenuInventario, MenuPedidos, MenuRepartidores, MenuFacturas, MenuDespacho };
+            Border[] todosLosMenus = { MenuInicio, MenuUsuarios, MenuClientes, MenuInventario, MenuPedidos, MenuRepartidores, MenuFacturas, MenuDespacho, MenuMensajes };
 
             foreach (var menu in todosLosMenus)
             {
@@ -122,6 +128,10 @@ namespace SistemaEnviosMaui.Views
                 case "Despacho":
                     MenuDespacho.BackgroundColor = Color.FromArgb("#1E3A8A");
                     MenuDespacho.Stroke = Color.FromArgb("#3B82F6");
+                    break;
+                case "Mensajes":
+                    MenuMensajes.BackgroundColor = Color.FromArgb("#1E3A8A");
+                    MenuMensajes.Stroke = Color.FromArgb("#3B82F6");
                     break;
             }
         }
@@ -180,6 +190,13 @@ namespace SistemaEnviosMaui.Views
 
                 case "Despacho":
                     ContenedorPrincipal.Content = new DespachoRutasPage();
+                    break;
+                case "Mensajes":
+                    int idUsuarioReal = _usuarioActual != null ? _usuarioActual.IdUsuario : 1;
+                    int idSalaChat = 1; // Tu sala comodín por ahora
+
+                    // Inyectamos el chat en el contenedor pasándole sus parámetros reales
+                    ContenedorPrincipal.Content = new ChatPage(idUsuarioReal, idSalaChat);
                     break;
             }
         }

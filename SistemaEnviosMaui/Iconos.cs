@@ -16,5 +16,7 @@ namespace SistemaEnviosMaui
         public const string Mensajeria = "\uf0e0";
         public const string Facturas = "\uf571";
         public const string Repartidores = "\uf4db";
+        public const string Comentarios = "\uf075";
+
     }
 }

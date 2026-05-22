@@ -3,4 +3,5 @@
   <Project Path="CapaEntidad/CapaEntidad.csproj" Id="1f3d288f-c81e-4377-ad58-61e1c8a7f0f7" />
   <Project Path="CapaNegocio/CapaNegocio.csproj" Id="f35468b9-7102-4460-8b31-4ac2da14d5b9" />
   <Project Path="SistemaEnviosMaui/SistemaEnviosMaui.csproj" />
+  <Project Path="SistemaEnviosWebAPI/SistemaEnviosWebAPI.csproj" Id="e0410e03-0f2f-4597-a524-bffe1494cbc1" />
 </Solution>
