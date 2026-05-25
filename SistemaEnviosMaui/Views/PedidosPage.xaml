@@ -165,7 +165,7 @@
                             <Entry x:Name="txtTotalPagar" Text="Q 0.00" BackgroundColor="#1e1e1e" TextColor="#2ecc71" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center" IsReadOnly="True"/>
 
                             <Button x:Name="btnRegistrarPedido" 
-                                    Text="💾 Despachar Guía" 
+                                    Text=" Despachar Guía" 
                                     BackgroundColor="#3498db" 
                                     TextColor="White" 
                                     FontAttributes="Bold" 
@@ -193,7 +193,7 @@
 
                         <Button Grid.Column="1" 
                                 x:Name="btnBuscarHistorial"
-                                Text="🔍 Filtrar" 
+                                Text="Filtrar" 
                                 BackgroundColor="#3498db" 
                                 TextColor="White"
                                 FontAttributes="Bold"

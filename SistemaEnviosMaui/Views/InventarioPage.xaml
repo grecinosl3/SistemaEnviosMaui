@@ -6,7 +6,7 @@
 
     <Grid ColumnDefinitions="350, *" Padding="20" ColumnSpacing="20">
 
-        <!-- PANEL IZQUIERDO: DETALLE (Dark Theme) -->
+        <!-- PANEL IZQUIERDO: DETALLE -->
         <Frame Grid.Column="0" BackgroundColor="#1e1e1e" CornerRadius="15" HasShadow="False" BorderColor="#333333">
 
             <ScrollView VerticalScrollBarVisibility="Never">
@@ -44,7 +44,7 @@
             </ScrollView>
         </Frame>
 
-        <!-- PANEL DERECHO: LISTA (Dark Theme) -->
+        <!-- PANEL DERECHO: LISTA -->
         <VerticalStackLayout Grid.Column="1" Spacing="20">
             <Label Text="Inventario de Productos" TextColor="White" FontSize="28" FontAttributes="Bold"/>
 
@@ -67,7 +67,7 @@
                                 <!-- Columna 0: Código -->
                                 <Label Text="{Binding Codigo}" Grid.Column="0" TextColor="White" VerticalOptions="Center"/>
 
-                                <!-- Columna 1: Nombre + Descripción (Aquí está el cambio) -->
+                                <!-- Columna 1: Nombre + Descripción-->
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Margin="10,0,0,0">
                                     <Label Text="{Binding Nombre}" 
                        TextColor="White" 
