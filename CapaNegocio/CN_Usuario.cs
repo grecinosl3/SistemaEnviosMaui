@@ -31,7 +31,6 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            // Reglas de negocio (Validaciones)
             if (string.IsNullOrEmpty(obj.NombreCompleto))
                 Mensaje += "Es necesario el nombre del usuario\n";
 
@@ -91,9 +90,7 @@ namespace CapaNegocio
             if (Mensaje != string.Empty)
                 return false;
 
-            // Llama al método de CapaDatos que también debe recibir el int
             return objcd_usuario.ActualizarRol(idUsuario, nuevoIdRol, out Mensaje);
         }
-
     }
 }

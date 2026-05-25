@@ -73,7 +73,7 @@ namespace CapaNegocio
             return objcd_cliente.Editar(obj, out Mensaje);
         }
 
-        // ELIMINAR CLIENTE (Borrado Lógico)
+        // ELIMINAR CLIENTE 
         public bool Eliminar(Cliente obj, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -87,7 +87,7 @@ namespace CapaNegocio
             return objcd_cliente.Eliminar(obj.IdCliente, out Mensaje);
         }
 
-        // NUEVO BUSCADOR: Buscar por NIT (Ideal para cuando registran guías rápido)
+        // NUEVO BUSCADOR: Buscar por NIT 
         public Cliente BuscarPorNIT(string nit)
         {
             if (string.IsNullOrWhiteSpace(nit)) return null;

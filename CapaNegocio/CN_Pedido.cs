@@ -20,7 +20,6 @@ namespace CapaNegocio
             if (idPedido <= 0)
                 return new List<DetallePedido>();
 
-            // Conecta con la Capa de Datos para traer las filas con sus respectivos oProducto llenos
             return objcd_pedido.ObtenerDetallePedido(idPedido);
         }
 
@@ -29,7 +28,6 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            // --- Reglas de Validación para Guías Logísticas ---
             if (pedido.IdCliente <= 0)
                 Mensaje += "Debe seleccionar una empresa cliente válida (Remitente).\n";
 
@@ -56,22 +54,18 @@ namespace CapaNegocio
 
             pedido.FechaPedido = DateTime.Now;
 
-            // Toda guía arranca en estado 'Registrado' por defecto en el sistema central
             if (string.IsNullOrEmpty(pedido.Estado))
                 pedido.Estado = "Registrado";
 
-            // El total de la operación logística es el Flete + el valor del paquete si es contra entrega
             pedido.Total = pedido.CostoFlete + pedido.MontoCOD;
 
-            // Aseguramos que la lista de detalles no vaya nula para que no rompa la transacción
             if (pedido.Detalles == null)
                 pedido.Detalles = new List<DetallePedido>();
 
-            // Mandamos los datos limpios a la transacción en CapaDatos
             return objcd_pedido.InsertarPedido(pedido, out Mensaje);
         }
 
-        // 3. CAMBIAR EL ESTADO DE UNA GUÍA (Flujo de ruta)
+        // 3. CAMBIAR EL ESTADO DE UNA GUÍA 
         public bool CambiarEstado(int idPedido, string estado, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -88,7 +82,6 @@ namespace CapaNegocio
                 return false;
             }
 
-            // Lista de estados permitidos para el control interno de mensajería
             var estadosValidos = new List<string> { "Registrado", "En Bodega", "En Ruta", "Entregado", "Devuelto", "Cancelado" };
             if (!estadosValidos.Contains(estado))
             {
@@ -99,7 +92,7 @@ namespace CapaNegocio
             return objcd_pedido.CambiarEstado(idPedido, estado, out Mensaje);
         }
 
-        // 4. ASIGNAR REPARTIDOR / MOTORISTA A UNA GUÍA
+        // 4. ASIGNAR REPARTIDOR 
         public bool AsignarRepartidor(int idPedido, int idRepartidor, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -136,12 +129,8 @@ namespace CapaNegocio
             if (Mensaje != string.Empty)
                 return false;
 
-            // Si todo está bien, mandamos la orden de salida a la Capa de Datos
             return objcd_pedido.AsignarPilotoEnBD(idPedido, idRepartidor, out Mensaje);
         }
-
-
-        //  MODULO DE LIQUIDACIÓN DE COBROS DE PILOTO - REPARTIDOR
 
         //  ENLACE PARA TRAER LA CARGA DE COBROS DEL PILOTO
         public List<Pedido> ListarPedidosParaLiquidar(int idRepartidor)
@@ -165,9 +154,6 @@ namespace CapaNegocio
 
             return objcd_pedido.LiquidarPedidosPiloto(idRepartidor, out Mensaje);
         }
-
-
-
 
         public DashboardMetrics GetDashboard()
         {

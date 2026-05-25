@@ -84,8 +84,6 @@ namespace CapaNegocio
         {
             if (string.IsNullOrWhiteSpace(codigo)) return null;
 
-            // Buscamos en tu lista de productos el que coincida con el código digitado
-            // Nota: Si en tu entidad 'Producto' la propiedad del código se llama diferente (ej. CodigoProd), cámbiala aquí
             return Listar().FirstOrDefault(p => p.Codigo.Trim().ToUpper() == codigo.Trim().ToUpper());
         }
     }
