@@ -8,7 +8,7 @@ namespace CapaDatos
 {
     public class CD_Repartidor
     {
-        // 1. LISTAR REPARTIDORES
+        // LISTAR REPARTIDORES
         public List<Repartidor> ListarRepartidores()
         {
             List<Repartidor> lista = new List<Repartidor>();
@@ -48,7 +48,7 @@ namespace CapaDatos
             return lista;
         }
 
-        // 2. REGISTRAR REPARTIDOR
+        // REGISTRAR REPARTIDOR
         public int Registrar(Repartidor obj, out string Mensaje)
         {
             int idRepartidorGenerado = 0;
@@ -83,7 +83,7 @@ namespace CapaDatos
             return idRepartidorGenerado;
         }
 
-        // 3. MODIFICAR REPARTIDOR
+        // MODIFICAR REPARTIDOR
         public bool Editar(Repartidor obj, out string Mensaje)
         {
             bool resultado = false;

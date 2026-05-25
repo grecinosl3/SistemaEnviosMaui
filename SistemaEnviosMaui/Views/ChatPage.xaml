@@ -7,9 +7,18 @@
     <Grid ColumnDefinitions="350, *" Padding="20" ColumnSpacing="20" BackgroundColor="#121212">
 
         <Border Grid.Column="0" BackgroundColor="#1e1e1e" StrokeShape="RoundRectangle 15" Stroke="#333333" StrokeThickness="1">
-            <VerticalStackLayout Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
+            <VerticalStackLayout Spacing="15" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="15">
 
-                <Label Text="SALA DE MENSAJERÍA" TextColor="#3498db" HorizontalOptions="Center" FontAttributes="Bold" FontSize="16" Margin="0,0,0,10"/>
+                <Button Text="⬅ Volver a Contactos"
+                        BackgroundColor="Transparent"
+                        TextColor="#3498db"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        HorizontalOptions="Start"
+                        Clicked="btnVolver_Clicked"
+                        Margin="0,0,0,15"/>
+
+                <Label Text="SALA DE MENSAJERÍA" TextColor="#3498db" HorizontalOptions="Center" FontAttributes="Bold" FontSize="16" Margin="0,0,0,10" x:Name="lblTituloChat"/>
 
                 <Border StrokeShape="RoundRectangle 50" WidthRequest="80" HeightRequest="80" BackgroundColor="#252525" StrokeThickness="0">
                     <Label Text="💬" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>

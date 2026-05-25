@@ -5,7 +5,7 @@ using SistemaEnviosMaui.ViewModels;
 
 namespace SistemaEnviosMaui.Views;
 
-// 🚨 CORREGIDO: Ahora hereda de ContentView para incrustarse en tu contenedor principal
+// Ahora hereda de ContentView para incrustarse en tu contenedor principal
 public partial class ChatPage : ContentView
 {
     public ObservableCollection<ChatMensaje> ListaMensajes { get; set; } = new ObservableCollection<ChatMensaje>();
@@ -14,12 +14,14 @@ public partial class ChatPage : ContentView
     private int _idUsuarioLogueado;
     private int _idSalaActual;
 
-    public ChatPage(int idUsuario, int idSala)
+
+    public ChatPage(int idUsuario, int idSala, string nombreContacto)
     {
         InitializeComponent();
 
         _idUsuarioLogueado = idUsuario;
         _idSalaActual = idSala;
+        lblTituloChat.Text = nombreContacto;
 
         // Establecemos el contexto de datos para el binding con el nuevo look oscuro
         this.BindingContext = this;
@@ -33,7 +35,7 @@ public partial class ChatPage : ContentView
             .WithUrl("http://localhost:5228/chathub")
             .Build();
 
-        // 👂 ESCUCHADOR 1: Captura mensajes nuevos en tiempo real
+        //  Captura mensajes nuevos en tiempo real
         _connection.On<ChatMensaje>("RecibirMensaje", (nuevoMensaje) =>
         {
             MainThread.BeginInvokeOnMainThread(() =>
@@ -44,7 +46,7 @@ public partial class ChatPage : ContentView
             });
         });
 
-        // 🔥 ESCUCHADOR 2: Captura el historial completo al abrir este módulo
+        //  Captura el historial completo al abrir este módulo
         _connection.On<List<ChatMensaje>>("RecibirHistorial", (listaHistorial) =>
         {
             MainThread.BeginInvokeOnMainThread(() =>
@@ -62,16 +64,16 @@ public partial class ChatPage : ContentView
         try
         {
             await _connection.StartAsync();
-            Console.WriteLine("✅ Conexión con SignalR establecida con éxito.");
+            Console.WriteLine(" Conexión con SignalR establecida con éxito.");
 
-            // 👥 Entramos a la sala usando el ID real
+            // Entramos a la sala usando el ID real
             await _connection.InvokeAsync("UnirseASala", _idSalaActual.ToString());
-            Console.WriteLine($"👥 Unido con éxito a la sala de chat #{_idSalaActual}");
+            Console.WriteLine($" Unido con éxito a la sala de chat #{_idSalaActual}");
 
-            // ⏳ El respiro para estabilizar la sesión
+            // El respiro para estabilizar la sesión
             await Task.Delay(500);
 
-            // 📚 Pedimos el historial dinámico
+            // Pedimos el historial dinámico
             await _connection.InvokeAsync("ObtenerHistorial", _idSalaActual.ToString());
         }
         catch (Exception ex)
@@ -105,6 +107,25 @@ public partial class ChatPage : ContentView
             if (Application.Current?.MainPage != null)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+    }
+    private void btnVolver_Clicked(object sender, EventArgs e)
+    {
+        // Buscamos la página principal para acceder a su contenedor
+        var principalPage = Application.Current?.MainPage as PrincipalPage;
+        if (principalPage == null && Application.Current?.MainPage?.Navigation != null)
+        {
+            principalPage = Application.Current.MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is PrincipalPage) as PrincipalPage;
+        }
+
+        if (principalPage != null)
+        {
+            var contenedor = principalPage.FindByName<ContentView>("ContenedorPrincipal");
+            if (contenedor != null)
+            {
+                // Volvemos a inyectar la lista de contactos pasándole tu ID logueado
+                contenedor.Content = new ListaChatsPage(_idUsuarioLogueado);
             }
         }
     }

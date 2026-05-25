@@ -55,7 +55,7 @@
                     <Picker x:Name="cboRepartidores" BackgroundColor="#2b2b2b" TextColor="White" Title="Seleccione un conductor..." ItemDisplayBinding="{Binding NombreCompleto}"/>
                 </VerticalStackLayout>
 
-                <Button x:Name="btnDespachar" Text="🚛 Despachar e Iniciar Ruta" BackgroundColor="#3498db" TextColor="White" FontAttributes="Bold" HeightRequest="50" Margin="0,20,0,0" Clicked="OnDespacharClicked"/>
+                <Button x:Name="btnDespachar" Text="Despachar e Iniciar Ruta" BackgroundColor="#3498db" TextColor="White" FontAttributes="Bold" HeightRequest="50" Margin="0,20,0,0" Clicked="OnDespacharClicked"/>
             </VerticalStackLayout>
         </Frame>
     </Grid>

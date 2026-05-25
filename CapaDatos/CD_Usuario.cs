@@ -8,7 +8,7 @@ namespace CapaDatos
 {
     public class CD_Usuario
     {
-        // 1. LISTAR USUARIOS (Corregido para leer la columna real NombreCompleto)
+        // LISTAR USUARIOS 
         public List<Usuario> ListarUsuarios()
         {
             List<Usuario> lista = new List<Usuario>();
@@ -59,7 +59,7 @@ namespace CapaDatos
             return lista;
         }
 
-        // 2. LOGIN (Corregido para leer la columna real NombreCompleto)
+        // LOGIN 
         public Usuario Login(string correo, string contrasena)
         {
             Usuario usuario = null;
@@ -113,7 +113,7 @@ namespace CapaDatos
             return usuario;
         }
 
-        // 3. REGISTRAR
+        //  REGISTRAR
         public int Registrar(Usuario obj, out string Mensaje)
         {
             int idUsuarioGenerado = 0;
@@ -151,7 +151,7 @@ namespace CapaDatos
             return idUsuarioGenerado;
         }
 
-        // 4. EDITAR
+        //  EDITAR
         public bool Editar(Usuario obj, out string Mensaje)
         {
             bool respuesta = false;
@@ -190,7 +190,7 @@ namespace CapaDatos
             return respuesta;
         }
 
-        // 5. ELIMINAR 
+        // ELIMINAR 
         public bool Eliminar(int idUsuario, out string mensaje)
         {
             bool respuesta = false;
@@ -221,7 +221,7 @@ namespace CapaDatos
             return respuesta;
         }
 
-        // 6. ACTUALIZAR ROL
+        // ACTUALIZAR ROL
         public bool ActualizarRol(int idUsuario, int nuevoIdRol, out string Mensaje)
         {
             bool resultado = false;

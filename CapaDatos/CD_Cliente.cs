@@ -9,7 +9,7 @@ namespace CapaDato
 {
     public class CD_Cliente
     {
-        // 1. LISTAR EMPRESAS CLIENTES
+        // LISTAR EMPRESAS CLIENTES
         public List<Cliente> Listar()
         {
             List<Cliente> lista = new List<Cliente>();
@@ -46,13 +46,13 @@ namespace CapaDato
                 }
                 catch (Exception)
                 {
-                    lista = new List<Cliente>(); // Retorna lista vacía si falla
+                    lista = new List<Cliente>(); 
                 }
             }
             return lista;
         }
 
-        // 2. REGISTRAR EMPRESA CLIENTE
+        //  REGISTRAR EMPRESA CLIENTE
         public int Registrar(Cliente obj, out string Mensaje)
         {
             int idGenerado = 0;
@@ -63,7 +63,6 @@ namespace CapaDato
                 SqlCommand cmd = new SqlCommand("sp_RegistrarCliente", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                // Nuevos Parámetros del modelo corporativo
                 cmd.Parameters.AddWithValue("@NombreComercial", obj.NombreComercial);
                 cmd.Parameters.AddWithValue("@RazonSocial", (object)obj.RazonSocial ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@NIT", obj.NIT);
@@ -88,7 +87,7 @@ namespace CapaDato
             return idGenerado;
         }
 
-        // 3. EDITAR EMPRESA CLIENTE
+        //  EDITAR EMPRESA CLIENTE
         public bool Editar(Cliente obj, out string Mensaje)
         {
             bool resultado = false;
@@ -125,7 +124,7 @@ namespace CapaDato
             return resultado;
         }
 
-        // 4. ELIMINAR CLIENTE
+        // ELIMINAR CLIENTE
         public bool Eliminar(int idCliente, out string Mensaje)
         {
             bool resultado = false;

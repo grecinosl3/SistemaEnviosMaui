@@ -7,7 +7,8 @@ namespace SistemaEnviosMaui.Views
 {
     public partial class PrincipalPage : ContentPage
     {
-        private Usuario _usuarioActual; // 👈 Guardamos los datos del login aquí
+        private Usuario _usuarioActual; // Guardamos los datos del login aquí
+        
         // Modificamos el constructor para que reciba el objeto Usuario completo
         public PrincipalPage(Usuario usuarioLogueado)
         {
@@ -17,10 +18,10 @@ namespace SistemaEnviosMaui.Views
             if (usuarioLogueado != null)
             {
                 _usuarioActual = usuarioLogueado;
-                // 1. Pintamos el nombre real en el encabezado azul
+                //  Pintamos el nombre real en el encabezado azul
                 lblUsuarioNombre.Text = usuarioLogueado.NombreCompleto;
 
-                // 2. Ejecutamos el filtro de seguridad según su Rol
+                //  Ejecutamos el filtro de seguridad según su Rol
                 CargarMenuSegunRol(usuarioLogueado);
             }
             else
@@ -143,7 +144,6 @@ namespace SistemaEnviosMaui.Views
             if (seguro)
             {
                 // Cambiamos la página principal del celular/computadora directo al Login
-                // Nota: Reemplaza 'LoginPage' por el nombre exacto de tu ventana de Login si se llama distinto
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
             }
         }
@@ -193,10 +193,8 @@ namespace SistemaEnviosMaui.Views
                     break;
                 case "Mensajes":
                     int idUsuarioReal = _usuarioActual != null ? _usuarioActual.IdUsuario : 1;
-                    int idSalaChat = 1; // Tu sala comodín por ahora
 
-                    // Inyectamos el chat en el contenedor pasándole sus parámetros reales
-                    ContenedorPrincipal.Content = new ChatPage(idUsuarioReal, idSalaChat);
+                    ContenedorPrincipal.Content = new ListaChatsPage(idUsuarioReal);
                     break;
             }
         }

@@ -23,7 +23,7 @@ namespace SistemaEnviosMaui.Views
                 return;
             }
 
-            indicador.IsRunning = true; // Mostramos que está cargando
+            indicador.IsRunning = true; 
 
             // Llamamos a la capa de negocio
             Usuario user = new CN_Usuario().Login(correo, clave);

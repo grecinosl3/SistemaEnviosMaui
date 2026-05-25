@@ -10,7 +10,7 @@ namespace CapaDatos
 {
     public class CD_Pedido
     {
-        // 1. OBTENER CORRELATIVO PARA EL NÚMERO DE GUÍA
+        // OBTENER CORRELATIVO PARA EL NÚMERO DE GUÍA
         public int ObtenerCorrelativo()
         {
             int idcorrelativo = 0;
@@ -27,13 +27,13 @@ namespace CapaDatos
                 }
                 catch (Exception)
                 {
-                    idcorrelativo = 1; // Si está vacía, arranca en 1
+                    idcorrelativo = 1; 
                 }
             }
             return idcorrelativo;
         }
 
-        // 2. REGISTRAR UNA GUÍA DE ENVÍO DIRECTA (CON TRANSACCIÓN EN C#)
+        // REGISTRAR UNA GUÍA DE ENVÍO DIRECTA
         public bool InsertarPedido(Pedido pedido, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -44,7 +44,6 @@ namespace CapaDatos
 
                 try
                 {
-                    // Query adaptado a la nueva estructura de la tabla Pedidos B2B
                     string queryPedido = @"INSERT INTO Pedidos
                         (IdCliente, IdUsuario, FechaPedido, FechaEntrega, NombreDestinatario, TelefonoDestinatario, DireccionEntrega, Estado, MetodoPago, MontoCOD, CostoFlete, Total, Notas)
                         VALUES
@@ -54,7 +53,7 @@ namespace CapaDatos
                     SqlCommand cmdPedido = new SqlCommand(queryPedido, con, trans);
 
                     cmdPedido.Parameters.AddWithValue("@IdCliente", pedido.IdCliente);
-                    cmdPedido.Parameters.AddWithValue("@IdUsuario", (object)pedido.IdRepartidor ?? DBNull.Value); // Mapeado a IdUsuario (Repartidor)
+                    cmdPedido.Parameters.AddWithValue("@IdUsuario", (object)pedido.IdRepartidor ?? DBNull.Value); 
                     cmdPedido.Parameters.AddWithValue("@FechaPedido", pedido.FechaPedido);
                     cmdPedido.Parameters.AddWithValue("@FechaEntrega", (object)pedido.FechaEntrega ?? DBNull.Value);
                     cmdPedido.Parameters.AddWithValue("@NombreDestinatario", pedido.NombreDestinatario);
@@ -69,7 +68,6 @@ namespace CapaDatos
 
                     int idPedidoGenerado = Convert.ToInt32(cmdPedido.ExecuteScalar());
 
-                    // Si tienes una tabla DetallePedido adaptada, aquí insertaría sus fletes aplicados
                     foreach (var item in pedido.Detalles)
                     {
                         string queryDetalle = @"INSERT INTO DetallePedido
@@ -88,7 +86,7 @@ namespace CapaDatos
                     }
 
                     trans.Commit();
-                    Mensaje = idPedidoGenerado.ToString(); // Retornamos el número de guía generado
+                    Mensaje = idPedidoGenerado.ToString(); 
                     return true;
                 }
                 catch (Exception ex)
@@ -100,7 +98,7 @@ namespace CapaDatos
             }
         }
 
-        // 3. LISTAR TODAS LAS GUÍAS EN EL SISTEMA
+        // LISTAR TODAS LAS GUÍAS EN EL SISTEMA
         public List<Pedido> ListarPedidos()
         {
             List<Pedido> lista = new List<Pedido>();
@@ -159,7 +157,7 @@ namespace CapaDatos
             return lista;
         }
 
-        // 4. CAMBIAR ESTADO DE LA GUÍA (Para el flujo: Registrado -> En Bodega -> En Ruta -> Entregado)
+        //  CAMBIAR ESTADO DE LA GUÍA (Para el flujo: Registrado -> En Bodega -> En Ruta -> Entregado)
         public bool CambiarEstado(int idPedido, string estado, out string Mensaje)
         {
             bool resultado = false;
@@ -171,7 +169,6 @@ namespace CapaDatos
                 {
                     string query = "UPDATE Pedidos SET Estado = @Estado";
 
-                    // Si pasa a Entregado, sellamos de una vez la FechaEntrega con la hora del sistema
                     if (estado == "Entregado")
                         query += ", FechaEntrega = GETDATE()";
 
@@ -193,7 +190,7 @@ namespace CapaDatos
             return resultado;
         }
 
-        // 5. ASIGNAR UN REPARTIDOR / MOTORISTA A UNA GUÍA
+        // ASIGNAR UN REPARTIDOR 
         public bool AsignarRepartidor(int idPedido, int idRepartidor, out string Mensaje)
         {
             bool resultado = false;
@@ -224,12 +221,10 @@ namespace CapaDatos
         {
             List<DetallePedido> lista = new List<DetallePedido>();
 
-            // Usamos tu Conexion nativa. Cambia "Conexion.cn" por el nombre exacto de tu cadena si varía.
             using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
             {
                 try
                 {
-                    // Consulta limpia que amarra el detalle con los datos de tu entidad Producto
                     string query = @"
                         SELECT d.IdDetalle, d.IdPedido, d.IdProducto, d.Cantidad, d.PrecioUnitario,
                                p.Nombre, p.Codigo, p.Descripcion
@@ -254,7 +249,6 @@ namespace CapaDatos
                                 IdProducto = Convert.ToInt32(dr["IdProducto"]),
                                 Cantidad = Convert.ToInt32(dr["Cantidad"]),
                                 PrecioUnitario = Convert.ToDecimal(dr["PrecioUnitario"]),
-                                // Llenamos el subobjeto Producto para que tu XAML en MAUI no tire nulos
                                 oProducto = new Producto()
                                 {
                                     IdProducto = Convert.ToInt32(dr["IdProducto"]),
@@ -266,13 +260,13 @@ namespace CapaDatos
                 }
                 catch (Exception)
                 {
-                    lista = new List<DetallePedido>(); // En caso de fallo devolvemos la lista vacía de seguridad
+                    lista = new List<DetallePedido>(); 
                 }
             }
             return lista;
         }
 
-        //  MÉTODO 1: FILTRAR PEDIDOS PENDIENTES DE RUTA
+        // FILTRAR PEDIDOS PENDIENTES DE RUTA
         public List<Pedido> ListarPedidosPendientes()
         {
             List<Pedido> lista = new List<Pedido>();
@@ -283,10 +277,10 @@ namespace CapaDatos
                 {
                     // El query correcto que habla el mismo idioma de tu base de datos
                     string query = @"
-                SELECT IdPedido, NombreDestinatario, DireccionEntrega, Total, FechaPedido
-                FROM Pedidos
-                WHERE (Estado = 'Registrado' OR Estado = 'REGISTRADO') 
-                AND (IdUsuario IS NULL OR IdUsuario = 0)";
+                        SELECT IdPedido, NombreDestinatario, DireccionEntrega, Total, FechaPedido 
+                        FROM Pedidos 
+                        WHERE Estado = 'En Bodega' 
+                        AND (IdUsuario IS NULL OR IdUsuario = 0 OR IdUsuario = 1)";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -316,8 +310,7 @@ namespace CapaDatos
             return lista;
         }
 
-        //  MÉTODO 2: ACTUALIZAR EL CHOFER Y PASAR A "EN RUTA"
-        // 🛠️ Nombre corregido para que tu CN_Pedido lo encuentre a la perfección
+        //  ACTUALIZAR EL CHOFER Y PASAR A "EN RUTA
         public bool AsignarPilotoEnBD(int idPedido, int idUsuario, out string Mensaje)
         {
             bool respuesta = false;
@@ -327,13 +320,12 @@ namespace CapaDatos
             {
                 try
                 {
-                    // El query que apunta a tu tabla real 'Pedidos' y tu columna 'IdUsuario'
                     string query = @"
-                UPDATE Pedidos 
-                SET IdUsuario = @idusuario, 
-                    Estado = 'En Ruta',
-                    FechaEntrega = GETDATE()
-                WHERE IdPedido = @idpedido";
+                        UPDATE Pedidos 
+                        SET IdUsuario = @idusuario, 
+                            Estado = 'En Ruta',
+                            FechaEntrega = GETDATE()
+                        WHERE IdPedido = @idpedido";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.Parameters.AddWithValue("@idusuario", idUsuario);
@@ -362,7 +354,7 @@ namespace CapaDatos
         }
 
 
-        // 1. OBTENER ENVIOS ENTREGADOS POR REPARTIDOR PARA COBRO COD
+        //  OBTENER ENVIOS ENTREGADOS POR REPARTIDOR PARA COBRO COD
         public List<Pedido> ObtenerPedidosParaLiquidar(int idRepartidor)
         {
             List<Pedido> lista = new List<Pedido>();
@@ -371,13 +363,12 @@ namespace CapaDatos
             {
                 try
                 {
-                    // 🛠️ CORRECCIÓN DE COLUMNA Y TABLA: Cambiado a p.IdUsuario y 'Pedidos'
                     string query = @"
-                SELECT p.IdPedido, p.NombreDestinatario, p.DireccionEntrega, p.MontoCOD, p.CostoFlete, p.Total, p.FechaPedido
-                FROM Pedidos p
-                WHERE p.IdUsuario = @idrepartidor 
-                AND p.MetodoPago = 'COD' 
-                AND p.Estado = 'Entregado'";
+                        SELECT p.IdPedido, p.NombreDestinatario, p.DireccionEntrega, p.MontoCOD, p.CostoFlete, p.Total, p.FechaPedido
+                        FROM Pedidos p
+                        WHERE p.IdUsuario = @idrepartidor 
+                        AND p.MetodoPago = 'COD' 
+                        AND p.Estado = 'Entregado'";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.Parameters.AddWithValue("@idrepartidor", idRepartidor);
@@ -403,7 +394,7 @@ namespace CapaDatos
                 }
                 catch (Exception ex)
                 {
-                    // Imprime el error real en la consola de salida de Visual Studio por si acaso
+ 
                     System.Diagnostics.Debug.WriteLine("CRITICAL SQL ERROR: " + ex.Message);
                     lista = new List<Pedido>();
                 }
@@ -411,7 +402,7 @@ namespace CapaDatos
             return lista;
         }
 
-        // 2. PROCESAR LA LIQUIDACIÓN COBRADA (Cerrar el ciclo del dinero)
+        //  PROCESAR LA LIQUIDACIÓN COBRADA 
         public bool LiquidarPedidosPiloto(int idRepartidor, out string Mensaje)
         {
             bool respuesta = false;
@@ -421,13 +412,12 @@ namespace CapaDatos
             {
                 try
                 {
-                    // 🛠️ CORRECCIÓN AQUÍ TAMBIÉN: Cambiado a IdUsuario y 'Pedidos'
                     string query = @"
-                UPDATE Pedidos 
-                SET Estado = 'Liquidado' 
-                WHERE IdUsuario = @idrepartidor 
-                AND MetodoPago = 'COD' 
-                AND Estado = 'Entregado'";
+                        UPDATE Pedidos 
+                        SET Estado = 'Liquidado' 
+                        WHERE IdUsuario = @idrepartidor 
+                        AND MetodoPago = 'COD' 
+                        AND Estado = 'Entregado'";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.Parameters.AddWithValue("@idrepartidor", idRepartidor);
@@ -454,9 +444,6 @@ namespace CapaDatos
             return respuesta;
         }
 
-
-
-
         public DashboardMetrics ObtenerMetricasDashboard()
         {
             DashboardMetrics metrics = new DashboardMetrics();
@@ -467,12 +454,12 @@ namespace CapaDatos
                 {
                     // Consulta consolidada para traer todo de un solo golpe por rendimiento
                     string query = @"
-                SELECT 
-                    COUNT(CASE WHEN Estado = 'Registrado' THEN 1 END) as Pendientes,
-                    COUNT(CASE WHEN Estado = 'En Ruta' THEN 1 END) as EnRuta,
-                    COUNT(CASE WHEN Estado = 'Liquidado' THEN 1 END) as Liquidados,
-                    ISNULL(SUM(CASE WHEN Estado = 'Liquidado' AND MetodoPago = 'COD' THEN Total END), 0) as TotalMes
-                FROM PEDIDO";
+                        SELECT 
+                            COUNT(CASE WHEN Estado = 'Registrado' THEN 1 END) as Pendientes,
+                            COUNT(CASE WHEN Estado = 'En Ruta' THEN 1 END) as EnRuta,
+                            COUNT(CASE WHEN Estado = 'Liquidado' THEN 1 END) as Liquidados,
+                            ISNULL(SUM(CASE WHEN Estado = 'Liquidado' AND MetodoPago = 'COD' THEN Total END), 0) as TotalMes
+                        FROM PEDIDO";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -491,7 +478,7 @@ namespace CapaDatos
                 }
                 catch (Exception)
                 {
-                    metrics = new DashboardMetrics(); // Si falla, devuelve todo en 0
+                    metrics = new DashboardMetrics(); 
                 }
             }
             return metrics;

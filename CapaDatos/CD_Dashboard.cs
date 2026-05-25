@@ -13,7 +13,6 @@ namespace CapaDatos
             int entregados = 0;
             decimal totalEfectivo = 0;
 
-            // Consulta rápida para traer los contadores y la suma en un solo viaje
             string query = @"
                 SELECT 
                     COUNT(CASE WHEN Estado = 'Registrado' OR Estado = 'En Bodega' THEN 1 END) as Pendientes,
@@ -47,11 +46,9 @@ namespace CapaDatos
             }
             catch (Exception ex)
             {
-                // Si algo truena en SQL, lo escribe en la consola de depuración para que te enteres
                 System.Diagnostics.Debug.WriteLine("Error en CD_Dashboard: " + ex.Message);
             }
 
-            // Retorna los 4 valores empaquetados
             return new Tuple<int, int, int, decimal>(pendientes, enRuta, entregados, totalEfectivo);
         }
     }

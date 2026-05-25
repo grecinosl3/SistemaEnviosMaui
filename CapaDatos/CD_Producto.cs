@@ -13,7 +13,6 @@ namespace CapaDatos
         {
             List<Producto> lista = new List<Producto>();
 
-
             try
             {
                 using (SqlConnection con = new SqlConnection(Conexion.Cadena))
@@ -28,16 +27,13 @@ namespace CapaDatos
                         {
                             lista.Add(new Producto
                             {
-
                                 IdProducto = Convert.ToInt32(dr["IdProducto"]),
-                                // Asignamos el ID al código para que se "pinte" en la lista
                                 Codigo = dr["IdProducto"].ToString(),
                                 Nombre = dr["Nombre"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
                                 Precio = Convert.ToDecimal(dr["Precio"]),
                                 Stock = Convert.ToInt32(dr["Stock"]),
                                 Activo = Convert.ToBoolean(dr["Activo"]),
-                                // Usamos la propiedad de objeto para la relación
                                 oCategoria = new Categoria
                                 {
                                     IdCategoria = Convert.ToInt32(dr["IdCategoria"]),
@@ -50,7 +46,7 @@ namespace CapaDatos
             }
             catch (Exception)
             {
-                lista = new List<Producto>(); // Si hay error, devuelve lista vacía
+                lista = new List<Producto>(); 
             }
 
             return lista;
