@@ -9,7 +9,5 @@ namespace CapaEntidad
         public int IdCategoria { get; set; }
         public string Nombre { get; set; }
         public int TiempoEntrega { get; set; }
-
-
     }
 }

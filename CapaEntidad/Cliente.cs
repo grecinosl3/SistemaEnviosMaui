@@ -6,15 +6,13 @@ namespace CapaEntidad
 {
     public class Cliente
     {
-        // Identificador único de la empresa en tu sistema
         public int IdCliente { get; set; }
 
-        // Datos Fiscales de la Empresa
         public string NombreComercial { get; set; }  
         public string RazonSocial { get; set; }    
         public string NIT { get; set; }             
 
-        // Datos del Contacto Operativo (con quien habla tu oficina)
+        // Datos del Contacto Operativo 
         public string NombreContacto { get; set; }   
         public string TelefonoContacto { get; set; }
         public string CorreoContacto { get; set; }

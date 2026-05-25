@@ -12,7 +12,7 @@ namespace CapaEntidad
         public int IdUsuarioDos { get; set; }
         public DateTime FechaCreacion { get; set; }
 
-        // 💡 Propiedades auxiliares (No están en la tabla, pero nos servirán en la interfaz)
+        // Propiedades auxiliares 
         public string? NombreOtroUsuario { get; set; }
         public string? UltimoMensaje { get; set; }
         public DateTime? FechaUltimoMensaje { get; set; }

@@ -13,8 +13,7 @@ namespace CapaEntidad
         public DateTime FechaEnvio { get; set; }
         public bool EstadoLeido { get; set; }
 
-        // 💡 Propiedad auxiliar para el diseño visual en MAUI
-        // Nos ayudará a saber si la burbuja va a la derecha (mía) o izquierda (otro)
+        //  Propiedad auxiliar para el diseño visual en MAUI
         public bool EsMensajeMio { get; set; }
 
     }
