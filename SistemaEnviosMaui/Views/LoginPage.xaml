@@ -232,10 +232,14 @@
 
                             <!-- Texto de ayuda -->
                             <Label HorizontalOptions="Center" Margin="0,4,0,0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSoporteTapped" />
+                                </Label.GestureRecognizers>
+
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="¿Problemas para acceder?  " FontSize="12" TextColor="#2D4F6B"/>
-                                        <Span Text="Contacta al administrador" FontSize="12" TextColor="#42A5F5"/>
+                                        <Span Text="Contacta al administrador" FontSize="12" TextColor="#42A5F5" TextDecorations="Underline"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>

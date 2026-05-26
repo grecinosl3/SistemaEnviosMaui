@@ -30,11 +30,11 @@ namespace SistemaEnviosMaui.Views
         {
             try
             {
-                // 1. Consultas pesadas a la Capa de Negocio (SQL Server) fuera del hilo de UI
+                // Consultas pesadas a la Capa de Negocio (SQL Server) fuera del hilo de UI
                 var pedidosBD = _cnPedido.ListarPendientes();
                 var repartidoresBD = _cnRepartidor.Listar();
 
-                // 2. Acoplamos los datos de forma segura dentro del MainThread gráfico
+                // Acoplamos los datos de forma segura dentro del MainThread gráfico
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     // Llenamos la colección de Pedidos Pendientes
@@ -126,7 +126,7 @@ namespace SistemaEnviosMaui.Views
                 _pedidoSeleccionado = null;
                 lblGuíaSeleccionada.Text = "Ninguna - Seleccione de la lista";
                 lblDestinatario.Text = "--";
-                cboRepartidores.SelectedItem = null; // Cambio estratégico para evitar desfaces en el Picker
+                cboRepartidores.SelectedItem = null; 
 
                 // Refrescar y volver a consultar la Base de Datos de forma asíncrona
                 await CargarDatosPantallaAsync();

@@ -54,13 +54,29 @@ namespace SistemaEnviosMaui.Views
         }
         private void OnSalirClicked(object sender, EventArgs e)
         {
-            // Aquí programas la lógica para salir de la app si lo deseas
+            Application.Current.Quit();
         }
 
         private void OnRegistroClicked(object sender, EventArgs e)
         {
-            // Aquí programas la navegación a la pantalla de registro
+            // Programacion de la navegación a la pantalla de registro
         }
 
+        private async void OnSoporteTapped(object sender, TappedEventArgs e)
+        {
+            try
+            {
+                
+                string destinatario = "soporte@sistemaenvios.com";
+                string asunto = "Soporte - Problemas de acceso al Sistema de Envios";
+
+                await Launcher.Default.OpenAsync(new Uri($"mailto:{destinatario}?subject={Uri.EscapeDataString(asunto)}"));
+            }
+            catch (Exception ex)
+            {
+                // Si el equipo no tiene gestor de correo, evitamos que la app se caiga
+                await DisplayAlert("Soporte Técnico", "Por favor comuníquese con el departamento de TI en la oficina central.", "OK");
+            }
+        }
     }
 }
