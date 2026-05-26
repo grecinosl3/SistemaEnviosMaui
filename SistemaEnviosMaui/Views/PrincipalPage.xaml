@@ -54,7 +54,7 @@
                 </HorizontalStackLayout>
             </Grid>
         </Border>
-        
+
         <Grid Grid.Row="1" BackgroundColor="#0A0E17" Padding="15,10">
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                 <HorizontalStackLayout Spacing="8" VerticalOptions="Center">

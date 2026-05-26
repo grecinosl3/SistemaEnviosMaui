@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SistemaEnviosMaui.Views.DespachoRutasPage"
              BackgroundColor="#121212">
 
-    <Grid ColumnDefinitions="*, 400" ColumnSpacing="20" Margin="20">
+    <Grid ColumnDefinitions="*, 400" ColumnSpacing="20" Margin="20" VerticalOptions="FillAndExpand">
 
         <Grid Grid.Column="0" RowDefinitions="Auto, *">
             <Label Grid.Row="0" Text="GUÍAS LOGÍSTICAS ESPERANDO ASIGNACIÓN" FontSize="18" FontAttributes="Bold" TextColor="White" Margin="0,0,0,15"/>
 
-            <Frame Grid.Row="1" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="0">
+            <Frame Grid.Row="1" BackgroundColor="#1e1e1e" CornerRadius="10" HasShadow="False" Padding="0" VerticalOptions="FillAndExpand">
                 <Grid RowDefinitions="Auto, *">
 
                     <Grid Grid.Row="0" BackgroundColor="#2b2b2b" Padding="12" ColumnDefinitions="1*, 2.5*, 3*, 1.5*">
@@ -19,7 +19,11 @@
                         <Label Grid.Column="3" Text="Total a Cobrar" TextColor="#3498db" FontAttributes="Bold" HorizontalOptions="End"/>
                     </Grid>
 
-                    <CollectionView Grid.Row="1" x:Name="lstPendientes" SelectionMode="Single" SelectionChanged="OnPedidoSeleccionado">
+                    <CollectionView Grid.Row="1" 
+                                    x:Name="lstPendientes" 
+                                    SelectionMode="Single" 
+                                    SelectionChanged="OnPedidoSeleccionado"
+                                    VerticalOptions="FillAndExpand">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Padding="12" ColumnDefinitions="1*, 2.5*, 3*, 1.5*" BackgroundColor="#1a1a1a">

@@ -23,12 +23,14 @@ namespace SistemaEnviosMaui.Views
                 return;
             }
 
-            indicador.IsRunning = true; 
+            indicador.IsRunning = true;
+            indicador.IsRunning = true;
 
             // Llamamos a la capa de negocio
             Usuario user = new CN_Usuario().Login(correo, clave);
 
             indicador.IsRunning = false;
+            indicador.IsVisible = false;
 
             if (user != null)
             {
@@ -41,6 +43,14 @@ namespace SistemaEnviosMaui.Views
             {
                 await DisplayAlert("Error", "Correo o contraseña incorrectos", "OK");
             }
+        }
+        private void OnOjoClicked(object sender, EventArgs e)
+        {
+            txtPassword.IsPassword = !txtPassword.IsPassword;
+
+            // Cambia el ícono según el estado
+            if (sender is Label ojo)
+                ojo.Text = txtPassword.IsPassword ? "👁️" : "🙈";
         }
         private void OnSalirClicked(object sender, EventArgs e)
         {

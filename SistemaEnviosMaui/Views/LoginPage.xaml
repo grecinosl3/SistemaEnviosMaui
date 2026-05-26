@@ -7,133 +7,243 @@
 
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#0A0E17" Offset="0.0" />
-            <GradientStop Color="#121824" Offset="0.5" />
-            <GradientStop Color="#1A2333" Offset="1.0" />
+            <GradientStop Color="#070D1A" Offset="0.0" />
+            <GradientStop Color="#0D1520" Offset="0.5" />
+            <GradientStop Color="#111D2E" Offset="1.0" />
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <ScrollView VerticalOptions="CenterAndExpand">
-        <Grid Padding="24" VerticalOptions="Center">
+    <Grid>
+        <!-- Fondo geométrico con círculos -->
+        <AbsoluteLayout IsClippedToBounds="True">
 
-            <Border StrokeShape="RoundRectangle 24" 
-                    Stroke="#2A364F" 
-                    BackgroundColor="#1E293B" 
-                    Padding="30, 40, 30, 35"
-                    VerticalOptions="Center"
-                    StrokeThickness="1"
-                    Shadow="{Shadow Brush=Black, Offset='0,15', Radius=30, Opacity=0.4}">
+            <!-- Círculos esquina superior izquierda -->
+            <Ellipse AbsoluteLayout.LayoutBounds="-120,-120,300,300"
+                     Stroke="#1A3A5C" StrokeThickness="0.8" Fill="Transparent" Opacity="0.5"/>
+            <Ellipse AbsoluteLayout.LayoutBounds="-180,-180,420,420"
+                     Stroke="#1A3A5C" StrokeThickness="0.6" Fill="Transparent" Opacity="0.3"/>
+            <Ellipse AbsoluteLayout.LayoutBounds="-240,-240,540,540"
+                     Stroke="#1A3A5C" StrokeThickness="0.4" Fill="Transparent" Opacity="0.15"/>
 
-                <VerticalStackLayout Spacing="24">
+            <!-- Círculos esquina inferior derecha -->
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+                     AbsoluteLayout.LayoutBounds="1.15,1.15,300,300"
+                     Stroke="#1A3A5C" StrokeThickness="0.8" Fill="Transparent" Opacity="0.5"/>
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+                     AbsoluteLayout.LayoutBounds="1.2,1.2,420,420"
+                     Stroke="#1A3A5C" StrokeThickness="0.6" Fill="Transparent" Opacity="0.3"/>
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional"
+                     AbsoluteLayout.LayoutBounds="1.25,1.25,540,540"
+                     Stroke="#1A3A5C" StrokeThickness="0.4" Fill="Transparent" Opacity="0.15"/>
 
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,0,0,10">
-                        <Border StrokeShape="RoundRectangle 42.5" 
-                                BackgroundColor="#0F172A" 
-                                WidthRequest="85" 
-                                HeightRequest="85"
-                                StrokeThickness="1"
-                                Stroke="#3B82F6"
-                                Shadow="{Shadow Brush='#3B82F6', Offset='0,0', Radius=15, Opacity=0.2}">
-                            <Label Text="🚀" FontSize="44" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        </Border>
+        </AbsoluteLayout>
 
-                        <Label Text="LOGÍSTICA EXPERTA" 
-                               FontSize="12" 
-                               TextColor="#3B82F6" 
-                               FontAttributes="Bold" 
-                               CharacterSpacing="3" 
-                               HorizontalOptions="Center"/>
+        <!-- Contenido principal -->
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <Grid VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="620" Padding="0,40">
 
-                        <Label Text="Sistema de Envíos" 
-                               FontSize="24" 
-                               FontAttributes="Bold" 
-                               TextColor="White" 
-                               HorizontalOptions="Center"/>
+                <Border StrokeShape="RoundRectangle 20"
+                        Stroke="#1A3A5C"
+                        StrokeThickness="1"
+                        Shadow="{Shadow Brush=Black, Offset='0,20', Radius=40, Opacity=0.6}">
+
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#0F1C2E" Offset="0.0"/>
+                            <GradientStop Color="#0A1520" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <VerticalStackLayout Spacing="0">
+
+                        <!-- Barra azul superior -->
+                        <BoxView HeightRequest="5" BackgroundColor="#1565C0" HorizontalOptions="Fill"/>
+
+                        <!-- Encabezado -->
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center" Margin="40,36,40,16">
+
+                            <Border StrokeShape="RoundRectangle 40"
+                                    WidthRequest="80"
+                                    HeightRequest="80"
+                                    StrokeThickness="2"
+                                    Stroke="#1565C0"
+                                    HorizontalOptions="Center"
+                                    Shadow="{Shadow Brush='#1565C0', Offset='0,0', Radius=20, Opacity=0.3}">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#0D1B2E" Offset="0.0"/>
+                                        <GradientStop Color="#0A1520" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Label Text="🚀" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+
+                            <Label Text="LOGÍSTICA EXPERTA"
+                                   FontSize="10"
+                                   TextColor="#42A5F5"
+                                   FontAttributes="Bold"
+                                   CharacterSpacing="3"
+                                   HorizontalOptions="Center"
+                                   Margin="0,8,0,0"/>
+
+                            <Label Text="Sistema de Envíos"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#E3F2FD"
+                                   HorizontalOptions="Center"/>
+
+                            <Label Text="Ingresa tus credenciales para continuar"
+                                   FontSize="13"
+                                   TextColor="#5C85A8"
+                                   HorizontalOptions="Center"/>
+
+                        </VerticalStackLayout>
+
+                        <!-- Línea separadora -->
+                        <BoxView HeightRequest="1" BackgroundColor="#1A3A5C" Margin="40,0" Opacity="0.5"/>
+
+                        <!-- Formulario -->
+                        <VerticalStackLayout Spacing="18" Margin="40,22,40,32">
+
+                            <!-- Campo Correo -->
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="IDENTIFICACIÓN"
+                                       FontSize="10"
+                                       TextColor="#5C85A8"
+                                       FontAttributes="Bold"
+                                       CharacterSpacing="1.5"/>
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#1A3A5C"
+                                        StrokeThickness="1"
+                                        Shadow="{Shadow Brush=Black, Offset='0,2', Radius=6, Opacity=0.3}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="#0A1520"/>
+                                    </Border.Background>
+                                    <Grid ColumnDefinitions="48, *" HeightRequest="52">
+                                        <Label Grid.Column="0" Text="✉️" FontSize="18"
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1"
+                                               x:Name="txtCorreo"
+                                               Placeholder="tu-correo@sistema.com"
+                                               PlaceholderColor="#2D4F6B"
+                                               TextColor="#E3F2FD"
+                                               BackgroundColor="Transparent"
+                                               Keyboard="Email"
+                                               FontSize="14"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,14,0"/>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Campo Contraseña -->
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="CLAVE DE ACCESO"
+                                       FontSize="10"
+                                       TextColor="#5C85A8"
+                                       FontAttributes="Bold"
+                                       CharacterSpacing="1.5"/>
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#1A3A5C"
+                                        StrokeThickness="1"
+                                        Shadow="{Shadow Brush=Black, Offset='0,2', Radius=6, Opacity=0.3}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="#0A1520"/>
+                                    </Border.Background>
+                                    <Grid ColumnDefinitions="48, *, 48" HeightRequest="52">
+                                        <Label Grid.Column="0" Text="🔒" FontSize="18"
+                                               HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1"
+                                               x:Name="txtPassword"
+                                               Placeholder="••••••••••••"
+                                               IsPassword="True"
+                                               PlaceholderColor="#2D4F6B"
+                                               TextColor="#E3F2FD"
+                                               BackgroundColor="Transparent"
+                                               FontSize="14"
+                                               VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" x:Name="lblOjo" Text="👁️" FontSize="18"
+                                               HorizontalOptions="Center" VerticalOptions="Center"
+                                               TextColor="#1565C0">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnOjoClicked"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Botón Iniciar Sesión -->
+                            <Button x:Name="btnIngresar"
+                                    Text="INICIAR SESIÓN"
+                                    CornerRadius="10"
+                                    HeightRequest="52"
+                                    FontAttributes="Bold"
+                                    CharacterSpacing="1.5"
+                                    FontSize="15"
+                                    TextColor="#E3F2FD"
+                                    Clicked="btnIngresar_Clicked"
+                                    Shadow="{Shadow Brush=#1565C0, Offset='0,6', Radius=16, Opacity=0.5}"
+                                    Margin="0,6,0,0">
+                                <Button.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#1565C0" Offset="0.0"/>
+                                        <GradientStop Color="#1976D2" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Button.Background>
+                            </Button>
+
+                            <!-- Indicador de carga -->
+                            <ActivityIndicator x:Name="indicador"
+                                               IsVisible="False"
+                                               Color="#42A5F5"
+                                               HorizontalOptions="Center"/>
+
+                            <!-- Separador -->
+                            <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Margin="0,4,0,4">
+                                <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#1A3A5C" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text=" O TAMBIÉN "
+                                       FontSize="10" TextColor="#2D4F6B"
+                                       FontAttributes="Bold" VerticalOptions="Center" Margin="8,0"/>
+                                <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#1A3A5C" VerticalOptions="Center"/>
+                            </Grid>
+
+                            <!-- Botones secundarios -->
+                            <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                                <Border Grid.Column="0" StrokeShape="RoundRectangle 10" Stroke="#1565C0" StrokeThickness="1" BackgroundColor="Transparent">
+                                    <Button Text="Crear Cuenta"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#42A5F5"
+                                            HeightRequest="46"
+                                            FontAttributes="Bold"
+                                            FontSize="13"
+                                            Clicked="OnRegistroClicked"/>
+                                </Border>
+                                <Border Grid.Column="1" StrokeShape="RoundRectangle 10" Stroke="#C62828" StrokeThickness="1" BackgroundColor="Transparent">
+                                    <Button Text="Salir"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#EF9A9A"
+                                            HeightRequest="46"
+                                            FontAttributes="Bold"
+                                            FontSize="13"
+                                            Clicked="OnSalirClicked"/>
+                                </Border>
+                            </Grid>
+
+                            <!-- Texto de ayuda -->
+                            <Label HorizontalOptions="Center" Margin="0,4,0,0">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="¿Problemas para acceder?  " FontSize="12" TextColor="#2D4F6B"/>
+                                        <Span Text="Contacta al administrador" FontSize="12" TextColor="#42A5F5"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
-
-                    <Grid RowDefinitions="Auto, Auto" RowSpacing="6">
-                        <Label Grid.Row="0" Text="Identificación" FontSize="13" TextColor="#94A3B8" FontAttributes="Bold" Margin="4,0"/>
-                        <Border Grid.Row="1" StrokeShape="RoundRectangle 12" Stroke="#334155" BackgroundColor="#0F172A" StrokeThickness="1.5">
-                            <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" Text="✉️" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#64748B"/>
-                                <Entry Grid.Column="1" 
-                                       x:Name="txtCorreo" 
-                                       Placeholder="tu-correo@sistema.com" 
-                                       PlaceholderColor="#475569"
-                                       TextColor="White"
-                                       HeightRequest="50" 
-                                       Keyboard="Email"
-                                       Margin="0,0,10,0"/>
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <Grid RowDefinitions="Auto, Auto" RowSpacing="6">
-                        <Label Grid.Row="0" Text="Clave de Acceso" FontSize="13" TextColor="#94A3B8" FontAttributes="Bold" Margin="4,0"/>
-                        <Border Grid.Row="1" StrokeShape="RoundRectangle 12" Stroke="#334155" BackgroundColor="#0F172A" StrokeThickness="1.5">
-                            <Grid ColumnDefinitions="40, *">
-                                <Label Grid.Column="0" Text="🔒" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#64748B"/>
-                                <Entry Grid.Column="1" 
-                                       x:Name="txtPassword" 
-                                       Placeholder="••••••••••••" 
-                                       IsPassword="True" 
-                                       PlaceholderColor="#475569"
-                                       TextColor="White"
-                                       HeightRequest="50" 
-                                       Margin="0,0,10,0"/>
-                            </Grid>
-                        </Border>
-                    </Grid>
-
-                    <Button x:Name="btnIngresar"
-                            Text="INICIAR SESIÓN" 
-                            BackgroundColor="#2563EB" 
-                            TextColor="White" 
-                            CornerRadius="12" 
-                            HeightRequest="52" 
-                            FontAttributes="Bold"
-                            CharacterSpacing="1"
-                            FontSize="15"
-                            Clicked="btnIngresar_Clicked"
-                            Shadow="{Shadow Brush=#2563EB, Offset='0,4', Radius=12, Opacity=0.4}"
-                            Margin="0,10,0,0"/>
-
-                    <Grid ColumnDefinitions="*, Auto, *" Margin="0,10,0,0" VerticalOptions="Center">
-                        <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#334155" VerticalOptions="Center"/>
-                        <Label Grid.Column="1" Text=" O TAMBIÉN " FontSize="10" TextColor="#64748B" FontAttributes="Bold" VerticalOptions="Center" Margin="10,0"/>
-                        <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#334155" VerticalOptions="Center"/>
-                    </Grid>
-
-                    <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
-                        <Button Grid.Column="0" 
-                                Text="Crear Cuenta" 
-                                BackgroundColor="Transparent" 
-                                BorderColor="#10B981"
-                                BorderWidth="1.5"
-                                TextColor="#10B981" 
-                                CornerRadius="12" 
-                                HeightRequest="46" 
-                                FontAttributes="Bold"
-                                FontSize="13"
-                                Clicked="OnRegistroClicked"/>
-
-                        <Button Grid.Column="1" 
-                                Text="Salir" 
-                                BackgroundColor="Transparent" 
-                                BorderColor="#EF4444"
-                                BorderWidth="1.5"
-                                TextColor="#EF4444" 
-                                CornerRadius="12" 
-                                HeightRequest="46" 
-                                FontAttributes="Bold"
-                                FontSize="13"
-                                Clicked="OnSalirClicked"/>
-                    </Grid>
-
-                    <ActivityIndicator x:Name="indicador" IsVisible="False" Color="#2563EB" HorizontalOptions="Center"/>
-
-                </VerticalStackLayout>
-            </Border>
-        </Grid>
-    </ScrollView>
+                </Border>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>

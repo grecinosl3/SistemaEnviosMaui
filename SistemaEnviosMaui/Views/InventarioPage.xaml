@@ -69,16 +69,9 @@
 
                                 <!-- Columna 1: Nombre + Descripción-->
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Margin="10,0,0,0">
-                                    <Label Text="{Binding Nombre}" 
-                       TextColor="White" 
-                       FontAttributes="Bold" 
-                       FontSize="15"/>
+                                    <Label Text="{Binding Nombre}" TextColor="White" FontAttributes="Bold" FontSize="15"/>
 
-                                    <Label Text="{Binding Descripcion}" 
-                       TextColor="#888888" 
-                       FontSize="12" 
-                       LineBreakMode="TailTruncation" 
-                       MaxLines="1"/>
+                                    <Label Text="{Binding Descripcion}" TextColor="#888888" FontSize="12" LineBreakMode="TailTruncation" MaxLines="1"/>
                                 </VerticalStackLayout>
 
                                 <!-- Columna 2: Categoría -->

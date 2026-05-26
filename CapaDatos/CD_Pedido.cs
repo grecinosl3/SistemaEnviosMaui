@@ -279,7 +279,7 @@ namespace CapaDatos
                     string query = @"
                         SELECT IdPedido, NombreDestinatario, DireccionEntrega, Total, FechaPedido 
                         FROM Pedidos 
-                        WHERE Estado = 'En Bodega' 
+                        WHERE (Estado = 'Registrado' OR Estado = 'En Bodega') 
                         AND (IdUsuario IS NULL OR IdUsuario = 0 OR IdUsuario = 1)";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);

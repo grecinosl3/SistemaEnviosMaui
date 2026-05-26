@@ -2,56 +2,76 @@ using CapaEntidad;
 using CapaNegocio;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
 namespace SistemaEnviosMaui.Views
 {
     public partial class DespachoRutasPage : ContentView
     {
-        private CN_Pedido _cnPedido = new CN_Pedido();
-        private CN_Repartidor _cnRepartidor = new CN_Repartidor();
+        private readonly CN_Pedido _cnPedido = new();
+        private readonly CN_Repartidor _cnRepartidor = new();
 
-        public ObservableCollection<Pedido> ListaPendientes { get; set; } = new ObservableCollection<Pedido>();
-        public ObservableCollection<Repartidor> ListaRepartidores { get; set; } = new ObservableCollection<Repartidor>();
+        public ObservableCollection<Pedido> ListaPendientes { get; set; } = new();
+        public ObservableCollection<Repartidor> ListaRepartidores { get; set; } = new();
 
         private Pedido _pedidoSeleccionado;
 
         public DespachoRutasPage()
         {
             InitializeComponent();
-            lstPendientes.ItemsSource = ListaPendientes;
-            CargarDatosPantalla();
+
+            // Disparar la carga de datos de la Base de Datos en segundo plano de inmediato
+            Task.Run(async () => await CargarDatosPantallaAsync());
         }
 
-        private void CargarDatosPantalla()
+        private async Task CargarDatosPantallaAsync()
         {
             try
             {
-                // 1. Cargar las guías que están en estado "Registrado"
-                var pendientesBD = _cnPedido.ListarPendientes();
-                ListaPendientes.Clear();
-                foreach (var p in pendientesBD)
-                {
-                    ListaPendientes.Add(p);
-                }
-
-                // 2. Cargar el combobox con los pilotos de la base de datos
+                // 1. Consultas pesadas a la Capa de Negocio (SQL Server) fuera del hilo de UI
+                var pedidosBD = _cnPedido.ListarPendientes();
                 var repartidoresBD = _cnRepartidor.Listar();
-                ListaRepartidores.Clear();
-                cboRepartidores.ItemsSource = null; // Reset rápido
 
-                foreach (var r in repartidoresBD)
+                // 2. Acoplamos los datos de forma segura dentro del MainThread gráfico
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    if (r.Activo) // Solo mostramos los pilotos que estén disponibles
+                    // Llenamos la colección de Pedidos Pendientes
+                    ListaPendientes.Clear();
+                    foreach (var p in pedidosBD)
                     {
-                        ListaRepartidores.Add(r);
+                        ListaPendientes.Add(p);
                     }
-                }
-                cboRepartidores.ItemsSource = ListaRepartidores;
+
+                    // Llenamos la colección de Repartidores Activos
+                    ListaRepartidores.Clear();
+                    foreach (var r in repartidoresBD)
+                    {
+                        if (r.Activo)
+                        {
+                            ListaRepartidores.Add(r);
+                        }
+                    }
+
+                    // Forzamos el refresco del enlace de datos (DataBinding manual preventivo)
+                    lstPendientes.ItemsSource = null;
+                    lstPendientes.ItemsSource = ListaPendientes;
+
+                    cboRepartidores.ItemsSource = null;
+                    cboRepartidores.ItemsSource = ListaRepartidores;
+                });
             }
             catch (Exception ex)
             {
-                Application.Current.MainPage.DisplayAlert("Error Logístico", $"Fallo al cargar datos: {ex.Message}", "OK");
+                // Garantizamos que la alerta de excepción se dibuje en el hilo correcto
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    if (Application.Current?.MainPage != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error Logístico", $"Fallo al cargar datos: {ex.Message}", "OK");
+                    }
+                });
             }
         }
 
@@ -73,35 +93,43 @@ namespace SistemaEnviosMaui.Views
 
         private async void OnDespacharClicked(object sender, EventArgs e)
         {
+            if (Application.Current?.MainPage == null) return;
+
             if (_pedidoSeleccionado == null)
             {
                 await Application.Current.MainPage.DisplayAlert("Atención", "Por favor, seleccione una guía de la tabla primero.", "OK");
                 return;
             }
 
-            var pilotoSeleccionado = cboRepartidores.SelectedItem as Repartidor;
-            if (pilotoSeleccionado == null)
+            if (cboRepartidores.SelectedItem is not Repartidor pilotoSeleccionado)
             {
                 await Application.Current.MainPage.DisplayAlert("Atención", "Debe seleccionar un piloto encargado para este despacho.", "OK");
                 return;
             }
 
-            string mensaje;
-            // Ejecutamos la asignación y cambio automático a "En Ruta"
-            bool exito = _cnPedido.DespacharARuta(_pedidoSeleccionado.IdPedido, pilotoSeleccionado.IdRepartidor, out mensaje);
+            // Ejecutamos la actualización SQL en background
+            bool exito = false;
+            string mensaje = string.Empty;
+            int idPedido = _pedidoSeleccionado.IdPedido;
+            int idRepartidor = pilotoSeleccionado.IdRepartidor;
+
+            await Task.Run(() =>
+            {
+                exito = _cnPedido.DespacharARuta(idPedido, idRepartidor, out mensaje);
+            });
 
             if (exito)
             {
-                await Application.Current.MainPage.DisplayAlert("Despacho Exitoso", $"La guía #{_pedidoSeleccionado.IdPedido} ahora está en ruta con {pilotoSeleccionado.Nombre}.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Despacho Exitoso", $"La guía #{idPedido} ahora está en ruta con {pilotoSeleccionado.Nombre}.", "OK");
 
-                // Limpiar el formulario derecho
+                // Restablecemos el formulario derecho de forma limpia
                 _pedidoSeleccionado = null;
                 lblGuíaSeleccionada.Text = "Ninguna - Seleccione de la lista";
                 lblDestinatario.Text = "--";
-                cboRepartidores.SelectedIndex = -1;
+                cboRepartidores.SelectedItem = null; // Cambio estratégico para evitar desfaces en el Picker
 
-                // Refrescar la tabla para desaparecer el que se fue a la calle
-                CargarDatosPantalla();
+                // Refrescar y volver a consultar la Base de Datos de forma asíncrona
+                await CargarDatosPantallaAsync();
             }
             else
             {

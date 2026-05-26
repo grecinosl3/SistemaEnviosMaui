@@ -199,7 +199,7 @@ namespace CapaDatos
             {
                 using (SqlConnection con = new SqlConnection(Conexion.Cadena))
                 {
-                    SqlCommand cmd = new SqlCommand("DELETE FROM Usuarios WHERE IdUsuario = @id", con);
+                    SqlCommand cmd = new SqlCommand("UPDATE Usuarios SET Activo = 0 WHERE IdUsuario = @id", con);
                     cmd.Parameters.AddWithValue("@id", idUsuario);
                     con.Open();
 
@@ -209,7 +209,7 @@ namespace CapaDatos
                     }
                     else
                     {
-                        mensaje = "No se pudo eliminar el usuario.";
+                        mensaje = "No se pudo dar de baja el usuario.";
                     }
                 }
             }
