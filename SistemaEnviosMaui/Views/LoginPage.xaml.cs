@@ -57,9 +57,9 @@ namespace SistemaEnviosMaui.Views
             Application.Current.Quit();
         }
 
-        private void OnRegistroClicked(object sender, EventArgs e)
+        private async void OnRegistroClicked(object sender, EventArgs e)
         {
-            // Programacion de la navegación a la pantalla de registro
+            await Shell.Current.GoToAsync("registro");
         }
 
         private async void OnSoporteTapped(object sender, TappedEventArgs e)
