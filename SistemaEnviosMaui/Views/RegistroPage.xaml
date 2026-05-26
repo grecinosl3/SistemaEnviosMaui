@@ -2,28 +2,151 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SistemaEnviosMaui.Views.RegistroPage"
-             Title="RegistroPage"
-             BackgroundColor="#121212">
+             Title="Registro de Usuario"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
 
-    <VerticalStackLayout Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#070D1A" Offset="0.0" />
+            <GradientStop Color="#0D1520" Offset="0.5" />
+            <GradientStop Color="#111D2E" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
-        <Label Text="Formulario de Registro"
-               FontSize="24"
-               TextColor="White"
-               HorizontalOptions="Center" />
+    <Grid>
+        <AbsoluteLayout IsClippedToBounds="True">
+            <Ellipse AbsoluteLayout.LayoutBounds="-120,-120,300,300" Stroke="#1A3A5C" StrokeThickness="0.8" Fill="Transparent" Opacity="0.5"/>
+            <Ellipse AbsoluteLayout.LayoutBounds="-180,-180,420,420" Stroke="#1A3A5C" StrokeThickness="0.6" Fill="Transparent" Opacity="0.3"/>
+            <Ellipse AbsoluteLayout.LayoutBounds="-240,-240,540,540" Stroke="#1A3A5C" StrokeThickness="0.4" Fill="Transparent" Opacity="0.15"/>
 
-        <Entry Placeholder="Nombre Completo" WidthRequest="300" />
-        <Entry Placeholder="Correo Electrónico" WidthRequest="300" />
-        <Entry Placeholder="Contraseña" IsPassword="True" WidthRequest="300" />
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="1.15,1.15,300,300" Stroke="#1A3A5C" StrokeThickness="0.8" Fill="Transparent" Opacity="0.5"/>
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="1.2,1.2,420,420" Stroke="#1A3A5C" StrokeThickness="0.6" Fill="Transparent" Opacity="0.3"/>
+            <Ellipse AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="1.25,1.25,540,540" Stroke="#1A3A5C" StrokeThickness="0.4" Fill="Transparent" Opacity="0.15"/>
+        </AbsoluteLayout>
 
-        <Button Text="Finalizar Registro"
-                BackgroundColor="#2ecc71"
-                WidthRequest="200" />
+        <ScrollView VerticalOptions="CenterAndExpand">
+            <Grid VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="620" Padding="0,40">
 
-        <Button Text="Volver al Login"
-                Clicked="OnVolverClicked"
-                BackgroundColor="Transparent"
-                TextColor="#42A5F5" />
+                <Border StrokeShape="RoundRectangle 20"
+                        Stroke="#1A3A5C"
+                        StrokeThickness="1"
+                        Shadow="{Shadow Brush=Black, Offset='0,20', Radius=40, Opacity=0.6}">
 
-    </VerticalStackLayout>
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#0F1C2E" Offset="0.0"/>
+                            <GradientStop Color="#0A1520" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                    <VerticalStackLayout Spacing="0">
+
+                        <BoxView HeightRequest="5" BackgroundColor="#1565C0" HorizontalOptions="Fill"/>
+
+                        <VerticalStackLayout Spacing="8" HorizontalOptions="Center" Margin="40,36,40,16">
+
+                            <Border StrokeShape="RoundRectangle 40"
+                                    WidthRequest="80" HeightRequest="80"
+                                    StrokeThickness="2" Stroke="#1565C0"
+                                    HorizontalOptions="Center"
+                                    Shadow="{Shadow Brush='#1565C0', Offset='0,0', Radius=20, Opacity=0.3}">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="#0D1B2E" Offset="0.0"/>
+                                        <GradientStop Color="#0A1520" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Label Text="👤" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+
+                            <Label Text="NUEVO USUARIO" FontSize="10" TextColor="#42A5F5" FontAttributes="Bold" CharacterSpacing="3" HorizontalOptions="Center" Margin="0,8,0,0"/>
+                            <Label Text="Crear Cuenta" FontSize="24" FontAttributes="Bold" TextColor="#E3F2FD" HorizontalOptions="Center"/>
+                            <Label Text="Ingresa tus datos para registrarte en el sistema" FontSize="13" TextColor="#5C85A8" HorizontalOptions="Center"/>
+
+                        </VerticalStackLayout>
+
+                        <BoxView HeightRequest="1" BackgroundColor="#1A3A5C" Margin="40,0" Opacity="0.5"/>
+
+                        <VerticalStackLayout Spacing="18" Margin="40,22,40,32">
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="NOMBRE COMPLETO" FontSize="10" TextColor="#5C85A8" FontAttributes="Bold" CharacterSpacing="1.5"/>
+                                <Border StrokeShape="RoundRectangle 10" Stroke="#1A3A5C" StrokeThickness="1" Shadow="{Shadow Brush=Black, Offset='0,2', Radius=6, Opacity=0.3}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="#0A1520"/>
+                                    </Border.Background>
+                                    <Grid ColumnDefinitions="48, *" HeightRequest="52">
+                                        <Label Grid.Column="0" Text="📝" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" x:Name="txtNombre" Placeholder="Ej. Juan Pérez" PlaceholderColor="#2D4F6B" TextColor="#E3F2FD" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" Margin="0,0,14,0"/>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="CORREO ELECTRÓNICO" FontSize="10" TextColor="#5C85A8" FontAttributes="Bold" CharacterSpacing="1.5"/>
+                                <Border StrokeShape="RoundRectangle 10" Stroke="#1A3A5C" StrokeThickness="1" Shadow="{Shadow Brush=Black, Offset='0,2', Radius=6, Opacity=0.3}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="#0A1520"/>
+                                    </Border.Background>
+                                    <Grid ColumnDefinitions="48, *" HeightRequest="52">
+                                        <Label Grid.Column="0" Text="✉️" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" x:Name="txtCorreo" Placeholder="tu-correo@sistema.com" PlaceholderColor="#2D4F6B" TextColor="#E3F2FD" BackgroundColor="Transparent" Keyboard="Email" FontSize="14" VerticalOptions="Center" Margin="0,0,14,0"/>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="CLAVE DE ACCESO" FontSize="10" TextColor="#5C85A8" FontAttributes="Bold" CharacterSpacing="1.5"/>
+                                <Border StrokeShape="RoundRectangle 10" Stroke="#1A3A5C" StrokeThickness="1" Shadow="{Shadow Brush=Black, Offset='0,2', Radius=6, Opacity=0.3}">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="#0A1520"/>
+                                    </Border.Background>
+                                    <Grid ColumnDefinitions="48, *" HeightRequest="52">
+                                        <Label Grid.Column="0" Text="🔒" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Entry Grid.Column="1" x:Name="txtPassword" Placeholder="••••••••••••" IsPassword="True" PlaceholderColor="#2D4F6B" TextColor="#E3F2FD" BackgroundColor="Transparent" FontSize="14" VerticalOptions="Center" Margin="0,0,14,0"/>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <Button x:Name="btnFinalizarRegistro"
+                                    Text="FINALIZAR REGISTRO"
+                                    CornerRadius="10"
+                                    HeightRequest="52"
+                                    FontAttributes="Bold"
+                                    CharacterSpacing="1.5"
+                                    FontSize="15"
+                                    TextColor="#E3F2FD"
+                                    Shadow="{Shadow Brush=#1565C0, Offset='0,6', Radius=16, Opacity=0.5}"
+                                    Margin="0,6,0,0">
+                                <Button.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#2ecc71" Offset="0.0"/>
+                                        <GradientStop Color="#27ae60" Offset="1.0"/>
+                                    </LinearGradientBrush>
+                                </Button.Background>
+                            </Button>
+
+                            <Grid ColumnDefinitions="*, Auto, *" VerticalOptions="Center" Margin="0,4,0,4">
+                                <BoxView Grid.Column="0" HeightRequest="1" BackgroundColor="#1A3A5C" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text=" ¿YA TIENES CUENTA? " FontSize="10" TextColor="#2D4F6B" FontAttributes="Bold" VerticalOptions="Center" Margin="8,0"/>
+                                <BoxView Grid.Column="2" HeightRequest="1" BackgroundColor="#1A3A5C" VerticalOptions="Center"/>
+                            </Grid>
+
+                            <Border StrokeShape="RoundRectangle 10" Stroke="#1565C0" StrokeThickness="1" BackgroundColor="Transparent">
+                                <Button Text="Volver al Login"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#42A5F5"
+                                        HeightRequest="46"
+                                        FontAttributes="Bold"
+                                        FontSize="13"
+                                        Clicked="OnVolverClicked"/>
+                            </Border>
+
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>
