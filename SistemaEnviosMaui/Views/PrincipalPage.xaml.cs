@@ -83,7 +83,7 @@ namespace SistemaEnviosMaui.Views
         }
         private void IluminarPestanaActiva(string opcionSeleccionada)
         {
-            // 1. Primero volvemos a poner TODOS los botones en su estado "Apagado" (Oscuro)
+            // Primero volvemos a poner TODOS los botones en su estado "Apagado" (Oscuro)
             Border[] todosLosMenus = { MenuInicio, MenuUsuarios, MenuClientes, MenuInventario, MenuPedidos, MenuRepartidores, MenuFacturas, MenuDespacho, MenuMensajes };
 
             foreach (var menu in todosLosMenus)
@@ -95,7 +95,7 @@ namespace SistemaEnviosMaui.Views
                 }
             }
 
-            // 2. Encendemos únicamente el que seleccionó el usuario (Azul Neón Eléctrico)
+            // Encendemos únicamente el que seleccionó el usuario (Azul Neón Eléctrico)
             switch (opcionSeleccionada)
             {
                 case "Inicio":
@@ -197,6 +197,49 @@ namespace SistemaEnviosMaui.Views
                     ContenedorPrincipal.Content = new ListaChatsPage(idUsuarioReal);
                     break;
             }
+        }
+
+        private void OnSidebarPointerEntered(object sender, PointerEventArgs e)
+        {
+            // Hacemos visibles los textos de los menús
+            txtInicio.IsVisible = true;
+            txtUsuarios.IsVisible = true;
+            txtClientes.IsVisible = true;
+            txtInventario.IsVisible = true;
+            txtPedidos.IsVisible = true;
+            txtRepartidores.IsVisible = true;
+            txtFacturas.IsVisible = true;
+            txtDespacho.IsVisible = true;
+            txtMensajes.IsVisible = true;
+
+            // Texto del logo y usuario
+            lblLogoTexto.IsVisible = true;
+            lblUsuarioNombre.IsVisible = true;
+
+            // Animación de expansión fluida a 220px
+            Animation anchoAnimation = new Animation(v => SidebarBorder.WidthRequest = v, 75, 220);
+            anchoAnimation.Commit(this, "ExpandirSidebar", length: 180, easing: Easing.CubicOut);
+        }
+
+        private void OnSidebarPointerExited(object sender, PointerEventArgs e)
+        {
+            // Ocultamos los textos inmediatamente para que la contracción sea limpia
+            txtInicio.IsVisible = false;
+            txtUsuarios.IsVisible = false;
+            txtClientes.IsVisible = false;
+            txtInventario.IsVisible = false;
+            txtPedidos.IsVisible = false;
+            txtRepartidores.IsVisible = false;
+            txtFacturas.IsVisible = false;
+            txtDespacho.IsVisible = false;
+            txtMensajes.IsVisible = false;
+
+            lblLogoTexto.IsVisible = false;
+            lblUsuarioNombre.IsVisible = false;
+
+            // Animación de contracción a 75px
+            Animation anchoAnimation = new Animation(v => SidebarBorder.WidthRequest = v, 220, 75);
+            anchoAnimation.Commit(this, "ColapsarSidebar", length: 180, easing: Easing.CubicIn);
         }
     }
 }

@@ -11,11 +11,11 @@ namespace SistemaEnviosWebAPI.Hubs
             try
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, idConversacion);
-                Console.WriteLine($"👥 Cliente conectado unido a la sala: {idConversacion}");
+                Console.WriteLine($" Cliente conectado unido a la sala: {idConversacion}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error en UnirseASala: {ex.Message}");
+                Console.WriteLine($" Error en UnirseASala: {ex.Message}");
             }
         }
 
@@ -31,18 +31,18 @@ namespace SistemaEnviosWebAPI.Hubs
 
                 if (guardado)
                 {
-                    Console.WriteLine($"✅ Mensaje guardado en SQL: {mensaje.Mensaje}");
+                    Console.WriteLine($" Mensaje guardado en SQL: {mensaje.Mensaje}");
                     // Retransmite a todos en la sala en tiempo real
                     await Clients.Group(mensaje.IdConversacion.ToString()).SendAsync("RecibirMensaje", mensaje);
                 }
                 else
                 {
-                    Console.WriteLine($"⚠️ Error al registrar: {error}");
+                    Console.WriteLine($" Error al registrar: {error}");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error crítico en EnviarMensaje: {ex.Message}");
+                Console.WriteLine($" Error crítico en EnviarMensaje: {ex.Message}");
             }
         }
 
@@ -59,12 +59,12 @@ namespace SistemaEnviosWebAPI.Hubs
 
                     // Envía el pasado únicamente al usuario que lo solicitó
                     await Clients.Caller.SendAsync("RecibirHistorial", historial);
-                    Console.WriteLine($"📚 Historial enviado. Sala {idConversacion}: {historial.Count} mensajes.");
+                    Console.WriteLine($" Historial enviado. Sala {idConversacion}: {historial.Count} mensajes.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error en ObtenerHistorial: {ex.Message}");
+                Console.WriteLine($" Error en ObtenerHistorial: {ex.Message}");
             }
         }
     }

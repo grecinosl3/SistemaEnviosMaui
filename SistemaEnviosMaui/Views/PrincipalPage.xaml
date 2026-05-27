@@ -1,185 +1,156 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:SistemaEnviosMaui"
              x:Class="SistemaEnviosMaui.Views.PrincipalPage"
              Title="PrincipalPage"
              BackgroundColor="#0A0E17"
              NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="70, 90, *">
+    <Grid ColumnDefinitions="Auto, *">
 
-        <Border Grid.Row="0" StrokeThickness="0" BackgroundColor="#0F172A">
-            <Border.Shadow>
-                <Shadow Brush="Black" Offset="0,4" Radius="10" Opacity="0.3"/>
-            </Border.Shadow>
+        <Border x:Name="SidebarBorder" 
+                Grid.Column="0" 
+                WidthRequest="75"
+                StrokeThickness="0" 
+                BackgroundColor="#131722"
+                HorizontalOptions="Start">
 
-            <Grid ColumnDefinitions="*, Auto" Padding="20,0">
-                <HorizontalStackLayout VerticalOptions="Center" Spacing="12">
-                    <Label Text="SISTEMA DE GESTIÓN DE ENVÍOS" 
-                            TextColor="White" 
-                            FontSize="18" 
-                            FontAttributes="Bold" 
-                            CharacterSpacing="1"
-                            VerticalOptions="Center"/>
-                </HorizontalStackLayout>
+            <Border.GestureRecognizers>
+                <PointerGestureRecognizer PointerEntered="OnSidebarPointerEntered" 
+                                          PointerExited="OnSidebarPointerExited"/>
+            </Border.GestureRecognizers>
 
-                <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="15">
+            <Grid RowDefinitions="Auto, *, Auto" Padding="10, 20, 10, 20">
 
-                    <Border StrokeShape="Ellipse" BackgroundColor="#1E293B" WidthRequest="36" HeightRequest="36" StrokeThickness="0">
-                        <Label Text="👤" HorizontalOptions="Center" VerticalOptions="Center" FontSize="16"/>
+                <Grid Grid.Row="0" ColumnDefinitions="55, *" Margin="0,0,0,20">
+                    <Border Grid.Column="0" StrokeShape="Ellipse" BackgroundColor="#4F46E5" WidthRequest="45" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Center">
+                        <Label Text="🚀" HorizontalOptions="Center" VerticalOptions="Center" FontSize="22"/>
                     </Border>
+                    <Label x:Name="lblLogoTexto" Grid.Column="1" Text="LOGÍSTICA" TextColor="White" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" Margin="5,0,0,0" IsVisible="False"/>
+                </Grid>
 
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="1">
-                        <Label Text="En línea" TextColor="#10B981" FontSize="11" FontAttributes="Bold"/>
-                        <Label x:Name="lblUsuarioNombre" Text="Invitado" TextColor="#E2E8F0" 
-                       FontAttributes="Bold" FontSize="14"/>
+                <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+                    <VerticalStackLayout Spacing="12" HorizontalOptions="Fill">
+
+                        <Border x:Name="MenuInicio" StrokeShape="RoundRectangle 12" BackgroundColor="#6366F1" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="🏠" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtInicio" Grid.Column="1" Text="Inicio" TextColor="White" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inicio" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuUsuarios" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="👥" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtUsuarios" Grid.Column="1" Text="Usuarios" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Usuarios" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuClientes" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="🤝" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtClientes" Grid.Column="1" Text="Clientes" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Clientes" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuInventario" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="📦" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtInventario" Grid.Column="1" Text="Inventario" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inventario" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuPedidos" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="📋" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtPedidos" Grid.Column="1" Text="Pedidos" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Pedidos" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuRepartidores" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="🚚" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtRepartidores" Grid.Column="1" Text="Repartidores" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Repartidores" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuFacturas" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="🧾" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtFacturas" Grid.Column="1" Text="Facturas" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Facturas" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuDespacho" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="📤" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtDespacho" Grid.Column="1" Text="Despacho" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Despacho" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <Border x:Name="MenuMensajes" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Fill">
+                            <Grid ColumnDefinitions="55, *">
+                                <Label Grid.Column="0" Text="💬" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label x:Name="txtMensajes" Grid.Column="1" Text="Mensajes" TextColor="#64748B" FontAttributes="Bold" FontSize="13" VerticalOptions="Center" IsVisible="False"/>
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Mensajes" />
+                            </Border.GestureRecognizers>
+                        </Border>
+
                     </VerticalStackLayout>
+                </ScrollView>
 
-                    <Border x:Name="BtnSalir" 
-                    StrokeShape="RoundRectangle 8" 
-                    BackgroundColor="#2D1F1F" 
-                    Stroke="#EF4444" 
-                    StrokeThickness="1"
-                    WidthRequest="40" 
-                    HeightRequest="36" 
-                    VerticalOptions="Center">
-                        <Label Text="🚪" HorizontalOptions="Center" VerticalOptions="Center" FontSize="18"/>
-
+                <Grid Grid.Row="2" ColumnDefinitions="55, *" Margin="0,15,0,0">
+                    <Border Grid.Column="0" StrokeShape="Ellipse" BackgroundColor="Transparent" WidthRequest="45" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Center">
+                        <Label Text="🚪" HorizontalOptions="Center" VerticalOptions="Center" FontSize="24"/>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnCerrarSesionClicked" />
                         </Border.GestureRecognizers>
                     </Border>
 
-                </HorizontalStackLayout>
+                    <Label x:Name="lblUsuarioNombre" 
+                           Grid.Column="1"
+                           Text="Administrador" 
+                           TextColor="#94A3B8" 
+                           FontAttributes="Bold" 
+                           FontSize="12" 
+                           VerticalOptions="Center"
+                           Margin="5,0,0,0"
+                           IsVisible="False"/>
+                </Grid>
+
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" BackgroundColor="#0A0E17" Padding="15,10">
-            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-
-                    <Border x:Name="MenuInicio" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Inicio}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Inicio" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inicio" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuUsuarios" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Usuarios}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Usuarios" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Usuarios" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuClientes" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Clientes}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Clientes" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Clientes" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuInventario" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Inventario}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Inventario" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Inventario" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuPedidos" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Pedidos}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Pedidos" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Pedidos" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuRepartidores" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="105" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Repartidores}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Repartidores" HorizontalOptions="Center" FontSize="11" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Repartidores" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuFacturas" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Facturas}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Facturas" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Facturas" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuDespacho" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Facturas}" FontFamily="FontAwesomeSolid" 
-                                   FontSize="22" HorizontalOptions="Center" TextColor="#3B82F6"/>
-                            <Label Text="Despacho" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Despacho" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                    <Border x:Name="MenuMensajes" StrokeShape="RoundRectangle 12" Stroke="#2A364F" BackgroundColor="#1E293B" WidthRequest="100" Padding="5">
-                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
-                            <Label Text="{x:Static local:Iconos.Comentarios}" FontFamily="FontAwesomeSolid" 
-               FontSize="22" HorizontalOptions="Center" TextColor="#10B981"/>
-                            <Label Text="Mensajes" HorizontalOptions="Center" FontSize="12" TextColor="White" FontAttributes="Bold"/>
-                        </VerticalStackLayout>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMenuOptionTapped" CommandParameter="Mensajes" />
-                        </Border.GestureRecognizers>
-                    </Border>
-
-                </HorizontalStackLayout>
-            </ScrollView>
-        </Grid>
-
         <ContentView x:Name="ContenedorPrincipal" 
-                     Grid.Row="2" 
-                     BackgroundColor="#0F172A"
-                     Margin="15,0,15,15">
-            <ContentView.ControlTemplate>
-                <ControlTemplate>
-                    <Border StrokeShape="RoundRectangle 16" Stroke="#2A364F" BackgroundColor="#121824" Padding="20">
-                        <ContentPresenter />
-                    </Border>
-                </ControlTemplate>
-            </ContentView.ControlTemplate>
-
-            <Label Text="Seleccione una opción del menú superior para comenzar" 
-                   HorizontalOptions="Center" 
-                   VerticalOptions="Center" 
-                   TextColor="#64748B"
-                   FontSize="15"
-                   FontAttributes="Italic"/>
+                     Grid.Column="1" 
+                     BackgroundColor="#0A0E17">
+            <Label Text="Contenido de la sección activa" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#1E293B" FontSize="16" FontAttributes="Bold"/>
         </ContentView>
 
     </Grid>

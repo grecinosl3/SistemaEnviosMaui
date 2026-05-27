@@ -66,16 +66,19 @@ namespace SistemaEnviosMaui.Views
         {
             try
             {
-                
-                string destinatario = "soporte@sistemaenvios.com";
-                string asunto = "Soporte - Problemas de acceso al Sistema de Envios";
+                // Reemplaza el 50200000000 por el número de soporte de tu país (con código de área sin el +)
+                string telefonoSoporte = "50230975787";
+                string mensaje = "Hola, necesito soporte técnico. Tengo problemas para acceder al Sistema de Envíos.";
 
-                await Launcher.Default.OpenAsync(new Uri($"mailto:{destinatario}?subject={Uri.EscapeDataString(asunto)}"));
+                // Creamos el enlace oficial de la API de WhatsApp
+                string urlWhatsApp = $"https://wa.me/{telefonoSoporte}?text={Uri.EscapeDataString(mensaje)}";
+
+                await Launcher.Default.OpenAsync(new Uri(urlWhatsApp));
             }
             catch (Exception ex)
             {
-                // Si el equipo no tiene gestor de correo, evitamos que la app se caiga
-                await DisplayAlert("Soporte Técnico", "Por favor comuníquese con el departamento de TI en la oficina central.", "OK");
+                // Si no tiene WhatsApp instalado (como en la PC de escritorio de prueba), muestra la alerta
+                await DisplayAlert("Soporte Técnico", "No se pudo abrir WhatsApp. Por favor, comunícate al teléfono: +502 30975787", "OK");
             }
         }
     }

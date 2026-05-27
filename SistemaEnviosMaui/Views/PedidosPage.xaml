@@ -155,7 +155,7 @@
                             <Label Text="Tipo de Facturación Requerida" TextColor="White" FontSize="12" Margin="0,3,0,0"/>
                             <Picker x:Name="cboTipoFactura" BackgroundColor="#1e1e1e" TextColor="White" Title="Seleccione...">
                                 <Picker.Items>
-                                    <x:String>Factura Electrónica (FEL)</x:String>
+                                    <x:String>Factura Electrónica </x:String>
                                     <x:String>Factura Física Especial</x:String>
                                     <x:String>Exento de IVA</x:String>
                                 </Picker.Items>
