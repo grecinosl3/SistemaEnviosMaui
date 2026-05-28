@@ -34,7 +34,6 @@ namespace SistemaEnviosMaui.Views
 
             if (user != null)
             {
-                // Si el login es correcto, saludamos al usuario
                 await DisplayAlert("Éxito", "Bienvenido " + user.NombreCompleto, "OK");
 
                 Application.Current.MainPage = new PrincipalPage(user);
@@ -48,7 +47,6 @@ namespace SistemaEnviosMaui.Views
         {
             txtPassword.IsPassword = !txtPassword.IsPassword;
 
-            // Cambia el ícono según el estado
             if (sender is Label ojo)
                 ojo.Text = txtPassword.IsPassword ? "👁️" : "🙈";
         }
@@ -66,18 +64,15 @@ namespace SistemaEnviosMaui.Views
         {
             try
             {
-                // Reemplaza el 50200000000 por el número de soporte de tu país (con código de área sin el +)
                 string telefonoSoporte = "50230975787";
                 string mensaje = "Hola, necesito soporte técnico. Tengo problemas para acceder al Sistema de Envíos.";
 
-                // Creamos el enlace oficial de la API de WhatsApp
                 string urlWhatsApp = $"https://wa.me/{telefonoSoporte}?text={Uri.EscapeDataString(mensaje)}";
 
                 await Launcher.Default.OpenAsync(new Uri(urlWhatsApp));
             }
             catch (Exception ex)
             {
-                // Si no tiene WhatsApp instalado (como en la PC de escritorio de prueba), muestra la alerta
                 await DisplayAlert("Soporte Técnico", "No se pudo abrir WhatsApp. Por favor, comunícate al teléfono: +502 30975787", "OK");
             }
         }

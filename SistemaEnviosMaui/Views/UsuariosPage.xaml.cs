@@ -22,19 +22,17 @@ namespace SistemaEnviosMaui.Views
 
             CargarUsuariosBD();
 
-            // Valores por defecto para el formulario
             pckEstado.SelectedIndex = 0;
-            pckRol.SelectedIndex = 1; // Por defecto Operador Logístico
+            pckRol.SelectedIndex = 1; 
         }
 
-        // 1. CARGAR DATOS DESDE LA DB (CON PARCHE DE SEGURIDAD MULTIHILO)
+        //  CARGAR DATOS DESDE LA DB
         private void CargarUsuariosBD()
         {
             try
             {
                 var lista = _cnUsuario.Listar();
 
-                // Forzamos la ejecución en el hilo principal de la pantalla
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     MisUsuarios.Clear();
@@ -60,7 +58,7 @@ namespace SistemaEnviosMaui.Views
             }
         }
 
-        // 2. GUARDAR / EDITAR
+        // GUARDAR / EDITAR
         private async void OnGuardarClicked(object sender, EventArgs e)
         {
             try
@@ -78,7 +76,7 @@ namespace SistemaEnviosMaui.Views
 
                 string mensaje;
 
-                if (usuarioFormulario.IdUsuario == 0) // NUEVO
+                if (usuarioFormulario.IdUsuario == 0) 
                 {
                     int idGenerado = _cnUsuario.Registrar(usuarioFormulario, out mensaje);
 
@@ -93,7 +91,7 @@ namespace SistemaEnviosMaui.Views
                         await Application.Current.MainPage.DisplayAlert("Validación", mensaje, "OK");
                     }
                 }
-                else // EDITAR
+                else
                 {
                     bool editado = _cnUsuario.Editar(usuarioFormulario, out mensaje);
 
@@ -115,7 +113,7 @@ namespace SistemaEnviosMaui.Views
             }
         }
 
-        // 3. SELECCIÓN DE FILA
+        // SELECCIÓN DE FILA
         private void OnUsuarioSeleccionado(object sender, SelectionChangedEventArgs e)
         {
             _usuarioSeleccionado = e.CurrentSelection.FirstOrDefault() as Usuario;
@@ -138,7 +136,7 @@ namespace SistemaEnviosMaui.Views
             }
         }
 
-        // 4. BAJA DE TRABAJADOR
+        // BAJA DE TRABAJADOR
         private async void OnEliminarClicked(object sender, EventArgs e)
         {
             if (_usuarioSeleccionado == null)
@@ -172,7 +170,7 @@ namespace SistemaEnviosMaui.Views
             }
         }
 
-        // 5. LIMPIAR FORMULARIO
+        // LIMPIAR FORMULARIO
         private void OnLimpiarClicked(object sender, EventArgs e)
         {
             txtNombre.Text = string.Empty;

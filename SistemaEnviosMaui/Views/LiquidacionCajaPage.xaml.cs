@@ -12,7 +12,6 @@ namespace SistemaEnviosMaui.Views
 {
     public partial class LiquidacionCajaPage : ContentView
     {
-        // Conectamos directamente con tus clases nativas de datos
         private CD_Pedido _cdPedido = new CD_Pedido();
         private CD_Repartidor _cdRepartidor = new CD_Repartidor();
 
@@ -23,7 +22,6 @@ namespace SistemaEnviosMaui.Views
         {
             InitializeComponent();
 
-            // Seteamos el contexto para habilitar los bindeos de las propiedades
             this.BindingContext = this;
 
             CargarPilotos();
@@ -35,7 +33,6 @@ namespace SistemaEnviosMaui.Views
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Llama a tu método real de base de datos para los pilotos
                     var pilotosBD = _cdRepartidor.ListarRepartidores();
 
                     ListaPilotos.Clear();
@@ -69,11 +66,9 @@ namespace SistemaEnviosMaui.Views
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // 1. Limpiamos por completo la visualización previa
                     lstGuiasACobrar.ItemsSource = null;
                     ListaCobros.Clear();
 
-                    // 2. CORRECCIÓN: Llamamos a tu método real de base de datos
                     var guiasEntregadas = _cdPedido.ObtenerPedidosParaLiquidar(piloto.IdRepartidor);
 
                     decimal acumuladoEfectivo = 0;
@@ -89,15 +84,12 @@ namespace SistemaEnviosMaui.Views
                         }
                     }
 
-                    // 3. Forzamos el refresco inyectando la colección poblada a la UI
                     lstGuiasACobrar.ItemsSource = ListaCobros;
 
-                    // 4. Actualizamos el panel informativo matemático
                     lblTotalEfectivo.Text = $"Q {acumuladoEfectivo:F2}";
                     lblTotalFletes.Text = $"Q {acumuladoFletes:F2}";
                     lblCantidadPaquetes.Text = ListaCobros.Count.ToString();
 
-                    // Habilitamos el botón si el chofer de verdad trae dinero en mano
                     btnLiquidar.IsEnabled = ListaCobros.Count > 0;
                 });
             }
@@ -118,7 +110,6 @@ namespace SistemaEnviosMaui.Views
             if (!confirmar) return;
 
             string mensaje;
-            // CORRECCIÓN: Apuntamos al nombre exacto de tu método de cierre en CD_Pedido
             bool exito = _cdPedido.LiquidarPedidosPiloto(piloto.IdRepartidor, out mensaje);
 
             if (exito)
@@ -127,7 +118,6 @@ namespace SistemaEnviosMaui.Views
 
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Limpieza total tras guardar los cambios en SQL Server
                     lstGuiasACobrar.ItemsSource = null;
                     ListaCobros.Clear();
 

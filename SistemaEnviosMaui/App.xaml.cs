@@ -13,16 +13,23 @@ namespace SistemaEnviosMaui
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            //Para ver la ventana de chat
-            //var pantallaChat = new Views.ChatPage();
-            //return new Window(pantallaChat);
-
             // DESCOMENTAR PARA USAR LA VENTANA PRINCIPAL
-            return new Window(new AppShell());
+           return new Window(new AppShell());
 
-            //var pantallaPrincipal = new NavigationPage(new Views.PrincipalPage("Usuario Prueba"));
+            //PARA INGRESAR PERO SIN INICIAR SESION, SOLO PARA VER LA VENTANA PRINCIPAL
+            /*
+            var usuarioSimulado = new CapaEntidad.Usuario
+            {
+                IdUsuario = 2,
+                NombreCompleto = "Usuario Prueba",
+                Correo = "admin@sistema.com",
+                Activo = true,
+                oRol = new CapaEntidad.Rol { IdRol = 1, NombreRol = "Administrador" }
+            };
 
-            //return new Window(pantallaPrincipal);
+            var pantallaPrincipal = new NavigationPage(new Views.PrincipalPage(usuarioSimulado));
+            return new Window(pantallaPrincipal);
+            */
         }
     }
 }

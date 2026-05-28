@@ -104,7 +104,7 @@ namespace SistemaEnviosMaui.Views
             if (codProducto.ToUpper() == "STD" || codProducto == "1")
             {
                 _idProductoSimulado = 1;
-                txtNombreProducto.Text = "Flete Estándar Capital/Departamentos";
+                txtNombreProducto.Text = "Servicio Estándar";
                 txtPrecioUnitario.Text = "40.00";
             }
             else if (codProducto.ToUpper() == "COD" || codProducto == "2")
@@ -256,7 +256,7 @@ namespace SistemaEnviosMaui.Views
             RecalcularGranTotal();
         }
 
-        // HISTORIAL DE ENVÍOS (MÓDULO TRACKING)
+        // HISTORIAL DE ENVÍOS 
         private void CargarHistorialCompleto()
         {
             try

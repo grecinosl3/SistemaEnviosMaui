@@ -22,7 +22,6 @@ namespace SistemaEnviosMaui.Views
         {
             InitializeComponent();
 
-            // Disparar la carga de datos de la Base de Datos en segundo plano de inmediato
             Task.Run(async () => await CargarDatosPantallaAsync());
         }
 
@@ -30,11 +29,9 @@ namespace SistemaEnviosMaui.Views
         {
             try
             {
-                // Consultas pesadas a la Capa de Negocio (SQL Server) fuera del hilo de UI
                 var pedidosBD = _cnPedido.ListarPendientes();
                 var repartidoresBD = _cnRepartidor.Listar();
 
-                // Acoplamos los datos de forma segura dentro del MainThread gráfico
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     // Llenamos la colección de Pedidos Pendientes
@@ -54,7 +51,6 @@ namespace SistemaEnviosMaui.Views
                         }
                     }
 
-                    // Forzamos el refresco del enlace de datos (DataBinding manual preventivo)
                     lstPendientes.ItemsSource = null;
                     lstPendientes.ItemsSource = ListaPendientes;
 
@@ -64,7 +60,6 @@ namespace SistemaEnviosMaui.Views
             }
             catch (Exception ex)
             {
-                // Garantizamos que la alerta de excepción se dibuje en el hilo correcto
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     if (Application.Current?.MainPage != null)

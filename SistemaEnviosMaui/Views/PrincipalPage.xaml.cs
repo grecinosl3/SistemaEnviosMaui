@@ -7,21 +7,17 @@ namespace SistemaEnviosMaui.Views
 {
     public partial class PrincipalPage : ContentPage
     {
-        private Usuario _usuarioActual; // Guardamos los datos del login aquí
+        private Usuario _usuarioActual;
         
-        // Modificamos el constructor para que reciba el objeto Usuario completo
         public PrincipalPage(Usuario usuarioLogueado)
         {
             InitializeComponent();
 
-            // Si por alguna razón viene nulo, lo manejamos como invitado para evitar caídas
             if (usuarioLogueado != null)
             {
                 _usuarioActual = usuarioLogueado;
-                //  Pintamos el nombre real en el encabezado azul
                 lblUsuarioNombre.Text = usuarioLogueado.NombreCompleto;
 
-                //  Ejecutamos el filtro de seguridad según su Rol
                 CargarMenuSegunRol(usuarioLogueado);
             }
             else
@@ -30,10 +26,8 @@ namespace SistemaEnviosMaui.Views
             }
         }
 
-        // Método encargado de ocultar o mostrar las opciones del menú superior
         private void CargarMenuSegunRol(Usuario usuarioLogueado)
         {
-            // Apagamos todas las pestañas primero por seguridad (Lista negra)
             MenuUsuarios.IsVisible = false;
             MenuClientes.IsVisible = false;
             MenuInventario.IsVisible = false;
@@ -43,10 +37,8 @@ namespace SistemaEnviosMaui.Views
             MenuDespacho.IsVisible = false;
             MenuMensajes.IsVisible = false;
 
-            // La pantalla de Inicio siempre se queda activa para todos
             MenuInicio.IsVisible = true;
 
-            // Encendemos los accesos permitidos según el IdRol
             switch (usuarioLogueado.oRol.IdRol)
             {
                 case 1: //  ADMINISTRADOR
@@ -60,7 +52,7 @@ namespace SistemaEnviosMaui.Views
                     MenuMensajes.IsVisible = true;
                     break;
 
-                case 2: // MODERADOR (Operador Logístico)
+                case 2: // MODERADOR 
                     MenuClientes.IsVisible = true;
                     MenuInventario.IsVisible = true;
                     MenuPedidos.IsVisible = true;
@@ -76,26 +68,24 @@ namespace SistemaEnviosMaui.Views
                     MenuMensajes.IsVisible = true;
                     break;
 
-                case 4: //  CLIENTE (Distribuidora)
+                case 4: //  CLIENTE 
                     MenuPedidos.IsVisible = true;
                     break;
             }
         }
         private void IluminarPestanaActiva(string opcionSeleccionada)
         {
-            // Primero volvemos a poner TODOS los botones en su estado "Apagado" (Oscuro)
             Border[] todosLosMenus = { MenuInicio, MenuUsuarios, MenuClientes, MenuInventario, MenuPedidos, MenuRepartidores, MenuFacturas, MenuDespacho, MenuMensajes };
 
             foreach (var menu in todosLosMenus)
             {
                 if (menu != null)
                 {
-                    menu.BackgroundColor = Color.FromArgb("#1E293B"); // Gris oscuro original
-                    menu.Stroke = Color.FromArgb("#2A364F");          // Borde apagado
+                    menu.BackgroundColor = Color.FromArgb("#1E293B"); 
+                    menu.Stroke = Color.FromArgb("#2A364F");         
                 }
             }
 
-            // Encendemos únicamente el que seleccionó el usuario (Azul Neón Eléctrico)
             switch (opcionSeleccionada)
             {
                 case "Inicio":
@@ -143,17 +133,14 @@ namespace SistemaEnviosMaui.Views
 
             if (seguro)
             {
-                // Cambiamos la página principal del celular/computadora directo al Login
                 Application.Current.MainPage = new NavigationPage(new LoginPage());
             }
         }
 
         private void OnMenuOptionTapped(object sender, TappedEventArgs e)
         {
-            // Validamos que el parámetro no venga vacío para evitar caídas
             if (e.Parameter == null) return;
 
-            // Obtenemos el nombre de la opción (Inicio, Usuarios, Clientes, etc.)
             var opcion = e.Parameter.ToString();
 
             IluminarPestanaActiva(opcion);
@@ -201,7 +188,6 @@ namespace SistemaEnviosMaui.Views
 
         private void OnSidebarPointerEntered(object sender, PointerEventArgs e)
         {
-            // Hacemos visibles los textos de los menús
             txtInicio.IsVisible = true;
             txtUsuarios.IsVisible = true;
             txtClientes.IsVisible = true;
@@ -212,18 +198,15 @@ namespace SistemaEnviosMaui.Views
             txtDespacho.IsVisible = true;
             txtMensajes.IsVisible = true;
 
-            // Texto del logo y usuario
             lblLogoTexto.IsVisible = true;
             lblUsuarioNombre.IsVisible = true;
 
-            // Animación de expansión fluida a 220px
             Animation anchoAnimation = new Animation(v => SidebarBorder.WidthRequest = v, 75, 220);
             anchoAnimation.Commit(this, "ExpandirSidebar", length: 180, easing: Easing.CubicOut);
         }
 
         private void OnSidebarPointerExited(object sender, PointerEventArgs e)
         {
-            // Ocultamos los textos inmediatamente para que la contracción sea limpia
             txtInicio.IsVisible = false;
             txtUsuarios.IsVisible = false;
             txtClientes.IsVisible = false;
@@ -237,7 +220,6 @@ namespace SistemaEnviosMaui.Views
             lblLogoTexto.IsVisible = false;
             lblUsuarioNombre.IsVisible = false;
 
-            // Animación de contracción a 75px
             Animation anchoAnimation = new Animation(v => SidebarBorder.WidthRequest = v, 220, 75);
             anchoAnimation.Commit(this, "ColapsarSidebar", length: 180, easing: Easing.CubicIn);
         }

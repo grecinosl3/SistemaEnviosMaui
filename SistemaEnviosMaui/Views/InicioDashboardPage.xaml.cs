@@ -12,7 +12,6 @@ namespace SistemaEnviosMaui.Views
         {
             InitializeComponent();
 
-            // 🔥 TRUCO: Le decimos a la página que cargue los datos justo cuando termine de dibujarse en pantalla
             this.Loaded += (s, e) => CargarDatosDashboard();
         }
 
@@ -22,7 +21,6 @@ namespace SistemaEnviosMaui.Views
             {
                 var metricas = objetoCapaDatos.ObtenerMetricasDashboard();
 
-                // Forzamos la actualización de texto en el hilo principal de la interfaz de usuario
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     lblPendientes.Text = metricas.Item1.ToString();

@@ -105,7 +105,7 @@ namespace SistemaEnviosMaui.Views
                 chkActivo.IsChecked = seleccionado.Activo;
 
                 btnCancelar.IsVisible = true;
-                btnGuardar.Text = "🔄 Actualizar Piloto";
+                btnGuardar.Text = " Actualizar Piloto";
                 btnGuardar.BackgroundColor = Color.FromArgb("#e67e22");
             }
         }
