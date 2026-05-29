@@ -24,9 +24,9 @@
 
                 <Grid Grid.Row="0" ColumnDefinitions="55, *" Margin="0,0,0,20">
                     <Border Grid.Column="0" StrokeShape="Ellipse" BackgroundColor="#4F46E5" WidthRequest="45" HeightRequest="45" StrokeThickness="0" HorizontalOptions="Center">
-                        <Label Text="🚀" HorizontalOptions="Center" VerticalOptions="Center" FontSize="22"/>
+                        <Label Text="📦" HorizontalOptions="Center" VerticalOptions="Center" FontSize="22"/>
                     </Border>
-                    <Label x:Name="lblLogoTexto" Grid.Column="1" Text="LOGÍSTICA" TextColor="White" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" Margin="5,0,0,0" IsVisible="False"/>
+                    <Label x:Name="lblLogoTexto" Grid.Column="1" Text="RerF" TextColor="White" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" Margin="5,0,0,0" IsVisible="False"/>
                 </Grid>
 
                 <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">

@@ -75,11 +75,11 @@
                                         <GradientStop Color="#0A1520" Offset="1.0"/>
                                     </LinearGradientBrush>
                                 </Border.Background>
-                                <Label Text="🚀" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Text="📦" FontSize="40" HorizontalOptions="Center" VerticalOptions="Center"/>
                             </Border>
 
-                            <Label Text="LOGÍSTICA EXPERTA"
-                                   FontSize="10"
+                            <Label Text="RerF Logistics"
+                                   FontSize="15"
                                    TextColor="#42A5F5"
                                    FontAttributes="Bold"
                                    CharacterSpacing="3"
