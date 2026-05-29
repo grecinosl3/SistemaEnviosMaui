@@ -1,0 +1,200 @@
+﻿@page "/contacto"
+@rendermode InteractiveServer
+@using Struct_1_proyec.Data
+@inject ApplicationDbContext Context
+
+<PageTitle>Soporte y Contacto | RerF Logistics</PageTitle>}
+
+<div class="container my-5">
+    <div class="d-flex align-items-center mb-5 p-3 bg-white shadow-sm rounded-3 border-start border-4 border-warning">
+        <i class="bi bi-headset display-4 text-warning me-3"></i>
+        <div>
+            <h1 class="h2 fw-bold text-dark mb-1">Centro de Soporte y Asistencia</h1>
+            <p class="text-muted mb-0">Preguntas frecuentes, régimen de transportación y apertura de tickets de reclamo.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <h4 class="fw-bold text-dark mb-3">
+                <i class="bi bi-shield-check text-success me-2"></i>Régimen Operativo y FAQ
+            </h4>
+
+            <div class="accordion shadow-sm" id="accordionRegimen">
+                <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold bg-white text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            ¿Cuáles son los artículos prohibidos en el régimen de envío?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionRegimen">
+                        <div class="accordion-body bg-light text-muted small">
+                            De acuerdo con las normativas internas y leyes nacionales de transporte, queda strictly prohibido el traslado de: dinero en efectivo, armas de fuego, municiones, sustancias inflamables o explosivos, estupefacientes, y productos perecederos sin cadena de frío controlada.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold bg-white text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            ¿Cómo funciona la política de Pago Contra Entrega?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionRegimen">
+                        <div class="accordion-body bg-light text-muted small">
+                            El servicio de <strong>Pago contra entrega (COD)</strong> faculta al repartidor a cobrar el valor del producto al destinatario en efectivo al momento de la entrega. El comercio remitente recibirá la liquidación de sus fondos en los días programados de corte semanal tras validar la entrega.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 mb-2 rounded-3 overflow-hidden shadow-sm">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold bg-white text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            ¿Cuáles son las políticas de devolución y reintentos?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionRegimen">
+                        <div class="accordion-body bg-light text-muted small">
+                            Realizamos hasta un máximo de dos (2) intentos de entrega en la dirección estipulada. Si el destinatario no es localizado o rechaza el paquete, la guía cambiará a estado "Devolución" y el paquete retornará a las bodegas centrales para la recolección del remitente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-gradient border-0 rounded-3 p-3 mt-4 text-white bg-dark shadow-sm">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-file-earmark-ruled display-6 text-warning me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Cumplimiento Tributario (SAT)</h6>
+                        <p class="mb-0 small text-light-50">Toda mercadería respaldada por nuestras guías debe contar con su correspondiente documentación comercial, NIT válido o declaración de Consumidor Final.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <h4 class="fw-bold text-dark mb-3">
+                <i class="bi bi-ticket-perforated text-primary me-2"></i>Crear Ticket de Asistencia
+            </h4>
+
+            @if (enviado)
+            {
+                <div class="alert alert-success p-4 rounded-3 shadow text-center mb-0" role="alert">
+                    <i class="bi bi-envelope-check-fill display-5 text-success d-block mb-2"></i>
+                    <h5 class="fw-bold">¡Ticket Recibido con Éxito!</h5>
+                    <p class="small text-muted mb-3">Hemos registrado tu requerimiento bajo el área de <strong>@tipoUltimoEnvio</strong>. Nuestro equipo se comunicará contigo a la brevedad.</p>
+                    <button class="btn btn-outline-success btn-sm px-4" @onclick="RestablecerFormulario">
+                        Abrir otro requerimiento
+                    </button>
+                </div>
+            }
+            else
+            {
+                @if (!string.IsNullOrEmpty(mensajeError))
+                {
+                    <div class="alert alert-danger py-2 px-3 small rounded-3 mb-3 d-flex align-items-center">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <div>@mensajeError</div>
+                    </div>
+                }
+
+                <div class="card shadow border-0 rounded-3">
+                    <div class="card-body p-4">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small">Nombre Completo</label>
+                            <input class="form-control" placeholder="Ej. Carlos Mendoza" @bind="contacto.Nombre" />
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary small">Correo Electrónico</label>
+                                <input type="email" class="form-control" placeholder="carlos@correo.com" @bind="contacto.Correo" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary small">Teléfono</label>
+                                <input type="tel" class="form-control" placeholder="55554444" @bind="contacto.Telefono" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary small">Tipo de Solicitud</label>
+                            <select class="form-select" @bind="contacto.TipoContacto">
+                                <option value="Consulta General">Consulta General</option>
+                                <option value="Reclamo de Envío">Reclamo por Paquete / Retraso</option>
+                                <option value="Soporte de Cuenta">Soporte Técnico de Plataforma</option>
+                                <option value="Inconveniente de Pago">Problemas con Liquidación / Pagos</option>
+                            </select>
+                        </div>
+
+                        @if (contacto.TipoContacto == "Reclamo de Envío" || contacto.TipoContacto == "Inconveniente de Pago")
+                        {
+                            <div class="mb-3 p-3 bg-warning bg-opacity-10 rounded-3 border border-warning border-opacity-20 animate__animated animate__fadeIn">
+                                <label class="form-label fw-bold text-warning-dark small">Número de Guía Vinculada *</label>
+                                <input class="form-control border-warning" placeholder="Ej. RERF-10024" @bind="contacto.NumeroGuia" />
+                                <div class="form-text text-muted x-small">Indica el número de guía para agilizar la auditoría operativa.</div>
+                            </div>
+                        }
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary small">Detalle del Mensaje</label>
+                            <textarea class="form-control" rows="4" placeholder="Describe detalladamente tu consulta o reclamo..." @bind="contacto.Mensaje"></textarea>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" @onclick="Enviar">
+                            <i class="bi bi-send-fill me-2"></i>Radicar Solicitud
+                        </button>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private Struct_1_proyec.Models.Contacto contacto = new Struct_1_proyec.Models.Contacto();
+    private bool enviado;
+    private string tipoUltimoEnvio = string.Empty;
+    private string mensajeError = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        // Valor predeterminado para el tipo de contacto al cargar el componente
+        contacto.TipoContacto = "Consulta General";
+    }
+
+    private async Task Enviar()
+    {
+        // Validaciones básicas de soporte
+        if (string.IsNullOrEmpty(contacto.Nombre) || string.IsNullOrEmpty(contacto.Correo) || string.IsNullOrEmpty(contacto.Mensaje))
+        {
+            mensajeError = "Por favor, completa los campos obligatorios (Nombre, Correo y Mensaje).";
+            return;
+        }
+
+        // Validación obligatoria de régimen para tickets de reclamos
+        if ((contacto.TipoContacto == "Reclamo de Envío" || contacto.TipoContacto == "Inconveniente de Pago") && string.IsNullOrEmpty(contacto.NumeroGuia))
+        {
+            mensajeError = "Para procesar un reclamo es obligatorio ingresar el Número de Guía afectado.";
+            return;
+        }
+
+        mensajeError = string.Empty;
+        tipoUltimoEnvio = contacto.TipoContacto;
+
+        // Persistencia directa usando DbContext
+        Context.Contactos.Add(contacto);
+        await Context.SaveChangesAsync();
+
+        enviado = true;
+    }
+
+    private void RestablecerFormulario()
+    {
+        contacto = new Struct_1_proyec.Models.Contacto();
+        contacto.TipoContacto = "Consulta General";
+        enviado = false;
+        mensajeError = string.Empty;
+    }
+}

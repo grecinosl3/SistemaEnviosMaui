@@ -1,0 +1,221 @@
+﻿@page "/tracking"
+@rendermode InteractiveServer
+@inject Struct_1_proyec.Services.TrackingService TrackingService
+
+<PageTitle>Rastreo de Envíos | RerF Logistics</PageTitle>
+
+<div class="container my-5">
+    @* Encabezado Principal *@
+    <div class="d-flex align-items-center mb-5 p-3 bg-white shadow-sm rounded-3 border-start border-4 border-primary">
+        <i class="bi bi-truck display-4 text-primary me-3"></i>
+        <div>
+            <h1 class="h2 fw-bold text-dark mb-1">Rastreo de Guías</h1>
+            <p class="text-muted mb-0">Consulte el estado de recolección y entrega de sus paquetes en tiempo real.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @* COLUMNA IZQUIERDA: Buscador *@
+        <div class="col-lg-4">
+            <div class="card shadow border-0 rounded-3 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-3">Localizar Envío</h5>
+                    <p class="text-muted small">Ingrese el número de guía para verificar el estado del servicio contratado.</p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">Número de Guía</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted"><i class="bi bi-qr-code"></i></span>
+                            <input class="form-control"
+                                   placeholder="Ej. RERF-1001"
+                                   @bind="numeroGuia"
+                                   @bind:event="oninput"
+                                   @onkeyup="EvaluarTeclado" />
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(mensajeError))
+                    {
+                        <div class="alert alert-danger py-2 px-3 small rounded-3 mb-3 d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <div>@mensajeError</div>
+                        </div>
+                    }
+
+                    <button class="btn btn-primary w-100 fw-bold shadow-sm" @onclick="Buscar">
+                        <i class="bi bi-search me-2"></i>Buscar Paquete
+                    </button>
+                </div>
+            </div>
+
+            @* Tarjeta Informativa de Flujo de Recolección *@
+            <div class="card bg-light border-0 rounded-3 p-3">
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-geo-alt-fill text-primary display-7 me-3 mt-1"></i>
+                    <div>
+                        <h6 class="fw-bold text-dark mb-1 small">Servicio Puerta a Puerta</h6>
+                        <p class="mb-0 text-muted x-small">Nuestro equipo recoge el paquete en la ubicación del remitente y lo traslada de forma directa hasta las manos del destinatario.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* COLUMNA DERECHA: Estado e Historial Real de Ubicación *@
+        <div class="col-lg-8">
+            @if (loading)
+            {
+                <div class="card shadow border-0 rounded-3 p-5 text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Buscando...</span>
+                    </div>
+                    <p class="text-muted mb-0">Consultando el sistema logístico en tiempo real...</p>
+                </div>
+            }
+            else if (pedido != null)
+            {
+                <div class="card shadow border-0 rounded-3 mb-4">
+                    @* Encabezado del Resultado *@
+                    <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold mb-1">Código de Rastreo</span>
+                            <h4 class="fw-bold text-dark mb-0">@numeroGuia.ToUpper()</h4>
+                        </div>
+                        <div class="text-end">
+                            <span class="text-muted d-block small">Estado Global</span>
+                            <span class="badge @(pedido.Estado == "Entregado" ? "bg-success" : "bg-warning text-dark") px-3 py-2 fw-bold">
+                                <i class="bi @(pedido.Estado == "Entregado" ? "bi-check-circle" : "bi-clock") me-1"></i> @pedido.Estado
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+
+                        @* Ubicación Intuitiva Basada en el Último Log Registrado en BD *@
+                        <div class="p-3 bg-primary bg-opacity-10 rounded-3 border-start border-4 border-primary mb-4">
+                            <div class="d-flex">
+                                <i class="bi bi-pin-map-fill text-primary fs-3 me-3 align-self-center"></i>
+                                <div>
+                                    <span class="text-uppercase fw-bold text-primary x-small tracking-wider">📍 Ubicación Actual / Último Punto de Control</span>
+                                    <h5 class="fw-bold text-dark mb-1">
+                                        @(pedido.Logs != null && pedido.Logs.Any()
+                                            ? pedido.Logs.OrderByDescending(x => x.Fecha).First().Estado
+                                            : pedido.Estado)
+                                    </h5>
+                                    <p class="text-muted small mb-0">
+                                        @(pedido.Logs != null && pedido.Logs.Any()
+                                            ? pedido.Logs.OrderByDescending(x => x.Fecha).First().Comentario
+                                            : "Sin detalles adicionales de ubicación.")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-4">
+                            <i class="bi bi-bezier2 me-2 text-secondary"></i>Línea de Tiempo del Servicio
+                        </h5>
+
+                        @if (pedido.Logs != null && pedido.Logs.Any())
+                        {
+                            @* Línea de tiempo Vertical en Orden Cronológico *@
+                            <div class="position-relative ps-4 border-start border-2 border-light ms-2">
+                                @foreach (var log in pedido.Logs.OrderBy(x => x.Fecha))
+                                {
+                                    <div class="mb-4 position-relative">
+                                        <div class="position-absolute start-0 top-0 translate-middle-x bg-white p-1" style="margin-left: -17px;">
+                                            <i class="bi @(log.Estado == "Entregado" ? "bi-check-circle-fill text-success" : "bi-dot text-primary fs-2") bg-white"></i>
+                                        </div>
+                                        <div class="ms-3 bg-light p-3 rounded-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="fw-bold text-dark mb-0 small">@log.Estado</h6>
+                                                <span class="text-muted x-small bg-white px-2 py-1 rounded shadow-sm">
+                                                    <i class="bi bi-calendar3 me-1"></i> @log.Fecha.ToString("dd/MM/yyyy hh:mm tt")
+                                                </span>
+                                            </div>
+                                            <p class="text-muted small mb-0">@log.Comentario</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted small text-center my-3">La guía existe pero no cuenta con movimientos registrados.</p>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                @* Vista inicial vacía *@
+                <div class="card border-2 border-dashed bg-light rounded-3 p-5 text-center text-muted">
+                    <i class="bi bi-radar display-1 text-muted opacity-50 mb-3"></i>
+                    <h5>Esperando número de guía</h5>
+                    <p class="small mb-0">Ingrese una guía registrada para trazar el mapa de movimientos puerta a puerta.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .x-small {
+        font-size: 0.75rem;
+    }
+
+    .border-dashed {
+        border-style: dashed !important;
+    }
+
+    .tracking-wider {
+        letter-spacing: 0.5px;
+    }
+</style>
+
+@code {
+    private string numeroGuia = string.Empty;
+    private Struct_1_proyec.Models.Pedido? pedido;
+    private bool loading;
+    private string mensajeError = string.Empty;
+
+    private async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(numeroGuia))
+        {
+            mensajeError = "Por favor, ingresa un número de guía.";
+            pedido = null;
+            return;
+        }
+
+        loading = true;
+        mensajeError = string.Empty;
+        pedido = null; // Limpiamos búsquedas anteriores
+
+        try
+        {
+            // Conexión directa a tu servicio de Entity Framework
+            pedido = await TrackingService.BuscarGuia(numeroGuia);
+
+            if (pedido == null)
+            {
+                mensajeError = "No se encontró ningún paquete con el número de guía especificado.";
+            }
+        }
+        catch (Exception)
+        {
+            mensajeError = "Error de comunicación con el servidor. No se pudo leer el historial logístico.";
+            pedido = null;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private void EvaluarTeclado(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            _ = Buscar();
+        }
+    }
+}

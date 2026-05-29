@@ -1,0 +1,117 @@
+﻿@page "/"
+
+<PageTitle>Inicio | RerF Logistics</PageTitle>
+
+@* Sección Hero / Bienvenida *@
+<div class="bg-dark text-white py-5 mb-5 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #1e1e24 0%, #0d1117 100%);">
+    <div class="container py-4 text-center text-lg-start">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge bg-warning text-dark mb-3 fw-bold px-3 py-2 text-uppercase tracking-wider">Sistema de Gestión Logística</span>
+                <h1 class="display-4 fw-bold mb-3">Distribución Inteligente a Nivel Nacional</h1>
+                <p class="lead text-muted-light mb-4 text-secondary">
+                    Bienvenido al portal operativo de <strong>RerF Logistics</strong>. Gestione guías de despacho, cotice tarifas comerciales y rastree flujos de transporte en tiempo real.
+                </p>
+                <div class="d-sm-flex gap-3 justify-content-center justify-content-lg-start">
+                    <a href="registrar-envio" class="btn btn-warning btn-lg fw-bold text-dark px-4 shadow-sm mb-3 mb-sm-0">
+                        <i class="bi bi-plus-circle-fill me-2"></i>Nuevo Envío
+                    </a>
+                    <a href="tracking" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-search me-2"></i>Rastrear Guía
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <i class="bi bi-truck display-1 text-warning opacity-75" style="font-size: 7rem;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    @* 2. SECCIÓN DE ACCESOS DIRECTOS (LAS TRES PÁGINAS WEB) *@
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-dark mb-2">Módulos del Sistema</h2>
+        <p class="text-muted">Seleccione la acción logística que desea ejecutar en la plataforma</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        @* Tarjeta 1: Registrar Envío *@
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3 card-hover border-bottom border-4 border-warning">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-warning bg-opacity-10 text-warning d-inline-flex p-3 rounded-circle mb-4">
+                        <i class="bi bi-box-seam-fill fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-3">Registrar Envío</h4>
+                    <p class="text-muted mb-4">Genere guías de despacho, capture datos de origen/destino y organice la recolección a domicilio.</p>
+                    <a href="registrar-envio" class="btn btn-primary w-100 fw-semibold rounded-2 py-2">
+                        Ingresar Módulo <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @* Tarjeta 2: Rastreo *@
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3 card-hover border-bottom border-4 border-primary">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-primary bg-opacity-10 text-primary d-inline-flex p-3 rounded-circle mb-4">
+                        <i class="bi bi-geo-alt-fill fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-3">Rastreo de Guías</h4>
+                    <p class="text-muted mb-4">Consulte el estado de los paquetes bajo el Régimen Operativo y verifique el historial de ruta.</p>
+                    <a href="tracking" class="btn btn-primary w-100 fw-semibold rounded-2 py-2">
+                        Monitorear <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        @* Tarjeta 3: Cotizador *@
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3 card-hover border-bottom border-4 border-success">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-success bg-opacity-10 text-success d-inline-flex p-3 rounded-circle mb-4">
+                        <i class="bi bi-calculator-fill fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-3">Cotizador</h4>
+                    <p class="text-muted mb-4">Calcule los costos estimados de distribución nacional según el peso en libras y destino.</p>
+                    <a href="cotizador" class="btn btn-primary w-100 fw-semibold rounded-2 py-2">
+                        Calcular Tarifa <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 3. COMPONENTE DE INFORMACIÓN ADICIONAL *@
+    <div class="row mt-5 pt-4">
+        <div class="col-12">
+            <div class="p-4 bg-light rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between border shadow-sm">
+                <div class="d-flex align-items-center mb-3 mb-md-0 text-center text-md-start">
+                    <i class="bi bi-headset display-5 text-dark me-3 d-none d-sm-block"></i>
+                    <div>
+                        <h5 class="fw-bold mb-1 text-dark">¿Necesita asistencia con el régimen de transporte?</h5>
+                        <p class="text-muted mb-0">Consulte las normativas de artículos prohibidos o genere un ticket formal en nuestra mesa de ayuda.</p>
+                    </div>
+                </div>
+                <a href="contacto" class="btn btn-outline-dark fw-bold px-4 py-2 text-nowrap">
+                    <i class="bi bi-info-circle me-2"></i>Centro de Soporte
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Efecto de elevación para las tarjetas operativas */
+    .card-hover {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.12) !important;
+        }
+</style>

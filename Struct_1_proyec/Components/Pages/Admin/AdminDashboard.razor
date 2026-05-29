@@ -1,0 +1,40 @@
+﻿@page "/admin"
+@rendermode InteractiveServer
+
+<div class="container mt-4">
+    @* Cabecera del Dashboard Logístico *@
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Dashboard Logístico Operativo</h2>
+            <p class="text-muted">Monitoreo global de guías y KPIs de rendimiento (Guatemala)</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-secondary">Actualizado: @DateTime.Now.ToString("HH:mm")</span>
+        </div>
+    </div>
+
+    @* KPIs del Sistema *@
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm border-0 p-4">
+                <i class="bi bi-cash-stack text-primary fs-1 mb-2"></i>
+                <h3 class="fw-bold">Q 18,450</h3>
+                <span class="text-muted text-uppercase small fw-bold">Facturación Total</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm border-0 p-4">
+                <i class="bi bi-check2-circle text-success fs-1 mb-2"></i>
+                <h3 class="fw-bold">142</h3>
+                <span class="text-muted text-uppercase small fw-bold">Guías Entregadas</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm border-0 p-4">
+                <i class="bi bi-exclamation-triangle text-warning fs-1 mb-2"></i>
+                <h3 class="fw-bold">12</h3>
+                <span class="text-muted text-uppercase small fw-bold">Envíos con Incidencia</span>
+            </div>
+        </div>
+    </div>
+</div>

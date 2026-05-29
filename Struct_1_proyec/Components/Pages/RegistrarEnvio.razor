@@ -1,0 +1,350 @@
+﻿@page "/registrar-envio"
+@using CapaEntidad;
+@rendermode InteractiveServer
+@using Struct_1_proyec.Services;
+@inject EnvioService envioService;
+
+<PageTitle>Registrar Nuevo Envío | RerF Logistics</PageTitle>
+
+<div class="container my-5">
+    @* Encabezado *@
+    <div class="d-flex align-items-center mb-5 p-3 bg-white shadow-sm rounded-3 border-start border-4 border-primary">
+        <i class="bi bi-box-seam-fill display-4 text-primary me-3"></i>
+        <div>
+            <h1 class="h2 fw-bold text-dark mb-1">Registrar Nuevo Envío</h1>
+            <p class="text-muted mb-0">Generación de guías de despacho y captura de datos exactos para distribución nacional.</p>
+        </div>
+    </div>
+
+    @if (envioRegistrado)
+    {
+        <div class="alert alert-success p-4 rounded-3 shadow mb-5 text-center" role="alert">
+            <i class="bi bi-check-circle-fill display-4 text-success d-block mb-2"></i>
+            <h4 class="alert-heading fw-bold">¡Envío Registrado Exitosamente!</h4>
+            <p class="mb-3">Se ha generado la guía operativa para el recolector. Los datos ya están listos en el sistema.</p>
+            <div class="bg-white text-dark d-inline-block px-4 py-2 rounded-3 border fw-bold fs-5 mb-3">
+                Número de Guía: <span class="text-primary">@guiaGenerada</span>
+            </div>
+            <div class="d-block">
+                <button class="btn btn-primary px-4" @onclick="NuevoRegistro">
+                    <i class="bi bi-plus-circle me-2"></i>Registrar Otro Envío
+                </button>
+            </div>
+        </div>
+    }
+    else
+    {
+        @if (!string.IsNullOrEmpty(mensajeValidacion))
+        {
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                <div>@mensajeValidacion</div>
+                <button type="button" class="btn-close" @onclick="() => mensajeValidacion = string.Empty"></button>
+            </div>
+        }
+
+        <div class="row g-4">
+            @* COLUMNA PRINCIPAL: DATOS DEL ENVÍO *@
+            <div class="col-lg-8">
+                <div class="card shadow border-0 rounded-3 mb-4">
+                    <div class="card-body p-4">
+
+                        @* SECCIÓN 1: DATOS DE RECOLECCIÓN  *@
+                        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-geo-fill me-2"></i>1. ¿Dónde recogemos el paquete? (Origen)</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-7">
+                                <label class="form-label fw-semibold">Nombre de quien envía (Remitente)</label>
+                                <input type="text" class="form-control" placeholder="Ej. Carlos Gómez" @bind="nombreRemitente" />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold">Teléfono del Remitente</label>
+                                <input type="tel" class="form-control" placeholder="Ej. 44332211" @bind="telefonoRemitente" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Dirección Exacta de Recolección</label>
+                                <input type="text" class="form-control" placeholder="Ej. Km 15 Ruta al Atlántico, Comercial El Frutal, Local 5" @bind="direccionRecoleccion" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Referencias para el Piloto (Recolección)</label>
+                                <input type="text" class="form-control" placeholder="Ej. A la par de la farmacia, portón gris de metal" @bind="referenciaRecoleccion" />
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25" />
+
+                        @* SECCIÓN 2: DATOS DE CONTACTO DESTINATARIO *@
+                        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-person-fill me-2"></i>2. ¿Quién recibe el paquete? (Destino)</h5>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-7">
+                                <label class="form-label fw-semibold">Nombre Completo</label>
+                                <input type="text" class="form-control" placeholder="Ej. Juan Pérez" @bind="oPedido.NombreDestinatario" />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold">Teléfono de Contacto</label>
+                                <input type="tel" class="form-control" placeholder="Ej. 55554444" @bind="oPedido.TelefonoDestinatario" />
+                            </div>
+                        </div>
+
+                        @* SECCIÓN 3: DIRECCIÓN DE DESTINATARIO *@
+                        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-geo-alt-fill me-2"></i>3. ¿A dónde lo enviamos?</h5>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Departamento de Destino</label>
+                                <select class="form-select" @bind="departamentoSeleccionado">
+                                    <option value="">-- Seleccione Departamento --</option>
+                                    @foreach (var depto in departamentos)
+                                    {
+                                        <option value="@depto">@depto</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Dirección Exacta de Entrega (Incluir Municipio si aplica)</label>
+                                <input type="text" class="form-control" placeholder="Ej. Barrio El Porvenir, Jalapa" @bind="direccionExactaEntrega" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-semibold">Referencias para el Motorista (Entrega)</label>
+                                <input type="text" class="form-control" placeholder="Ej. Frente a la tienda El Sol, portón de metal verde" @bind="referenciaEntrega" />
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25" />
+
+                        @* SECCIÓN 4: DETALLES DEL PAQUETE *@
+                        <h5 class="fw-bold text-primary mb-3"><i class="bi bi-box-seam me-2"></i>4. ¿Qué estás enviando?</h5>
+                        <div class="row g-3 mb-2">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Tipo de Contenido</label>
+                                <select class="form-select" @bind="contenidoPaquete">
+                                    <option value="">-- Seleccione una categoría --</option>
+                                    <option value="Electrónicos">Electrónicos / Gadgets</option>
+                                    <option value="Documentos">Documentos / Papelería</option>
+                                    <option value="Ropa y Calzado">Moda (Ropa, Zapatos, Accesorios)</option>
+                                    <option value="Alimentos y Bebidas">Alimentos (No perecederos)</option>
+                                    <option value="Repuestos">Repuestos / Herramientas</option>
+                                    <option value="Cosméticos">Cosméticos / Cuidado Personal</option>
+                                    <option value="Otros">Otros (Especificar en referencias)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Peso Estimado (Libras)</label>
+                                <div class="input-group">
+                                    <input type="number" step="0.1" class="form-control" @bind="pesoLbs" />
+                                    <span class="input-group-text">lbs</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            @* COLUMNA LATERAL: FACTURACIÓN Y PAGO *@
+            <div class="col-lg-4">
+                <div class="card shadow border-0 rounded-3 mb-4 bg-light">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-credit-card-2-back-fill me-2"></i>5. Información de Pago</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Forma de Pago</label>
+                            <select class="form-select" @bind="oPedido.MetodoPago">
+                                <option value="">-- Seleccione Pago --</option>
+                                <option value="COD">Pago contra entrega</option>
+                                <option value="Prepagado">Crédito / Prepagado Empresarial</option>
+                                <option value="Transferencia">Transferencia Anticipada</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">NIT (Opcional)</label>
+                            <input type="text" class="form-control" placeholder="Ej. 1234567-K" @bind="nitFactura" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Datos de Facturación</label>
+                            <input type="text" class="form-control" placeholder="Ej. Consumidor Final" @bind="nombreFactura" />
+                        </div>
+
+                        <button type="button" class="btn btn-warning btn-lg w-100 fw-bold text-dark shadow-sm" @onclick="ProcesarRegistro">
+                            <i class="bi bi-file-earmark-check-fill me-2"></i>Generar Guía RerF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    // Uso de global:: para que no choque con otra clase Pedido
+    private global::CapaEntidad.Pedido oPedido = new global::CapaEntidad.Pedido();
+
+    private bool envioRegistrado = false;
+    private string guiaGenerada = string.Empty;
+    private string mensajeValidacion = string.Empty;
+
+    private string nombreRemitente = string.Empty;
+    private string telefonoRemitente = string.Empty;
+    private string direccionRecoleccion = string.Empty;
+    private string referenciaRecoleccion = string.Empty;
+
+    private string departamentoSeleccionado = string.Empty;
+    private string direccionExactaEntrega = string.Empty;
+    private string referenciaEntrega = string.Empty;
+
+    private string contenidoPaquete = string.Empty;
+    private decimal pesoLbs = 1.0m;
+    private string nitFactura = string.Empty;
+    private string nombreFactura = string.Empty;
+
+    private List<string> departamentos = new()
+    {
+        "Alta Verapaz", "Baja Verapaz", "Chimaltenango", "Chiquimula", "El Progreso", "Escuintla",
+        "Guatemala", "Huehuetenango", "Izabal", "Jalapa", "Jutiapa", "Petén", "Quetzaltenango",
+        "Quiché", "Retalhuleu", "Sacatepéquez", "San Marcos", "Santa Rosa", "Sololá", "Suchitepéquez",
+        "Totonicapán", "Zacapa"
+    };
+
+    protected override void OnInitialized()
+    {
+        oPedido.IdCliente = 1;
+        oPedido.MetodoPago = "COD";
+        oPedido.Estado = "Pendiente";
+        oPedido.FechaPedido = DateTime.Now;
+        oPedido.Detalles = new List<global::CapaEntidad.DetallePedido>();
+    }
+
+    private async Task ProcesarRegistro()
+    {
+        try
+        {
+            // Validaciones
+            if (string.IsNullOrEmpty(nombreRemitente) || string.IsNullOrEmpty(telefonoRemitente))
+            {
+                mensajeValidacion = "El nombre y teléfono del remitente son obligatorios para coordinar la recolección.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(direccionRecoleccion))
+            {
+                mensajeValidacion = "Debe indicar la dirección exacta donde el piloto debe recoger el paquete.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(oPedido.NombreDestinatario) || string.IsNullOrEmpty(oPedido.TelefonoDestinatario))
+            {
+                mensajeValidacion = "Faltan los datos de contacto esenciales del destinatario.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(departamentoSeleccionado))
+            {
+                mensajeValidacion = "Debes especificar obligatoriamente un departamento de destino.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(direccionExactaEntrega) || string.IsNullOrEmpty(referenciaEntrega))
+            {
+                mensajeValidacion = "La dirección exacta de entrega y una referencia clara son requeridas.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(contenidoPaquete))
+            {
+                mensajeValidacion = "Por favor selecciona el tipo de contenido/especificación del paquete.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(oPedido.MetodoPago))
+            {
+                mensajeValidacion = "Debes seleccionar una forma de pago válida.";
+                return;
+            }
+
+            if (pesoLbs <= 0)
+            {
+                mensajeValidacion = "El peso físico del paquete debe ser mayor a 0 libras.";
+                return;
+            }
+
+            mensajeValidacion = string.Empty;
+
+            // Concatenamos la dirección y el departamento seleccionado
+            oPedido.DireccionEntrega = $"{direccionExactaEntrega}, {departamentoSeleccionado}";
+
+            // Operación limpia entre decimales
+            decimal costoCalculado = pesoLbs * 5;
+            oPedido.CostoFlete = costoCalculado;
+            oPedido.Total = costoCalculado;
+            oPedido.FechaPedido = DateTime.Now;
+
+            oPedido.Notas = $"Contenido: {contenidoPaquete} | Remitente: {nombreRemitente} ({telefonoRemitente}) | Recolección: {direccionRecoleccion} (Ref: {referenciaRecoleccion}) | Ref. Entrega: {referenciaEntrega} | Facturar a: {nombreFactura} - NIT: {nitFactura}";
+
+            // Construimos el detalle de forma explícita
+            oPedido.Detalles = new List<global::CapaEntidad.DetallePedido>
+            {
+                new global::CapaEntidad.DetallePedido
+                {
+                    IdProducto = 1, 
+                    Cantidad = 1,
+                    PrecioUnitario = costoCalculado,
+                }
+            };
+
+            // Enviamos al servicio
+            var resultado = await envioService.RegistrarEnvio(oPedido);
+
+            if (resultado.exito)
+            {
+                guiaGenerada = resultado.numeroGuia;
+                envioRegistrado = true;
+            }
+            else
+            {
+                mensajeValidacion = $"Error de Base de Datos: {resultado.mensaje}";
+                envioRegistrado = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeValidacion = $"CRASH EN EL SISTEMA: {ex.Message} - Verifica tu conexión o datos.";
+            envioRegistrado = false;
+        }
+        finally
+        {
+            this.StateHasChanged();
+        }
+    }
+
+    private void NuevoRegistro()
+    {
+        oPedido = new global::CapaEntidad.Pedido();
+        oPedido.IdCliente = 1;
+        oPedido.MetodoPago = "COD";
+        oPedido.Estado = "Pendiente";
+        oPedido.FechaPedido = DateTime.Now;
+        oPedido.Detalles = new List<global::CapaEntidad.DetallePedido>();
+
+        nombreRemitente = string.Empty;
+        telefonoRemitente = string.Empty;
+        direccionRecoleccion = string.Empty;
+        referenciaRecoleccion = string.Empty;
+
+        departamentoSeleccionado = string.Empty;
+        direccionExactaEntrega = string.Empty;
+        referenciaEntrega = string.Empty;
+
+        contenidoPaquete = string.Empty;
+        pesoLbs = 1.0m;
+        nitFactura = string.Empty;
+        nombreFactura = string.Empty;
+
+        envioRegistrado = false;
+        guiaGenerada = string.Empty;
+        mensajeValidacion = string.Empty;
+    }
+}
