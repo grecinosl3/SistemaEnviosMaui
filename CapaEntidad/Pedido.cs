@@ -9,6 +9,7 @@ namespace CapaEntidad
 
         // La Empresa que envía el paquete
         public int IdCliente { get; set; }
+        public int? IdPiloto { get; set; }
         public Cliente oCliente { get; set; }
 
         // Personal operativo 

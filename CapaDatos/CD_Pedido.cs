@@ -311,7 +311,8 @@ namespace CapaDatos
         }
 
         //  ACTUALIZAR EL CHOFER Y PASAR A "EN RUTA
-        public bool AsignarPilotoEnBD(int idPedido, int idUsuario, out string Mensaje)
+        // Asegúrate de que la cabecera reciba 'idPedido' e 'idPiloto'
+        public bool AsignarPilotoEnBD(int idPedido, int idPiloto, out string Mensaje)
         {
             bool respuesta = false;
             Mensaje = string.Empty;
@@ -322,13 +323,14 @@ namespace CapaDatos
                 {
                     string query = @"
                         UPDATE Pedidos 
-                        SET IdUsuario = @idusuario, 
-                            Estado = 'En Ruta',
-                            FechaEntrega = GETDATE()
+                        SET IdPiloto = @idpiloto, 
+                            Estado = 'En Ruta'
                         WHERE IdPedido = @idpedido";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
-                    cmd.Parameters.AddWithValue("@idusuario", idUsuario);
+
+                    // Usamos la variable 'idPiloto' que ahora sí existe en la cabecera
+                    cmd.Parameters.AddWithValue("@idpiloto", idPiloto);
                     cmd.Parameters.AddWithValue("@idpedido", idPedido);
                     cmd.CommandType = CommandType.Text;
 
@@ -483,7 +485,5 @@ namespace CapaDatos
             }
             return metrics;
         }
-
-
     }
 }

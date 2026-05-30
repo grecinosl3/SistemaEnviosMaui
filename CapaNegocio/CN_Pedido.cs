@@ -1,7 +1,9 @@
 ﻿using CapaDatos;
 using CapaEntidad;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CapaNegocio
 {
@@ -129,6 +131,7 @@ namespace CapaNegocio
             if (Mensaje != string.Empty)
                 return false;
 
+            // Pasamos idRepartidor al nuevo parámetro idPiloto de la Capa de Datos
             return objcd_pedido.AsignarPilotoEnBD(idPedido, idRepartidor, out Mensaje);
         }
 
@@ -158,6 +161,49 @@ namespace CapaNegocio
         public DashboardMetrics GetDashboard()
         {
             return objcd_pedido.ObtenerMetricasDashboard();
+        }
+        public List<Repartidor> ListarRepartidores()
+        {
+            List<Repartidor> lista = new List<Repartidor>();
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.Cadena))
+            {
+                try
+                {
+                    // 1. OJO: Revisa que tu consulta SQL incluya la columna IdUsuario
+                    string query = "SELECT IdRepartidor, IdUsuario, Nombre, Apellidos, Telefono, TipoVehiculo, PlacaVehiculo, Activo FROM Repartidores WHERE Activo = 1";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.CommandType = CommandType.Text;
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Repartidor()
+                            {
+                                IdRepartidor = Convert.ToInt32(dr["IdRepartidor"]),
+
+                                // 2. ¡ESTA LÍNEA ES LA QUE TE FALTA! Mapea el valor al objeto de C#
+                                IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+
+                                Nombre = dr["Nombre"].ToString(),
+                                Apellidos = dr["Apellidos"].ToString(),
+                                Telefono = dr["Telefono"].ToString(),
+                                TipoVehiculo = dr["TipoVehiculo"].ToString(),
+                                PlacaVehiculo = dr["PlacaVehiculo"].ToString(),
+                                Activo = Convert.ToBoolean(dr["Activo"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lista = new List<Repartidor>();
+                }
+            }
+            return lista;
         }
     }
 }
