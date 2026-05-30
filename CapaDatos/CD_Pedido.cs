@@ -355,7 +355,6 @@ namespace CapaDatos
             return respuesta;
         }
 
-
         //  OBTENER ENVIOS ENTREGADOS POR REPARTIDOR PARA COBRO COD
         public List<Pedido> ObtenerPedidosParaLiquidar(int idRepartidor)
         {
